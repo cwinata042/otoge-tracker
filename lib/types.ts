@@ -1,0 +1,45 @@
+export enum TGameTypes {
+  'Main' = 'Main',
+  'Fandisc' = 'Fandisc',
+}
+
+export enum TGameStatuses {
+  'Incomplete' = 'Incomplete',
+  'Playing' = 'Playing',
+  'Completed' = 'Completed',
+  'On Hold' = 'On Hold',
+  'Dropped' = 'Dropped',
+}
+
+export enum TGameLanguages {
+  'EN' = 'EN',
+  'JP' = 'JP',
+}
+
+export enum TGamePlatforms {
+  'Switch' = 'Switch',
+  'PS Vita' = 'PS Vita',
+  'PC' = 'PC',
+}
+
+export enum TCurrency {
+  'USD' = 'USD',
+  'JPY' = 'JPY',
+}
+
+export type TOwnedGame = {
+  vndb_id: string
+  orig_title: string
+  title: string
+  type: TGameTypes
+  status: TGameStatuses
+  img_link: string
+  owned_copies: [
+    {
+      language: TGameLanguages
+      platform: TGamePlatforms
+    }
+  ]
+  price: number
+  price_currency: TCurrency
+}

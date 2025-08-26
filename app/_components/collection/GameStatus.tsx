@@ -1,11 +1,5 @@
-interface GameStatusProps {
-    status: string;
-}
+import { TGameStatuses } from '@/lib/types'
 
-export default function GameStatus({status} : GameStatusProps) {
-    return (
-        <div className={"gameStatus " + status}>
-            {status}
-        </div>
-    )
+export default function GameStatus({ status }: { status: TGameStatuses }) {
+  return <div className={'gameStatus ' + status}>{status}</div>
 }

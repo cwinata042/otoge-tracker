@@ -1,20 +1,21 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next'
+import './globals.css'
+import Providers from './Providers'
 
 export const metadata: Metadata = {
-  title: "Otoge Tracker"
-};
+  title: 'Otoge Tracker',
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en">
       <body>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
-  );
+  )
 }

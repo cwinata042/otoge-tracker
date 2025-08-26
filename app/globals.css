@@ -3,13 +3,13 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --dark: #232C3D;
-  --darker: #15181F;
-  --accent-1: #E6B341;
-  --light: #FBFAF8;
+  --dark: #232c3d;
+  --darker: #15181f;
+  --accent-1: #e6b341;
+  --light: #fbfaf8;
   --completed: #305083;
-  --playing: #C2D79C;
-  --dark-green: #45512F;
+  --playing: #c2d79c;
+  --dark-green: #45512f;
   --game-card-width: 450px;
   --one-column: calc(var(--game-card-width) + 100px);
   --two-column: calc(var(--game-card-width) * 2 + 100px);
@@ -93,7 +93,6 @@ a {
 .gameGrid {
   display: grid;
   gap: 30px;
-
 }
 
 @media (width >= 1030px) {
@@ -175,6 +174,8 @@ a {
   position: relative;
 }
 
-.filter-sort {
-
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
