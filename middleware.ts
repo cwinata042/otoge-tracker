@@ -1,5 +1,5 @@
 export { default } from 'next-auth/middleware'
 
 export const config = {
-  matcher: ['/collection(.*)'],
+  matcher: ['/collection(.*)', '/api/collection(.*)'],
 }
