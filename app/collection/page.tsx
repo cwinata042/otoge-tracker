@@ -4,6 +4,7 @@ import Link from 'next/link'
 import GameGrid from '../_components/collection/GameGrid'
 import { useQuery } from '@tanstack/react-query'
 import { signOut, useSession } from 'next-auth/react'
+import { COLLECTION_QUERY_KEY } from '@/lib/queryKeys'
 
 export default function Collection() {
   const { data: session } = useSession()
@@ -13,7 +14,7 @@ export default function Collection() {
     error,
     data: ownedGames,
   } = useQuery({
-    queryKey: ['owned-games', session?.user._id],
+    queryKey: [COLLECTION_QUERY_KEY, session?.user._id],
     queryFn: async () => {
       const res = await fetch(`/api/collection`, {
         headers: {
