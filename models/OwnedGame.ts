@@ -2,6 +2,10 @@ import mongoose from 'mongoose'
 
 const ownedGameSchema = new mongoose.Schema(
   {
+    user_id: {
+      type: mongoose.Types.ObjectId,
+      required: true,
+    },
     vndb_id: {
       type: String,
     },
@@ -40,8 +44,11 @@ const ownedGameSchema = new mongoose.Schema(
           enum: ['Switch', 'PS Vita', 'PC'],
           required: [true, "Please provide the game copy's platform."],
         },
+        orig_price: {
+          type: mongoose.Types.Double,
+        },
         price: {
-          type: Number,
+          type: mongoose.Types.Double,
         },
         price_currency: {
           type: String,

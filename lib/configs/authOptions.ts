@@ -41,4 +41,18 @@ export const authOptions: AuthOptions = {
   pages: {
     signIn: '/',
   },
+  callbacks: {
+    jwt: async ({ token, user }: { token: any; user: any }) => {
+      if (user) {
+        token.user = { _id: user._id, email: user.email }
+      }
+
+      return Promise.resolve(token)
+    },
+    session: async ({ session, token }: { session: any; token: any }) => {
+      session.user = token.user
+
+      return Promise.resolve(session)
+    },
+  },
 }

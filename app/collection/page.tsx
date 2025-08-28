@@ -7,23 +7,29 @@ import { signOut, useSession } from 'next-auth/react'
 
 export default function Collection() {
   const { data: session } = useSession()
+
   const {
     status,
     error,
     data: ownedGames,
   } = useQuery({
-    queryKey: ['owned-games'],
+    queryKey: ['owned-games', session?.user._id],
     queryFn: async () => {
-      const res = await fetch('/api/collection')
+      const res = await fetch(`/api/collection`, {
+        headers: {
+          UserId: session?.user._id ? session?.user._id : '',
+        },
+      })
       return res.json()
     },
+    enabled: !!session,
   })
 
   if (status === 'pending') {
     return <div>Loading...</div>
   }
 
-  if (status === 'error') {
+  if (status === 'error' || error) {
     return <div>Failed to fetch owned games.</div>
   }
 
