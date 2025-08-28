@@ -22,6 +22,14 @@ export enum TGamePlatforms {
   'PC' = 'PC',
 }
 
+export type TGameCopy = {
+  language: TGameLanguages
+  platform: TGamePlatforms
+  orig_price?: number | null
+  price?: number | null
+  price_currency?: TCurrency | null
+}
+
 export enum TCurrency {
   'USD' = 'USD',
   'JPY' = 'JPY',

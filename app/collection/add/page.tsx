@@ -1,10 +1,11 @@
 'use client'
 
+import { COLLECTION_QUERY_KEY } from '@/lib/queryKeys'
 import { TCurrency, TGameLanguages, TGamePlatforms, TGameStatuses, TGameTypes } from '@/lib/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 
 export default function AddToCollection() {
   const { data: session } = useSession()
@@ -12,10 +13,19 @@ export default function AddToCollection() {
   const {
     register,
     handleSubmit,
-    watch,
     getValues,
+    control,
     formState: { errors },
   } = useForm()
+
+  const {
+    fields: ownedCopies,
+    append,
+    remove,
+  } = useFieldArray({
+    control,
+    name: 'owned_copies',
+  })
 
   const { mutate } = useMutation({
     mutationFn: async () => {
@@ -29,7 +39,7 @@ export default function AddToCollection() {
       return res.json()
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['owned-games'] })
+      queryClient.invalidateQueries({ queryKey: [COLLECTION_QUERY_KEY] })
     },
     onError: (error) => {
       console.log(error)
@@ -76,6 +86,42 @@ export default function AddToCollection() {
     )
   })
 
+  const ownedCopiesList = ownedCopies.map((copy, index) => {
+    return (
+      <div key={copy.id} className="owned-copy-field">
+        <div className="form-field">
+          <label htmlFor={copy.id}>Language</label>
+          <select key={copy.id} {...register(`owned_copies.${index}.language`)}>
+            {langDropdown}
+          </select>
+        </div>
+        <div className="form-field">
+          <label htmlFor={copy.id}>Platform</label>
+          <select key={copy.id} {...register(`owned_copies.${index}.platform`)}>
+            {platDropdown}
+          </select>
+        </div>
+        <div className="form-field">
+          <label htmlFor={copy.id}>Original Price</label>
+          <input key={copy.id} type="number" min={0} step=".01" {...register(`owned_copies.${index}.orig_price`)} />
+        </div>
+        <div className="form-field">
+          <label htmlFor={copy.id}>Price</label>
+          <input key={copy.id} type="number" min={0} step=".01" {...register(`owned_copies.${index}.price`)} />
+        </div>
+        <div className="form-field">
+          <label htmlFor={copy.id}>Currency</label>
+          <select key={copy.id} {...register(`owned_copies.${index}.price_currency`)}>
+            {currDropdown}
+          </select>
+        </div>
+        <button className="remove-copy-button" type="button" onClick={() => remove(index)}>
+          Remove
+        </button>
+      </div>
+    )
+  })
+
   return (
     <div className="main-container">
       <div className="header">
@@ -113,34 +159,14 @@ export default function AddToCollection() {
         </div>
         <div className="form-field">
           <p>Owned Copies</p>
-          <div className="owned-copy-field">
-            <div className="form-field">
-              <label htmlFor="owned_copies.0.language">Language</label>
-              <select key="owned_copies.0.language" {...register('owned_copies.0.language')}>
-                {langDropdown}
-              </select>
-            </div>
-            <div className="form-field">
-              <label htmlFor="owned_copies.0.platform">Platform</label>
-              <select key="owned_copies.0.platform" {...register('owned_copies.0.platform')}>
-                {platDropdown}
-              </select>
-            </div>
-            <div className="form-field">
-              <label htmlFor="owned_copies.0.orig_price">Original Price</label>
-              <input type="number" {...register('owned_copies.0.orig_price')} />
-            </div>
-            <div className="form-field">
-              <label htmlFor="owned_copies.0.price">Price</label>
-              <input type="number" {...register('owned_copies.0.price')} />
-            </div>
-            <div className="form-field">
-              <label htmlFor="owned_copies.0.price_currency">Currency</label>
-              <select key="owned_copies.0.platform" {...register('owned_copies.0.price_currency')}>
-                {currDropdown}
-              </select>
-            </div>
-          </div>
+          {ownedCopiesList}
+          <button
+            className="add-copy-button"
+            type="button"
+            onClick={() => append({ language: '', platform: '', orig_price: null, price: null, price_currency: '' })}
+          >
+            Add Copy
+          </button>
         </div>
         <input type="submit" value="Add Game" />
       </form>
