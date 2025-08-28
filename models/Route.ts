@@ -10,6 +10,10 @@ const routeSchema = new mongoose.Schema(
       type: mongoose.Types.ObjectId,
       required: true,
     },
+    name: {
+      type: String,
+      required: true,
+    },
     type: {
       type: String,
       enum: ['Character', 'Other'],

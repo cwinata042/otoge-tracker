@@ -251,7 +251,9 @@ button {
 }
 
 .add-copy-button,
-.remove-copy-button {
+.remove-copy-button,
+.add-route-button,
+.remove-route-button {
   padding: 2px 10px;
   font-size: 12px;
   width: fit-content;
@@ -302,4 +304,20 @@ a:hover {
 
 .copies:hover .copies-tooltip {
   visibility: visible;
+}
+
+.tabs {
+  display: flex;
+  cursor: pointer;
+}
+.tab {
+  background: var(--dark);
+  padding: 5px 10px;
+}
+.tab.active,
+.tab.active:hover {
+  background: var(--completed);
+}
+.tab:hover {
+  background: #203b66;
 }

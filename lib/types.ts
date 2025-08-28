@@ -3,7 +3,7 @@ export enum TGameTypes {
   'Fandisc' = 'Fandisc',
 }
 
-export enum TGameStatuses {
+export enum TStatuses {
   'Incomplete' = 'Incomplete',
   'Playing' = 'Playing',
   'Completed' = 'Completed',
@@ -30,6 +30,11 @@ export type TGameCopy = {
   price_currency?: TCurrency | null
 }
 
+export enum TRouteTypes {
+  'Character' = 'Character',
+  'Other' = 'Other',
+}
+
 export enum TCurrency {
   'USD' = 'USD',
   'JPY' = 'JPY',
@@ -40,7 +45,7 @@ export type TOwnedGame = {
   orig_title: string
   title: string
   type: TGameTypes
-  status: TGameStatuses
+  status: TStatuses
   img_link: string
   owned_copies: [
     {
