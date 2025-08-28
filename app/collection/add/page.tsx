@@ -19,9 +19,12 @@ export default function AddToCollection() {
 
   const { mutate } = useMutation({
     mutationFn: async () => {
-      const body = JSON.stringify(getValues())
-      console.log(body)
-      const res = await fetch('/api/collection', { method: 'POST', body: body })
+      const body = getValues()
+
+      const res = await fetch('/api/collection', {
+        method: 'POST',
+        body: JSON.stringify({ ...body, user_id: session?.user?._id ? session?.user?._id : '' }),
+      })
 
       return res.json()
     },
@@ -124,12 +127,16 @@ export default function AddToCollection() {
               </select>
             </div>
             <div className="form-field">
+              <label htmlFor="owned_copies.0.orig_price">Original Price</label>
+              <input type="number" {...register('owned_copies.0.orig_price')} />
+            </div>
+            <div className="form-field">
               <label htmlFor="owned_copies.0.price">Price</label>
               <input type="number" {...register('owned_copies.0.price')} />
             </div>
             <div className="form-field">
-              <label htmlFor="owned_copies.0.currency">Currency</label>
-              <select key="owned_copies.0.platform" {...register('owned_copies.0.currency')}>
+              <label htmlFor="owned_copies.0.price_currency">Currency</label>
+              <select key="owned_copies.0.platform" {...register('owned_copies.0.price_currency')}>
                 {currDropdown}
               </select>
             </div>
