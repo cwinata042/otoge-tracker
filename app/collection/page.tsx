@@ -14,7 +14,7 @@ export default function Collection() {
     error,
     data: ownedGames,
   } = useQuery({
-    queryKey: [COLLECTION_QUERY_KEY, session?.user._id],
+    queryKey: [COLLECTION_QUERY_KEY],
     queryFn: async () => {
       const res = await fetch(`/api/collection`, {
         headers: {
@@ -23,6 +23,7 @@ export default function Collection() {
       })
       return res.json()
     },
+    staleTime: 1000 * 60 * 5,
     enabled: !!session,
   })
 

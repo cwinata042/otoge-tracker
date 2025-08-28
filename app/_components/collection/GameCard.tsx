@@ -9,7 +9,7 @@ export default function GameCard({ gameDetails }: { gameDetails: TOwnedGame }) {
       <div className="squareContainer">
         <Image
           src={gameDetails.img_link}
-          alt={`Game cover for ${gameDetails.orig_title}`}
+          alt={`Game cover for ${gameDetails.title}`}
           fill={true}
           style={{ objectFit: 'cover' }}
         />
@@ -17,9 +17,9 @@ export default function GameCard({ gameDetails }: { gameDetails: TOwnedGame }) {
       <div className="gameInfo">
         <div className="gameDetails">
           <GameStatus status={gameDetails.status} />
-          <GameCopy platform={gameDetails.owned_copies[0].platform} language={gameDetails.owned_copies[0].language} />
+          <GameCopy copies={gameDetails.owned_copies} />
         </div>
-        <div className="gameTitle">{gameDetails.orig_title}</div>
+        <div className="gameTitle">{gameDetails.title}</div>
       </div>
     </div>
   )

@@ -1,13 +1,8 @@
-import { TGameLanguages, TGamePlatforms } from '@/lib/types'
+import { TGameCopy, TGameLanguages, TGamePlatforms } from '@/lib/types'
 import Image from 'next/image'
 
-interface GameCopyProps {
-  platform: string
-  language: string
-}
-
-export default function GameCopy({ platform, language }: { platform: TGamePlatforms; language: TGameLanguages }) {
-  function getPlatformIcon() {
+export default function GameCopy({ copies }: { copies: TGameCopy[] }) {
+  function getPlatformIcon(platform: TGamePlatforms) {
     switch (platform) {
       case TGamePlatforms.Switch:
         return <Image src="/switch.svg" alt="Switch logo" width="18" height="18" />
@@ -16,7 +11,7 @@ export default function GameCopy({ platform, language }: { platform: TGamePlatfo
     }
   }
 
-  function getLanguageIcon() {
+  function getLanguageIcon(language: TGameLanguages) {
     switch (language) {
       case TGameLanguages.JP:
         return <Image src="/jp.svg" alt="Japanese flag" width="25" height="16" />
@@ -25,10 +20,31 @@ export default function GameCopy({ platform, language }: { platform: TGamePlatfo
     }
   }
 
+  function getMoreCopies() {
+    if (copies.length > 1) {
+      return (
+        <div className="copies">
+          <p>+{copies.length - 1}</p>
+          <span className="copies-tooltip">
+            {copies.slice(1).map((copy, index) => {
+              return (
+                <div key={`copy-${index}`} className="gameCopy">
+                  {getPlatformIcon(copy.platform)}
+                  {getLanguageIcon(copy.language)}
+                </div>
+              )
+            })}
+          </span>
+        </div>
+      )
+    }
+  }
+
   return (
     <div className={`gameCopy`}>
-      {getPlatformIcon()}
-      {getLanguageIcon()}
+      {getPlatformIcon(copies[0].platform)}
+      {getLanguageIcon(copies[0].language)}
+      {getMoreCopies()}
     </div>
   )
 }
