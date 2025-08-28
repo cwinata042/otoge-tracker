@@ -3,8 +3,10 @@
 import Link from 'next/link'
 import GameGrid from '../_components/collection/GameGrid'
 import { useQuery } from '@tanstack/react-query'
+import { signOut, useSession } from 'next-auth/react'
 
 export default function Collection() {
+  const { data: session } = useSession()
   const {
     status,
     error,
@@ -22,13 +24,15 @@ export default function Collection() {
   }
 
   if (status === 'error') {
-    console.log(error)
     return <div>Failed to fetch owned games.</div>
   }
 
   return (
     <div className="main-container">
-      <div className="header">Cool header here</div>
+      <div className="header">
+        <p>{session?.user?.email}</p>
+        <button onClick={() => signOut()}>Log out</button>
+      </div>
       <div className="body">
         <div className="collection-header">
           <div className="collection-title">

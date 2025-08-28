@@ -2,10 +2,12 @@
 
 import { TCurrency, TGameLanguages, TGamePlatforms, TGameStatuses, TGameTypes } from '@/lib/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useForm } from 'react-hook-form'
 
 export default function AddToCollection() {
+  const { data: session } = useSession()
   const queryClient = useQueryClient()
   const {
     register,
