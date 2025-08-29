@@ -438,6 +438,10 @@ input[type='text']#vndb-link::placeholder {
 .loader {
   animation: spin-animation 1s infinite;
 }
+.loader.lg {
+  width: 30px;
+  height: 30px;
+}
 
 @keyframes spin-animation {
   0% {
@@ -597,4 +601,16 @@ tbody tr.selected {
   align-items: center;
   justify-content: center;
   gap: 20px;
+}
+
+.loading-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+p.lg {
+  font-size: 24px;
 }

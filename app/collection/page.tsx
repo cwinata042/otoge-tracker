@@ -6,6 +6,7 @@ import GameGrid from '../_components/collection/GameGrid'
 import { useQuery } from '@tanstack/react-query'
 import { signOut, useSession } from 'next-auth/react'
 import { COLLECTION_QUERY_KEY } from '@/lib/queryKeys'
+import { LuLoaderCircle } from 'react-icons/lu'
 
 export default function Collection() {
   const { data: session } = useSession()
@@ -28,12 +29,24 @@ export default function Collection() {
     enabled: !!session,
   })
 
-  if (status === 'pending') {
-    return <div>Loading...</div>
-  }
-
-  if (status === 'error' || error) {
-    return <div>Failed to fetch owned games.</div>
+  function getCollection() {
+    switch (status) {
+      case 'pending':
+        return (
+          <div className="loading-page">
+            <p className="form-info-white lg">Grabbing your collection...</p>
+            <LuLoaderCircle className="loader lg" />
+          </div>
+        )
+      case 'error':
+        return (
+          <div className="loading-page">
+            <p className="form-info-white lg">There was an error grabbing your collection. Try reloading the page!</p>
+          </div>
+        )
+      default:
+        return <GameGrid collection={ownedGames} />
+    }
   }
 
   return (
@@ -50,12 +63,12 @@ export default function Collection() {
       <div className="body">
         <div className="collection-header">
           <div className="collection-title">
-            <div className="title">Collection (30)</div>
+            <div className="title">{`Collection (${ownedGames?.length ? ownedGames?.length : 0})`}</div>
             <Link href="/collection/add">Add new game</Link>
           </div>
           <div className="filter-sort">filter and sort</div>
         </div>
-        <GameGrid collection={ownedGames} />
+        {getCollection()}
       </div>
     </div>
   )
