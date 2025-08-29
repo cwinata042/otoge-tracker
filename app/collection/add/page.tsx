@@ -51,6 +51,9 @@ export default function AddToCollection() {
   } = useFieldArray({
     control,
     name: 'owned_copies',
+    rules: {
+      required: true,
+    },
   })
 
   const {
@@ -153,14 +156,14 @@ export default function AddToCollection() {
     return (
       <div key={copy.id} className="owned-copy-field">
         <div className="form-field">
-          <label htmlFor={copy.id}>Language</label>
-          <select key={copy.id} {...register(`owned_copies.${index}.language`)}>
+          <label htmlFor={copy.id}>Language*</label>
+          <select key={copy.id} {...(register(`owned_copies.${index}.language`), { required: true })}>
             {langDropdown}
           </select>
         </div>
         <div className="form-field">
-          <label htmlFor={copy.id}>Platform</label>
-          <select key={copy.id} {...register(`owned_copies.${index}.platform`)}>
+          <label htmlFor={copy.id}>Platform*</label>
+          <select key={copy.id} {...(register(`owned_copies.${index}.platform`), { required: true })}>
             {platDropdown}
           </select>
         </div>
@@ -174,9 +177,23 @@ export default function AddToCollection() {
         </div>
         <div className="form-field">
           <label htmlFor={copy.id}>Currency</label>
-          <select key={copy.id} {...register(`owned_copies.${index}.price_currency`)}>
+          <select
+            key={copy.id}
+            {...register(`owned_copies.${index}.price_currency`, {
+              validate: {
+                checkCurrency: (currency: TCurrency | string) => {
+                  if (getValues(`owned_copies.${index}.price`) && (currency === '' || !currency)) {
+                    return 'Please enter a currency.'
+                  }
+                },
+              },
+            })}
+          >
             {currDropdown}
           </select>
+          {errors?.owned_copies && errors.owned_copies[index]?.price_currency && (
+            <div className="form-error">Please select a currency.</div>
+          )}
         </div>
         <button className="remove-copy-button" type="button" onClick={() => remove(index)}>
           Remove
@@ -189,24 +206,33 @@ export default function AddToCollection() {
     return (
       <div key={route.id} className="owned-copy-field">
         <div className="form-field">
-          <label htmlFor={route.id}>Type</label>
-          <select key={route.id} {...register(`routes.${index}.type`)}>
+          <label htmlFor={route.id}>Type*</label>
+          <select key={route.id} {...register(`routes.${index}.type`, { required: true })}>
             {routeTypeDropdown}
           </select>
+          {errors?.routes && errors.routes[index]?.type?.type === 'required' && (
+            <div className="form-error">Please select a route type.</div>
+          )}
         </div>
         <div className="form-field">
-          <label htmlFor={route.id}>Name</label>
-          <input key={route.id} {...register(`routes.${index}.name`)} />
+          <label htmlFor={route.id}>Character/Route Name*</label>
+          <input key={route.id} {...register(`routes.${index}.name`, { required: true })} />
+          {errors?.routes && errors.routes[index]?.name?.type === 'required' && (
+            <div className="form-error">Please enter a character/route name.</div>
+          )}
         </div>
         <div className="form-field">
           <label htmlFor={route.id}>Image Link</label>
           <input key={route.id} {...register(`routes.${index}.route_img_link`)} />
         </div>
         <div className="form-field">
-          <label htmlFor={route.id}>Status</label>
-          <select key={route.id} {...register(`routes.${index}.status`)}>
+          <label htmlFor={route.id}>Status*</label>
+          <select key={route.id} {...register(`routes.${index}.status`, { required: true })}>
             {statusDropdown}
           </select>
+          {errors?.routes && errors.routes[index]?.status?.type === 'required' && (
+            <div className="form-error">Please select a route status.</div>
+          )}
         </div>
         <button className="remove-route-button" type="button" onClick={() => removeRoute(index)}>
           Remove
@@ -238,10 +264,10 @@ export default function AddToCollection() {
         setValue('title', vndbData.results[0].title)
         setValue('orig_title', vndbData.results[0].alttitle)
         setValue('img_link', vndbData.results[0].image.url)
+        removeRoute()
 
         for (const character of vndbData.results[0].va) {
           const characterObj = character.character
-
           // Only pull characters with primary roles
           if (characterObj.vns[0].role === 'primary') {
             appendRoute({
@@ -322,12 +348,26 @@ export default function AddToCollection() {
         {currTab === 'Game Details' ? (
           <>
             <div className="form-field">
-              <label htmlFor="orig_title">Original Title</label>
-              <input key="orig_title" {...register('orig_title')} />
+              <label htmlFor="orig_title">Original Title*</label>
+              <input
+                key="orig_title"
+                {...register('orig_title', {
+                  required: true,
+                })}
+              />
+              {errors.orig_title?.type === 'required' && (
+                <div className="form-error">Please enter the original title.</div>
+              )}
             </div>
             <div className="form-field">
-              <label htmlFor="title">Title</label>
-              <input key="title" {...register('title')} />
+              <label htmlFor="title">Title*</label>
+              <input
+                key="title"
+                {...register('title', {
+                  required: true,
+                })}
+              />
+              {errors.title?.type === 'required' && <div className="form-error">Please enter the title.</div>}
             </div>
             <div className="form-field">
               <label htmlFor="img_link">Link to Cover Image</label>
@@ -338,20 +378,23 @@ export default function AddToCollection() {
               <input key="vndb_id" {...register('vndb_id')} />
             </div>
             <div className="form-field">
-              <label htmlFor="type">Type</label>
-              <select key="type" {...register('type')}>
+              <label htmlFor="type">Type*</label>
+              <select key="type" {...register('type', { required: true })}>
                 {typeDropdown}
               </select>
+              {errors.type?.type === 'required' && <div className="form-error">Please select a type.</div>}
             </div>
             <div className="form-field">
-              <label htmlFor="status">Status</label>
+              <label htmlFor="status">Status*</label>
               <select key="status" {...register('status')}>
                 {statusDropdown}
               </select>
+              {errors.status?.type === 'required' && <div className="form-error">Please select a status.</div>}
             </div>
             <div className="form-field">
-              <p>Owned Copies</p>
+              <p>Owned Copies*</p>
               {ownedCopiesList}
+              {errors.owned_copies?.root && <div className="form-error">Please add at least one game copy.</div>}
               <button
                 className="add-copy-button"
                 type="button"
