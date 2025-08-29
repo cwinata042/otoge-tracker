@@ -47,12 +47,7 @@ export type TOwnedGame = {
   type: TGameTypes
   status: TStatuses
   img_link: string
-  owned_copies: [
-    {
-      language: TGameLanguages
-      platform: TGamePlatforms
-    }
-  ]
+  owned_copies: TGameCopy[]
   price: number
   price_currency: TCurrency
 }

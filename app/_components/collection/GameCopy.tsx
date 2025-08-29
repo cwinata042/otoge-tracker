@@ -2,7 +2,7 @@ import { TGameCopy, TGameLanguages, TGamePlatforms } from '@/lib/types'
 import Image from 'next/image'
 
 export default function GameCopy({ copies }: { copies: TGameCopy[] }) {
-  function getPlatformIcon(platform: TGamePlatforms) {
+  function getPlatformIcon(platform: TGamePlatforms | string) {
     switch (platform) {
       case TGamePlatforms.Switch:
         return <Image src="/switch.svg" alt="Switch logo" width="18" height="18" />
@@ -11,7 +11,7 @@ export default function GameCopy({ copies }: { copies: TGameCopy[] }) {
     }
   }
 
-  function getLanguageIcon(language: TGameLanguages) {
+  function getLanguageIcon(language: TGameLanguages | string) {
     switch (language) {
       case TGameLanguages.JP:
         return <Image src="/jp.svg" alt="Japanese flag" width="25" height="16" />
