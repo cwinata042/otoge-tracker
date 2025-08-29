@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import GameGrid from '../_components/collection/GameGrid'
 import { useQuery } from '@tanstack/react-query'
 import { signOut, useSession } from 'next-auth/react'
@@ -38,8 +39,13 @@ export default function Collection() {
   return (
     <div className="main-container">
       <div className="header">
-        <p>{session?.user?.email}</p>
-        <button onClick={() => signOut()}>Log out</button>
+        <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
+        <div className="user-details">
+          <p>{session?.user.email}</p>
+          <button className="small" onClick={() => signOut()}>
+            Log out
+          </button>
+        </div>
       </div>
       <div className="body">
         <div className="collection-header">

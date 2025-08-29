@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { COLLECTION_QUERY_KEY } from '@/lib/queryKeys'
 import {
   TCurrency,
@@ -11,7 +12,7 @@ import {
   TAddGameFormValues,
 } from '@/lib/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -405,8 +406,13 @@ export default function AddToCollection() {
   return (
     <div className="main-container">
       <div className="header">
-        Cool header here
-        <Link href="/collection">Back</Link>
+        <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
+        <div className="user-details">
+          <p>{session?.user.email}</p>
+          <button className="small" onClick={() => signOut()}>
+            Log out
+          </button>
+        </div>
       </div>
       <dialog className="vndb-import-container">
         <div className="vndb-import-modal">
@@ -607,7 +613,10 @@ export default function AddToCollection() {
             </div>
           </>
         )}
-        <input type="submit" value="Add Game" />
+        <Link className="button outlined" href="/collection">
+          Cancel
+        </Link>
+        <input className="button main" type="submit" value="Add Game" />
       </form>
     </div>
   )

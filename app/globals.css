@@ -70,6 +70,10 @@ a {
   width: 100%;
   color: var(--light);
   border-bottom: solid var(--accent-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0px 50px;
 }
 
 div.main {
@@ -260,7 +264,8 @@ div.main {
 }
 
 input[type='submit'],
-button {
+button,
+.button {
   font-family: 'DM Sans', sans-serif;
   display: flex;
   padding: 10px 30px;
@@ -476,7 +481,8 @@ button.small {
   color: var(--background);
   background: none;
 }
-button {
+button,
+.button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -492,53 +498,64 @@ input#vndb-link:disabled {
   color: var(--medium);
   pointer-events: none;
 }
-button:hover {
+button:hover,
+.button:hover {
   border: var(--background-hover) solid 1px;
   color: var(--background-hover);
 }
-button.main {
+button.main,
+.button.main {
   border: var(--accent-dark) solid 1px;
   background: var(--accent-dark);
   color: var(--darker);
 }
-button.main:hover {
+button.main:hover,
+.button.main:hover {
   border: var(--accent-dark-hover) solid 1px;
   background: var(--accent-dark-hover);
 }
-button.main.outlined {
+button.main.outlined,
+.button.main.outlined {
   border: var(--accent-dark) solid 1px;
   background: none;
   color: var(--accent-dark);
 }
-button.main.outlined:hover {
+button.main.outlined:hover,
+.button.main.outlined:hover {
   border: var(--accent-dark-hover) solid 1px;
   color: var(--accent-dark-hover);
 }
-button.main.outlined.disabled {
+button.main.outlined.disabled,
+.button.main.outlined.disabled {
   border: var(--accent-dark-disabled) solid 1px;
   background: none;
   color: var(--accent-dark-disabled);
 }
-button.main.disabled {
+button.main.disabled,
+.button.main.disabled {
   gap: 10px;
   border: var(--accent-dark-disabled) solid 1px;
   background: var(--accent-dark-disabled);
   color: black;
 }
-button.small {
+button.small,
+.button.small {
   padding: 5px 10px;
   font-size: 14px;
   font-weight: bold;
 }
-button.nobg {
+button.nobg,
+.button.nobg {
   border: none;
   background: none;
   color: var(--background);
 }
-button.warn {
+button.warn,
+.button.warn {
   color: var(--error-text);
 }
-button.warn:hover {
+button.warn:hover,
+.button.warn:hover {
   color: var(--error-text-hover);
 }
 hr.solid {
@@ -569,4 +586,15 @@ tbody tr {
 }
 tbody tr.selected {
   color: var(--background);
+}
+.logo {
+  width: 32px;
+  height: 32px;
+}
+
+.user-details {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
