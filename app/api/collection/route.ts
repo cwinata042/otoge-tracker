@@ -4,6 +4,7 @@ import OwnedGame from '@/models/OwnedGame'
 import { NextResponse } from 'next/server'
 import mongoose from 'mongoose'
 import { headers } from 'next/headers'
+import Route from '@/models/Route'
 
 export async function GET(req: Request) {
   try {
@@ -19,9 +20,26 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  await dbConnect()
-  const { user_id, vndb_id, orig_title, title, type, status, img_link, owned_copies } = await req.json()
-  const newOwnedGame = new OwnedGame({ user_id, vndb_id, orig_title, title, type, status, img_link, owned_copies })
-  await newOwnedGame.save()
-  return NextResponse.json(newOwnedGame, { status: 201 })
+  try {
+    await dbConnect()
+    const { user_id, vndb_id, orig_title, title, type, status, img_link, owned_copies, routes } = await req.json()
+    const newOwnedGame = new OwnedGame({ user_id, vndb_id, orig_title, title, type, status, img_link, owned_copies })
+    await newOwnedGame.save()
+
+    if (routes.length > 0) {
+      const newOwnedGameId = newOwnedGame._id
+      const routesArray = routes.map((route: any) => {
+        return {
+          ...route,
+          user_id: new mongoose.Types.ObjectId(user_id),
+          game_id: new mongoose.Types.ObjectId(newOwnedGameId),
+        }
+      })
+      const newRoutes = await Route.insertMany(routesArray)
+    }
+
+    return NextResponse.json(newOwnedGame, { status: 201 })
+  } catch (error) {
+    return NextResponse.json({ error: error })
+  }
 }
