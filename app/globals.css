@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..1000');
 
 :root {
   --background: #ffffff;
@@ -6,9 +6,11 @@
   --dark: #232c3d;
   --darker: #15181f;
   --accent-dark: #e6b341;
-  --accent-dark-hover: #b47f0b;
+  --accent-dark-disabled: #9c7521;
+  --accent-dark-hover: #c08c1b;
   --accent-light: #0e55b1;
   --light: #fbfaf8;
+  --background-hover: #c8cedf;
   --completed: #305083;
   --playing: #c2d79c;
   --dark-green: #45512f;
@@ -17,6 +19,7 @@
   --two-column: calc(var(--game-card-width) * 2 + 100px);
   --three-column: calc(var(--game-card-width) * 3 + 100px);
   --error-text: rgb(233, 34, 34);
+  --error-text-hover: rgb(197, 17, 17);
   --dark-gray: #384458;
   --darker-gray: #17171796;
   --medium: #606d8b;
@@ -40,6 +43,7 @@ body {
   color: var(--light);
   background: var(--darker);
   font-family: 'DM Sans', sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -68,7 +72,7 @@ a {
   border-bottom: solid var(--accent-dark);
 }
 
-.main {
+div.main {
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -177,7 +181,7 @@ a {
 
 .gameTitle {
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 700;
   line-height: 20px;
   color: var(--light);
 }
@@ -215,9 +219,20 @@ a {
   align-items: end;
 }
 
+.form-info {
+  color: var(--accent-dark);
+  font-weight: 700;
+}
+.form-info-white {
+  font-weight: 700;
+}
+.form-info-pale {
+  color: var(--medium);
+  font-weight: 500;
+}
 .form-error {
   color: var(--error-text);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .password-container {
@@ -248,7 +263,7 @@ input[type='submit'],
 button {
   font-family: 'DM Sans', sans-serif;
   display: flex;
-  padding: 5px 15px;
+  padding: 10px 30px;
   font-size: 16px;
   font-weight: bold;
   width: fit-content;
@@ -342,9 +357,12 @@ a:hover {
   height: 100%;
   background: none;
   border: none;
+  padding: 50px;
 }
 .vndb-import-modal {
   display: flex;
+  max-width: 790px;
+  width: 100%;
   flex-direction: column;
   background: var(--darker);
   color: var(--background);
@@ -352,12 +370,16 @@ a:hover {
   gap: 40px;
 }
 .vndb-main {
-  width: 790px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 25px;
 }
 .vndb-search {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.vndb-search-options-container {
   display: flex;
   align-items: center;
   gap: 45px;
@@ -382,7 +404,8 @@ input[type='text']#vndb-link::placeholder {
   color: var(--medium);
   font-style: italic;
 }
-.vndb-search-button {
+.vndb-search-button,
+.vndb-import-button {
   background: var(--accent-dark);
   color: black;
 }
@@ -391,4 +414,159 @@ input[type='text']#vndb-link::placeholder {
   align-items: center;
   justify-content: end;
   gap: 10px;
+}
+.vndb-header,
+.vndb-link-container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.vndb-search-button-loading,
+.vndb-import-button-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--accent-dark-disabled);
+  color: black;
+}
+.loader {
+  animation: spin-animation 1s infinite;
+}
+
+@keyframes spin-animation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+.vndb-search-result-table {
+  width: 100%;
+}
+th {
+  text-align: left;
+  background: var(--dark);
+  padding: 5px 10px;
+}
+td {
+  padding: 5px 10px;
+}
+table {
+  border-collapse: collapse;
+}
+.vndb-search-results-container {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 10px;
+}
+.vndb-search-result-prompt {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+td.checkbox {
+  text-align: right;
+}
+button.small {
+  padding: 5px 10px;
+  font-size: 14px;
+  color: var(--background);
+  background: none;
+}
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: var(--background) solid 1px;
+  color: var(--background);
+  cursor: pointer;
+}
+input {
+  cursor: pointer;
+}
+input#vndb-link:disabled {
+  color: var(--medium);
+  pointer-events: none;
+}
+button:hover {
+  border: var(--background-hover) solid 1px;
+  color: var(--background-hover);
+}
+button.main {
+  border: var(--accent-dark) solid 1px;
+  background: var(--accent-dark);
+  color: var(--darker);
+}
+button.main:hover {
+  border: var(--accent-dark-hover) solid 1px;
+  background: var(--accent-dark-hover);
+}
+button.main.outlined {
+  border: var(--accent-dark) solid 1px;
+  background: none;
+  color: var(--accent-dark);
+}
+button.main.outlined:hover {
+  border: var(--accent-dark-hover) solid 1px;
+  color: var(--accent-dark-hover);
+}
+button.main.outlined.disabled {
+  border: var(--accent-dark-disabled) solid 1px;
+  background: none;
+  color: var(--accent-dark-disabled);
+}
+button.main.disabled {
+  gap: 10px;
+  border: var(--accent-dark-disabled) solid 1px;
+  background: var(--accent-dark-disabled);
+  color: black;
+}
+button.small {
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: bold;
+}
+button.nobg {
+  border: none;
+  background: none;
+  color: var(--background);
+}
+button.warn {
+  color: var(--error-text);
+}
+button.warn:hover {
+  color: var(--error-text-hover);
+}
+hr.solid {
+  border-top: 1px solid var(--dark);
+  border-color: var(--dark);
+  width: 100%;
+}
+button:disabled {
+  pointer-events: none;
+}
+input[type='checkbox'] {
+  appearance: none;
+  margin: 0;
+  width: 21px;
+  height: 21px;
+  background: none;
+  border: var(--medium) 1px solid;
+}
+input[type='checkbox']:checked {
+  background: var(--accent-dark);
+  border: var(--accent-dark) 1px solid;
+}
+input[type='checkbox']:hover {
+  border: var(--accent-dark) 1px solid;
+}
+tbody tr {
+  color: var(--medium);
+}
+tbody tr.selected {
+  color: var(--background);
 }

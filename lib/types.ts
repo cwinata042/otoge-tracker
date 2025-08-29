@@ -61,7 +61,7 @@ export type TRoute = {
 }
 
 export type TAddGameFormValues = {
-  vndb_link: string
+  vndb_search: string
   vndb_id: string
   orig_title: string
   title: string

@@ -10,11 +10,12 @@ import {
   TRouteTypes,
   TAddGameFormValues,
 } from '@/lib/types'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
+import { LuLoaderCircle } from 'react-icons/lu'
 
 export default function AddToCollection() {
   const { data: session } = useSession()
@@ -22,12 +23,19 @@ export default function AddToCollection() {
 
   const [currTab, setCurrTab] = useState<string>('Game Details')
   const [vndbImportType, setVNDBImportType] = useState<string>('VNDB Link')
+  const [vndbImportId, setVNDBImportId] = useState<string | null>(null)
+  const [vndbImportError, setVNDBImportError] = useState<string>('')
+  const [isLoadingVNDBSearch, setIsLoadingVNDBSearch] = useState<boolean>(false)
+  const [vndbSearchResults, setVNDBSearchResults] = useState<any | null>(null)
+  const [isLoadingVNDBImport, setIsLoadingVNDBImport] = useState<boolean>(false)
 
   const {
     register,
     handleSubmit,
     getValues,
     setValue,
+    setError,
+    clearErrors,
     control,
     formState: { errors },
   } = useForm<TAddGameFormValues>({
@@ -35,7 +43,7 @@ export default function AddToCollection() {
       orig_title: '',
       title: '',
       img_link: '',
-      vndb_link: '',
+      vndb_search: '',
       vndb_id: '',
       type: TGameTypes.Main,
       status: TStatuses.Incomplete,
@@ -63,27 +71,6 @@ export default function AddToCollection() {
   } = useFieldArray({
     control,
     name: 'routes',
-  })
-
-  const { refetch: refetchVNDB } = useQuery({
-    queryKey: ['vndb', getValues('vndb_link').split('/').pop()],
-    queryFn: async () => {
-      const res = await fetch('https://api.vndb.org/kana/vn', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          filters: ['id', '=', getValues('vndb_link').split('/').pop()],
-          fields: 'title, alttitle, image.url, va.character{name, image.url, vns.role}',
-        }),
-      })
-
-      return res.json()
-    },
-    enabled: false,
-    staleTime: 1000 * 60 * 5,
-    refetchOnWindowFocus: false,
   })
 
   const { mutate } = useMutation({
@@ -247,22 +234,115 @@ export default function AddToCollection() {
     if (dialog && show) {
       dialog.showModal()
     } else if (dialog && !show) {
-      setValue('vndb_link', '')
+      clearVNDBSearch()
+      setIsLoadingVNDBSearch(false)
+      setIsLoadingVNDBImport(false)
       dialog.close()
     }
   }
 
-  async function fetchVNDBData() {
-    const vndbId = getValues('vndb_link').split('/').pop()
-    const vndbIdFormat = /^[v]\d+$/
-    if (vndbId && vndbIdFormat.test(vndbId)) {
-      const res = await refetchVNDB()
-      const vndbData = res.data
+  const handleSearchClick = async () => {
+    if (vndbImportType === 'VNDB Link') {
+      const vndbId = getValues('vndb_search').split('/').pop()
+      const vndbIdFormat = /^[v]\d+$/
 
-      if (vndbData && vndbData.results.length === 1) {
+      if (vndbId && vndbIdFormat.test(vndbId)) {
+        setIsLoadingVNDBSearch(true)
+
+        try {
+          const vndbSearchData = await queryClient.fetchQuery({
+            queryKey: ['vndb', vndbId],
+            queryFn: async () => {
+              const res = await fetch('https://api.vndb.org/kana/vn', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  filters: ['id', '=', vndbId],
+                  fields: 'title, alttitle, released',
+                }),
+              })
+
+              return res.json()
+            },
+            staleTime: 0,
+          })
+
+          setVNDBSearchResults(vndbSearchData)
+          setIsLoadingVNDBSearch(false)
+        } catch (err) {
+          setVNDBSearchResults([])
+          setIsLoadingVNDBSearch(false)
+        }
+      } else {
+        setError('vndb_search', { message: 'Please enter a valid VNDB link.' })
+      }
+    } else {
+      const vndbName = getValues('vndb_search')
+
+      if (vndbName && vndbName !== '') {
+        setIsLoadingVNDBSearch(true)
+
+        try {
+          const vndbSearchData = await queryClient.fetchQuery({
+            queryKey: ['vndb', vndbName],
+            queryFn: async () => {
+              const res = await fetch('https://api.vndb.org/kana/vn', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  filters: ['search', '=', vndbName],
+                  fields: 'title, alttitle, released',
+                }),
+              })
+
+              return res.json()
+            },
+            staleTime: 0,
+          })
+
+          setVNDBSearchResults(vndbSearchData)
+          setIsLoadingVNDBSearch(false)
+        } catch (err) {
+          setVNDBSearchResults([])
+          setIsLoadingVNDBSearch(false)
+        }
+      } else {
+        setError('vndb_search', { message: 'Please enter a search value.' })
+      }
+    }
+  }
+
+  const handleImportClick = async () => {
+    // Only fetch if valid VNDB link
+    if (vndbImportId) {
+      setIsLoadingVNDBImport(true)
+      try {
+        const vndbData = await queryClient.fetchQuery({
+          queryKey: ['vndb', vndbImportId],
+          queryFn: async () => {
+            const res = await fetch('https://api.vndb.org/kana/vn', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                filters: ['id', '=', vndbImportId],
+                fields: 'title, alttitle, image.url, va.character{name, image.url, vns.role}',
+              }),
+            })
+
+            return res.json()
+          },
+          staleTime: 0,
+        })
+
         setValue('vndb_id', vndbData.results[0].id)
         setValue('title', vndbData.results[0].title)
-        setValue('orig_title', vndbData.results[0].alttitle)
+        setValue('orig_title', vndbData.results[0].alttitle ? vndbData.results[0].alttitle : vndbData.results[0].title)
         setValue('img_link', vndbData.results[0].image.url)
         removeRoute()
 
@@ -278,10 +358,48 @@ export default function AddToCollection() {
             })
           }
         }
-
+        setIsLoadingVNDBImport(false)
         toggleModal(false)
+      } catch (err) {
+        setIsLoadingVNDBImport(false)
       }
+    } else {
+      setVNDBImportError('Select a game to import.')
     }
+  }
+
+  const vndbSearchResultHeadersData = ['Title', 'Released', '']
+  const vndbSearchResultHeaders = vndbSearchResultHeadersData.map((header) => {
+    return <th key={header}>{header}</th>
+  })
+  const vndbSearchResultRows = vndbSearchResults?.results.map((result: any) => {
+    return (
+      <tr key={`result-${result.id}`} className={vndbImportId === result.id ? 'selected' : ''}>
+        <td>{result.title ?? 'No title available'}</td>
+        <td>{result.released ?? 'No release date available'}</td>
+        <td className="checkbox">
+          <input
+            type="checkbox"
+            checked={vndbImportId === result.id}
+            onChange={() => {
+              if (vndbImportId === result.id) {
+                setVNDBImportId(null)
+              } else {
+                setVNDBImportId(result.id)
+                setVNDBImportError('')
+              }
+            }}
+          />
+        </td>
+      </tr>
+    )
+  })
+
+  function clearVNDBSearch() {
+    setValue('vndb_search', '')
+    setVNDBImportId(null)
+    setVNDBSearchResults(null)
+    setVNDBImportType('VNDB Link')
   }
 
   return (
@@ -293,43 +411,111 @@ export default function AddToCollection() {
       <dialog className="vndb-import-container">
         <div className="vndb-import-modal">
           <div className="vndb-main">
-            <h2>Import from VNDB</h2>
+            <div className="vndb-header">
+              <h2>Import from VNDB</h2>
+              <div className="form-info">NOTE: This will overwrite any existing values.</div>
+            </div>
             <div className="vndb-search">
-              <p>Search by</p>
-              <div className="vndb-search-options">
-                <div className="vndb-search-option">
-                  <input
-                    name="vndb-search-by"
-                    type="radio"
-                    id="vndb-link"
-                    value="VNDB Link"
-                    checked={vndbImportType === 'VNDB Link'}
-                    onChange={() => setVNDBImportType('VNDB Link')}
-                  />
-                  <label htmlFor="vndb-link">VNDB Link</label>
-                </div>
-                <div className="vndb-search-option">
-                  <input
-                    name="vndb-search-by"
-                    type="radio"
-                    id="game-title"
-                    value="Game Title"
-                    checked={vndbImportType === 'Game Title'}
-                    onChange={() => setVNDBImportType('Game Title')}
-                  />
-                  <label htmlFor="game-title">Game Title</label>
+              <div className="vndb-search-options-container">
+                <p className="form-info-white">Search by</p>
+                <div className="vndb-search-options">
+                  <div className="vndb-search-option">
+                    <input
+                      name="vndb-search-by"
+                      type="radio"
+                      id="vndb-link"
+                      value="VNDB Link"
+                      checked={vndbImportType === 'VNDB Link'}
+                      onChange={() => setVNDBImportType('VNDB Link')}
+                    />
+                    <label htmlFor="vndb-link">VNDB Link/ID</label>
+                  </div>
+                  <div className="vndb-search-option">
+                    <input
+                      name="vndb-search-by"
+                      type="radio"
+                      id="game-title"
+                      value="Game Title"
+                      checked={vndbImportType === 'Game Title'}
+                      onChange={() => setVNDBImportType('Game Title')}
+                    />
+                    <label htmlFor="game-title">Game Title</label>
+                  </div>
                 </div>
               </div>
+              <div className="vndb-link-container">
+                <input
+                  id="vndb-link"
+                  type="text"
+                  placeholder={
+                    vndbImportType === 'VNDB Link' ? 'https://vndb.org/v25197, v25197...' : 'BUSTAFELLOWS...'
+                  }
+                  {...register('vndb_search')}
+                  onChange={() => clearErrors('vndb_search')}
+                  disabled={vndbSearchResults !== null}
+                />
+                {errors.vndb_search && <div className="form-error">{errors.vndb_search.message}</div>}
+              </div>
             </div>
-            <input id="vndb-link" type="text" placeholder="https://vndb.org/v25197" {...register('vndb_link')} />
+            {vndbSearchResults && (
+              <>
+                <hr className="solid" />
+                <div className="vndb-search-results-container">
+                  <div className="vndb-search-result-prompt">
+                    <p className="form-info-white">Please select the game you want to import:</p>
+                    <p className="form-info-pale">
+                      {vndbSearchResults.more
+                        ? 'More than 10 results'
+                        : `${vndbSearchResults.results.length} ${
+                            vndbSearchResults.results.length > 1 ? 'results' : 'result'
+                          }`}
+                    </p>
+                  </div>
+                  <table className="vndb-search-result-table">
+                    <thead>
+                      <tr>{vndbSearchResultHeaders}</tr>
+                    </thead>
+                    <tbody>{vndbSearchResultRows}</tbody>
+                  </table>
+                  <button className="small nobg warn" onClick={() => clearVNDBSearch()}>
+                    Clear search results
+                  </button>
+                </div>
+              </>
+            )}
           </div>
           <div className="vndb-buttons">
-            <button autoFocus onClick={() => toggleModal(false)}>
-              Cancel
-            </button>
-            <button className="vndb-search-button" onClick={() => fetchVNDBData()}>
-              Search
-            </button>
+            {!isLoadingVNDBSearch && !isLoadingVNDBImport && (
+              <button autoFocus onClick={() => toggleModal(false)}>
+                Cancel
+              </button>
+            )}
+            {!vndbSearchResults &&
+              (!isLoadingVNDBSearch ? (
+                <button className="main outlined" onClick={handleSearchClick}>
+                  Search
+                </button>
+              ) : (
+                <button className="main outlined disabled">
+                  <p>Searching...</p>
+                  <LuLoaderCircle className="loader" />
+                </button>
+              ))}
+            {vndbSearchResults &&
+              (!isLoadingVNDBImport ? (
+                <button
+                  className={`main ${!vndbImportId ? 'disabled' : ''}`}
+                  onClick={handleImportClick}
+                  disabled={!vndbImportId}
+                >
+                  Import
+                </button>
+              ) : (
+                <button className="main disabled">
+                  <p>Importing...</p>
+                  <LuLoaderCircle className="loader" />
+                </button>
+              ))}
           </div>
         </div>
       </dialog>
