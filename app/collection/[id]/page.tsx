@@ -1,0 +1,126 @@
+'use client'
+
+import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
+import { TGameDetails } from '@/lib/types'
+import { QueryObserverRefetchErrorResult, QueryStatus, useQuery, UseQueryResult } from '@tanstack/react-query'
+import { signOut, useSession } from 'next-auth/react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useParams } from 'next/navigation'
+import { useState } from 'react'
+import { LuLoaderCircle } from 'react-icons/lu'
+
+export default function GameViewer() {
+  const { data: session } = useSession()
+  const params = useParams()
+
+  const [currTab, setCurrTab] = useState<string>('Details')
+
+  const {
+    status,
+    error,
+    data: gameDetails,
+  }: { status: string; error: any | null; data: undefined | TGameDetails } = useQuery({
+    queryKey: [SINGLE_GAME_QUERY_KEY, params.id],
+    queryFn: async () => {
+      const res = await fetch(`/api/collection/${params.id}`, {
+        headers: {
+          UserId: session?.user._id ? session?.user._id : '',
+        },
+      })
+      return res.json()
+    },
+    staleTime: 1000 * 60 * 5,
+    enabled: !!session,
+  })
+
+  console.log(gameDetails)
+
+  if (status === 'pending') {
+    return (
+      <div className="main-container">
+        <div className="header">
+          <Link href="/collection">
+            <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
+          </Link>
+          <div className="user-details">
+            <p>{session?.user.email}</p>
+            <button className="small" onClick={() => signOut()}>
+              Log out
+            </button>
+          </div>
+        </div>
+        <div className="body">
+          <div className="loading-page">
+            <p className="form-info-white lg">Grabbing game details...</p>
+            <LuLoaderCircle className="loader lg" />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (status === 'error' || !gameDetails) {
+    return (
+      <div className="main-container">
+        <div className="header">
+          <Link href="/collection">
+            <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
+          </Link>
+          <div className="user-details">
+            <p>{session?.user.email}</p>
+            <button className="small" onClick={() => signOut()}>
+              Log out
+            </button>
+          </div>
+        </div>
+        <div className="body">
+          <div className="loading-page">
+            <p className="form-info-white lg">There was an error grabbing your collection. Try reloading the page!</p>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className="main-container">
+      <div className="header">
+        <Link href="/collection">
+          <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
+        </Link>
+        <div className="user-details">
+          <p>{session?.user.email}</p>
+          <button className="small" onClick={() => signOut()}>
+            Log out
+          </button>
+        </div>
+      </div>
+      <div className="body">
+        <div className="single-game-header">
+          <h1>{gameDetails.title}</h1>
+          <button className="small main outlined">Edit</button>
+        </div>
+        <div className="single-game-main">
+          <div className="tabs">
+            <div className={`tab ${currTab === 'Details' ? 'active' : ''}`} onClick={() => setCurrTab('Details')}>
+              Details
+            </div>
+            <div className={`tab ${currTab === 'Routes' ? 'active' : ''}`} onClick={() => setCurrTab('Routes')}>
+              Routes
+            </div>
+          </div>
+          {currTab === 'Details' ? (
+            <div className="single-game-details">
+              <div className="game-details-image">
+                <Image src={gameDetails.img_link} alt={'Game Image'} fill={true} style={{ objectFit: 'cover' }} />
+              </div>
+            </div>
+          ) : (
+            <div className="single-game-details">Routes</div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}

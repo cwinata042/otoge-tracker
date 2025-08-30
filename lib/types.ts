@@ -43,7 +43,22 @@ export enum TCurrency {
   'JPY' = 'JPY',
 }
 
+export type TGameDetails = {
+  _id: string
+  vndb_id: string
+  orig_title: string
+  title: string
+  type: TGameTypes
+  status: TStatuses
+  img_link: string
+  owned_copies: TGameCopy[]
+  price: number
+  price_currency: TCurrency
+  routes: TRoute[]
+}
+
 export type TOwnedGame = {
+  _id: string
   vndb_id: string
   orig_title: string
   title: string

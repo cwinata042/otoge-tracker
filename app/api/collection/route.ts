@@ -1,9 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next'
 import dbConnect from '@/lib/mongoose'
 import OwnedGame from '@/models/OwnedGame'
 import { NextResponse } from 'next/server'
 import mongoose from 'mongoose'
-import { headers } from 'next/headers'
 import Route from '@/models/Route'
 
 export async function GET(req: Request) {

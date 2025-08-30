@@ -235,14 +235,14 @@ export default function AddToCollection() {
         </div>
         <div className="form-field">
           <label htmlFor={route.id}>Character/Route Name*</label>
-          <input key={route.id} {...register(`routes.${index}.name`, { required: true })} />
+          <input type="text" key={route.id} {...register(`routes.${index}.name`, { required: true })} />
           {errors?.routes && errors.routes[index]?.name?.type === 'required' && (
             <div className="form-error">Please enter a character/route name.</div>
           )}
         </div>
         <div className="form-field">
           <label htmlFor={route.id}>Image Link</label>
-          <input key={route.id} {...register(`routes.${index}.route_img_link`)} />
+          <input type="text" key={route.id} {...register(`routes.${index}.route_img_link`)} />
         </div>
         <div className="form-field">
           <label htmlFor={route.id}>Status*</label>
@@ -436,7 +436,9 @@ export default function AddToCollection() {
   return (
     <div className="main-container">
       <div className="header">
-        <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
+        <Link href="/collection">
+          <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
+        </Link>
         <div className="user-details">
           <p>{session?.user.email}</p>
           <button className="small" onClick={() => signOut()}>
@@ -593,6 +595,7 @@ export default function AddToCollection() {
                   <div className="form-field">
                     <label htmlFor="title">Title*</label>
                     <input
+                      type="text"
                       key="title"
                       {...register('title', {
                         required: true,
@@ -603,6 +606,7 @@ export default function AddToCollection() {
                   <div className="form-field">
                     <label htmlFor="orig_title">Original Title*</label>
                     <input
+                      type="text"
                       key="orig_title"
                       {...register('orig_title', {
                         required: true,
@@ -614,7 +618,7 @@ export default function AddToCollection() {
                   </div>
                   <div className="form-field">
                     <label htmlFor="img_link">Link to Cover Image</label>
-                    <input key="img_link" {...register('img_link')} />
+                    <input type="text" key="img_link" {...register('img_link')} />
                     <button
                       type="button"
                       className="small"

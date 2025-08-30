@@ -52,7 +52,9 @@ export default function Collection() {
   return (
     <div className="main-container">
       <div className="header">
-        <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
+        <Link href="/collection">
+          <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
+        </Link>
         <div className="user-details">
           <p>{session?.user.email}</p>
           <button className="small" onClick={() => signOut()}>
@@ -64,7 +66,11 @@ export default function Collection() {
         <div className="collection-header">
           <div className="collection-title">
             <div className="title">{`Collection (${ownedGames?.length ? ownedGames?.length : 0})`}</div>
-            <Link href="/collection/add">Add new game</Link>
+            {ownedGames?.length > 1 && (
+              <Link className="button main outlined small" href="/collection/add">
+                Add new game
+              </Link>
+            )}
           </div>
           <div className="filter-sort">filter and sort</div>
         </div>
