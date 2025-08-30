@@ -205,7 +205,7 @@ div.main {
 
 .sign-up-container,
 .login-container {
-  background: var(--dark-gray);
+  border: var(--dark) 3px solid;
 
   display: flex;
   gap: 20px;
@@ -252,10 +252,10 @@ div.main {
 .password-toggle {
   position: absolute;
   right: 5px;
-  color: var(--foreground);
+  color: var(--accent-dark);
 }
 .password-toggle:hover {
-  color: var(--accent-light);
+  color: var(--accent-dark-hover);
 }
 ::-ms-reveal,
 ::-ms-clear {
@@ -295,6 +295,19 @@ a {
 }
 a:hover {
   color: var(--accent-dark-hover);
+}
+
+.sign-up-form > .form-field > input,
+.password-container > input {
+  padding: 10px;
+  font-size: 16px;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--dark);
+  border: none;
+  color: var(--background);
+  outline: none;
+  width: 100%;
+  cursor: pointer;
 }
 
 .copies {

@@ -540,7 +540,7 @@ export default function AddToCollection() {
                     Search
                   </button>
                 ) : (
-                  <button className="main outlined disabled">
+                  <button className="main outlined disabled" disabled>
                     <p>Searching...</p>
                     <LuLoaderCircle className="loader" />
                   </button>
@@ -555,7 +555,7 @@ export default function AddToCollection() {
                     Import
                   </button>
                 ) : (
-                  <button className="main disabled">
+                  <button className="main disabled" disabled>
                     <p>Importing...</p>
                     <LuLoaderCircle className="loader" />
                   </button>
@@ -686,7 +686,7 @@ export default function AddToCollection() {
                 Cancel
               </Link>
               {addCopyStatus === 'pending' ? (
-                <button className="main disabled">
+                <button className="main disabled" disabled>
                   <p>Adding game...</p>
                   <LuLoaderCircle className="loader" />
                 </button>

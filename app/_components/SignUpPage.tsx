@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { LuLoaderCircle } from 'react-icons/lu'
 
 export default function SignUpPage() {
   const {
@@ -26,9 +27,11 @@ export default function SignUpPage() {
 
   const [passHide, setPassHide] = useState<boolean>(true)
   const [passConfirmHide, setPassConfirmHide] = useState<boolean>(true)
+  const [signingUp, setSigningUp] = useState<boolean>(false)
 
   const { mutate } = useMutation({
     mutationFn: async () => {
+      setSigningUp(true)
       const body = JSON.stringify({
         email: getValues('email'),
         password: getValues('password'),
@@ -37,9 +40,11 @@ export default function SignUpPage() {
       const res = await fetch('/api/sign-up', { method: 'POST', body: body })
 
       if (!res.ok) {
+        setSigningUp(false)
         throw new Error('A user with this email already exists.')
       }
 
+      setSigningUp(false)
       return res.json()
     },
     onSuccess: () => {
@@ -154,7 +159,14 @@ export default function SignUpPage() {
           </div>
           <Link href="/">Log in with your account</Link>
           <div className="submit-button-container">
-            <input type="submit" value="Sign up" />
+            {signingUp ? (
+              <button className="main disabled" disabled>
+                <p>Signing up</p>
+                <LuLoaderCircle className="loader" />
+              </button>
+            ) : (
+              <input className="button main" type="submit" value="Sign up" />
+            )}
           </div>
         </form>
       </div>
