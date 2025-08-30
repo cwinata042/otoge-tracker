@@ -4,6 +4,7 @@ export enum TGameTypes {
 }
 
 export enum TStatuses {
+  '' = '',
   'Incomplete' = 'Incomplete',
   'Playing' = 'Playing',
   'Completed' = 'Completed',
@@ -12,11 +13,13 @@ export enum TStatuses {
 }
 
 export enum TGameLanguages {
+  '' = '',
   'EN' = 'EN',
   'JP' = 'JP',
 }
 
 export enum TGamePlatforms {
+  '' = '',
   'Switch' = 'Switch',
   'PS Vita' = 'PS Vita',
   'PC' = 'PC',

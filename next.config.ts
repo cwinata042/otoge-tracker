@@ -1,13 +1,13 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
   /* config options here */
-};
+}
 
 module.exports = {
   images: {
-    remotePatterns: [new URL('https://t.vndb.org/**')]
-  }
+    remotePatterns: [new URL('https://t.vndb.org/**'), new URL('https://placehold.co/**')],
+  },
 }
 
-export default nextConfig;
+export default nextConfig
