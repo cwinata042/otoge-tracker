@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
   try {
     await dbConnect()
 
-    const { email, password } = await req.json()
+    const { email, password, username } = await req.json()
     const hashedPassword = await bcrypt.hash(password, 10)
 
     const existingUser = await User.findOne({ email })
@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Email already in use.' }, { status: 409 })
     }
 
-    await User.create({ email, password: hashedPassword })
+    await User.create({ email, password: hashedPassword, username })
 
     return NextResponse.json({ message: 'User created.' }, { status: 201 })
   } catch (err) {

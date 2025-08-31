@@ -19,6 +19,7 @@ export default function SignUpPage() {
   } = useForm({
     defaultValues: {
       email: '',
+      username: '',
       password: '',
       confirmPassword: '',
     },
@@ -35,6 +36,7 @@ export default function SignUpPage() {
       const body = JSON.stringify({
         email: getValues('email'),
         password: getValues('password'),
+        username: getValues('username'),
       })
 
       const res = await fetch('/api/sign-up', { method: 'POST', body: body })
@@ -89,6 +91,22 @@ export default function SignUpPage() {
       <div className="sign-up-container">
         <h1>Sign up</h1>
         <form className="sign-up-form" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-field">
+            <label htmlFor="email">Username</label>
+            <input
+              id="username"
+              {...register('username', {
+                validate: {
+                  checkUsername: (username) => {
+                    if (username === '' || !username) {
+                      return 'Please enter an email.'
+                    }
+                  },
+                },
+              })}
+            />
+            {errors.username && <div className="form-error">{errors.username.message}</div>}
+          </div>
           <div className="form-field">
             <label htmlFor="email">Email</label>
             <input

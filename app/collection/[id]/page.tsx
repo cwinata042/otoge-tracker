@@ -1,6 +1,7 @@
 'use client'
 
 import GameStatus from '@/app/_components/collection/GameStatus'
+import Header from '@/app/_components/Header'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import { TGameDetails } from '@/lib/types'
 import { QueryObserverRefetchErrorResult, QueryStatus, useQuery, UseQueryResult } from '@tanstack/react-query'
@@ -40,17 +41,7 @@ export default function GameViewer() {
   if (status === 'pending') {
     return (
       <div className="main-container">
-        <div className="header">
-          <Link href="/collection">
-            <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
-          </Link>
-          <div className="user-details">
-            <p>{session?.user.email}</p>
-            <button className="small" onClick={() => signOut()}>
-              Log out
-            </button>
-          </div>
-        </div>
+        <Header />
         <div className="body">
           <div className="game-grid-empty">
             <div className="loading-page">
@@ -66,17 +57,7 @@ export default function GameViewer() {
   if (status === 'error' || !gameDetails) {
     return (
       <div className="main-container">
-        <div className="header">
-          <Link href="/collection">
-            <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
-          </Link>
-          <div className="user-details">
-            <p>{session?.user.email}</p>
-            <button className="small" onClick={() => signOut()}>
-              Log out
-            </button>
-          </div>
-        </div>
+        <Header />
         <div className="body">
           <div className="game-grid-empty">
             <div className="loading-page">
@@ -90,17 +71,7 @@ export default function GameViewer() {
 
   return (
     <div className="main-container">
-      <div className="header">
-        <Link href="/collection">
-          <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
-        </Link>
-        <div className="user-details">
-          <p>{session?.user.email}</p>
-          <button className="small" onClick={() => signOut()}>
-            Log out
-          </button>
-        </div>
-      </div>
+      <Header />
       <div className="body">
         <div className="single-game-header">
           <div className="header-main">

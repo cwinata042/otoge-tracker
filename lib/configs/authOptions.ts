@@ -44,8 +44,9 @@ export const authOptions: AuthOptions = {
   callbacks: {
     jwt: async ({ token, user }: { token: any; user: any }) => {
       if (user) {
-        token.user = { _id: user._id, email: user.email }
+        token.user = { _id: user._id, email: user.email, username: user.username }
       }
+      console.log(user)
 
       return Promise.resolve(token)
     },

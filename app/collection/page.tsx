@@ -10,6 +10,7 @@ import { LuLoaderCircle } from 'react-icons/lu'
 import Dropdown from '../_components/collection/Dropdown'
 import { useState } from 'react'
 import { TGameLanguages, TGamePlatforms, TOwnedGame, TStatuses } from '@/lib/types'
+import Header from '../_components/Header'
 
 type TFilters = {
   status: string[]
@@ -28,6 +29,7 @@ export default function Collection() {
   const filterDropdowns = filters.map((filter) => {
     return (
       <Dropdown
+        key={filter.name}
         dropdownName={filter.name}
         dropdownOptions={filter.options}
         allowMulti={true}
@@ -91,7 +93,7 @@ export default function Collection() {
     })
   }
 
-  const displayedGames = ownedGames.filter((game: TOwnedGame) => {
+  const displayedGames = ownedGames?.filter((game: TOwnedGame) => {
     const platform =
       currFilters.platform.length > 0
         ? currFilters.platform.some((platform) => game.owned_copies.map((game) => game.platform).includes(platform))
@@ -104,21 +106,10 @@ export default function Collection() {
 
     return platform && status && language
   })
-  console.log(displayedGames)
 
   return (
     <div className="main-container">
-      <div className="header">
-        <Link href="/collection">
-          <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
-        </Link>
-        <div className="user-details">
-          <p>{session?.user.email}</p>
-          <button className="small" onClick={() => signOut()}>
-            Log out
-          </button>
-        </div>
-      </div>
+      <Header />
       <div className="body">
         <div className="collection-header">
           <div className="collection-title">

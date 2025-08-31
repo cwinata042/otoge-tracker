@@ -19,6 +19,7 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { LuLoaderCircle } from 'react-icons/lu'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import { useRouter } from 'next/navigation'
+import Header from '@/app/_components/Header'
 
 export default function AddToCollection() {
   const { data: session } = useSession()
@@ -435,17 +436,7 @@ export default function AddToCollection() {
 
   return (
     <div className="main-container">
-      <div className="header">
-        <Link href="/collection">
-          <Image className="logo" src="/otoge-tracker-logo.svg" alt="Otoge Tracker logo" width={256} height={256} />
-        </Link>
-        <div className="user-details">
-          <p>{session?.user.email}</p>
-          <button className="small" onClick={() => signOut()}>
-            Log out
-          </button>
-        </div>
-      </div>
+      <Header />
       <div className="add-game-container">
         <dialog className="vndb-import-container">
           <div className="vndb-import-modal">
