@@ -2,10 +2,21 @@ import { TOwnedGame } from '@/lib/types'
 import GameCard from './GameCard'
 import Link from 'next/link'
 
-export default function GameGrid({ collection }: { collection: TOwnedGame[] }) {
+export default function GameGrid({ collection, hasFilters }: { collection: TOwnedGame[]; hasFilters: boolean }) {
   const gameCards = collection.map((game) => {
     return <GameCard gameDetails={game} key={game.orig_title} />
   })
+
+  const noGamesFound = (
+    <div className="game-grid-empty">
+      <div className="empty-container">
+        <div className="empty-container-message">
+          <p className="form-info-white big">No games found</p>
+          <p className="center">Try refining your search or removing filters.</p>
+        </div>
+      </div>
+    </div>
+  )
 
   const emptyCollection = (
     <div className="game-grid-empty">
@@ -25,5 +36,11 @@ export default function GameGrid({ collection }: { collection: TOwnedGame[] }) {
     </div>
   )
 
-  return gameCards.length > 0 ? <div className="gameGrid">{gameCards}</div> : emptyCollection
+  return gameCards.length > 0 ? (
+    <div className="gameGrid">{gameCards}</div>
+  ) : hasFilters ? (
+    noGamesFound
+  ) : (
+    emptyCollection
+  )
 }

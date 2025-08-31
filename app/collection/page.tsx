@@ -7,9 +7,35 @@ import { useQuery } from '@tanstack/react-query'
 import { signOut, useSession } from 'next-auth/react'
 import { COLLECTION_QUERY_KEY } from '@/lib/queryKeys'
 import { LuLoaderCircle } from 'react-icons/lu'
+import Dropdown from '../_components/collection/Dropdown'
+import { useState } from 'react'
+import { TGameLanguages, TGamePlatforms, TOwnedGame, TStatuses } from '@/lib/types'
+
+type TFilters = {
+  status: string[]
+  platform: string[]
+  language: string[]
+}
 
 export default function Collection() {
   const { data: session } = useSession()
+  const [currFilters, setCurrFilters] = useState<TFilters>({ status: [], platform: [], language: [] })
+  const filters = [
+    { name: 'Status', options: Object.keys(TStatuses) },
+    { name: 'Platform', options: Object.keys(TGamePlatforms) },
+    { name: 'Language', options: Object.keys(TGameLanguages) },
+  ]
+  const filterDropdowns = filters.map((filter) => {
+    return (
+      <Dropdown
+        dropdownName={filter.name}
+        dropdownOptions={filter.options}
+        allowMulti={true}
+        currSelected={currFilters[filter.name.toLowerCase() as keyof TFilters]}
+        setSelected={setFilter}
+      />
+    )
+  })
 
   const {
     status,
@@ -49,9 +75,36 @@ export default function Collection() {
           </div>
         )
       default:
-        return <GameGrid collection={ownedGames} />
+        return (
+          <GameGrid
+            hasFilters={ownedGames.length !== displayedGames.length && ownedGames.length > 0}
+            collection={displayedGames}
+          />
+        )
     }
   }
+
+  function setFilter(name: string, newFilters: string[]) {
+    setCurrFilters({
+      ...currFilters,
+      [name]: newFilters,
+    })
+  }
+
+  const displayedGames = ownedGames.filter((game: TOwnedGame) => {
+    const platform =
+      currFilters.platform.length > 0
+        ? currFilters.platform.some((platform) => game.owned_copies.map((game) => game.platform).includes(platform))
+        : true
+    const status = currFilters.status.length > 0 ? currFilters.status.includes(game.status) : true
+    const language =
+      currFilters.language.length > 0
+        ? currFilters.language.some((lang) => game.owned_copies.map((game) => game.language).includes(lang))
+        : true
+
+    return platform && status && language
+  })
+  console.log(displayedGames)
 
   return (
     <div className="main-container">
@@ -69,14 +122,16 @@ export default function Collection() {
       <div className="body">
         <div className="collection-header">
           <div className="collection-title">
-            <div className="title">{`Collection (${ownedGames?.length ? ownedGames?.length : 0})`}</div>
+            <div className="title">{`Collection (${displayedGames?.length ? displayedGames?.length : 0})`}</div>
             {ownedGames?.length > 1 && (
               <Link className="button main outlined small" href="/collection/add">
                 Add new game
               </Link>
             )}
           </div>
-          <div className="filter-sort">filter and sort</div>
+          <div className="filter-sort">
+            <div className="dropdowns">{filterDropdowns}</div>
+          </div>
         </div>
         {getCollection()}
       </div>

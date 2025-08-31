@@ -610,6 +610,18 @@ button.small,
   font-size: 14px;
   font-weight: bold;
 }
+button.main.nobg,
+.button.main.nobg {
+  border: none;
+  background: none;
+  color: var(--accent-dark);
+}
+button.main.nobg:hover,
+.button.main.nobg:hover {
+  border: none;
+  background: none;
+  color: var(--accent-dark-hover);
+}
 button.nobg,
 .button.nobg {
   border: none;
@@ -838,4 +850,47 @@ p.center {
   flex-direction: column;
   gap: 20px;
   width: 100%;
+}
+.dropdown-btn {
+  padding: 0;
+}
+.dropdowns {
+  display: flex;
+  gap: 30px;
+}
+.dropdown {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+.dropdown-content {
+  visibility: hidden;
+
+  list-style: none;
+  position: absolute;
+  top: 30px;
+  right: 0px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+
+  border: var(--dark) 1px solid;
+}
+.dropdown:focus-within .dropdown-content {
+  visibility: visible;
+}
+.dropdown-content li {
+  display: flex;
+  padding: 8px 15px;
+  text-wrap: nowrap;
+  background: var(--darker);
+  align-items: center;
+  gap: 5px;
+}
+.dropdown-content li.selected {
+  color: var(--accent-dark);
+}
+.dropdown-content li:hover {
+  background: var(--dark);
 }

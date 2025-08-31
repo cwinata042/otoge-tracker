@@ -107,7 +107,7 @@ export default function GameViewer() {
             <h1>{gameDetails.title}</h1>
             <button className="small main outlined">Edit</button>
           </div>
-          <Link href="/" className="button small nobg">
+          <Link href="/collection" className="button small nobg">
             Back
           </Link>
         </div>
