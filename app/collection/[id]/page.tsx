@@ -4,8 +4,8 @@ import GameStatus from '@/app/_components/collection/GameStatus'
 import Header from '@/app/_components/Header'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import { TGameDetails } from '@/lib/types'
-import { QueryObserverRefetchErrorResult, QueryStatus, useQuery, UseQueryResult } from '@tanstack/react-query'
-import { signOut, useSession } from 'next-auth/react'
+import { useQuery } from '@tanstack/react-query'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
@@ -18,25 +18,21 @@ export default function GameViewer() {
 
   const [currTab, setCurrTab] = useState<string>('Details')
 
-  const {
-    status,
-    error,
-    data: gameDetails,
-  }: { status: string; error: any | null; data: undefined | TGameDetails } = useQuery({
-    queryKey: [SINGLE_GAME_QUERY_KEY, params.id],
-    queryFn: async () => {
-      const res = await fetch(`/api/collection/${params.id}`, {
-        headers: {
-          UserId: session?.user._id ? session?.user._id : '',
-        },
-      })
-      return res.json()
-    },
-    staleTime: 1000 * 60 * 5,
-    enabled: !!session,
-  })
-
-  console.log(gameDetails)
+  const { status, data: gameDetails }: { status: string; error: any | null; data: undefined | TGameDetails } = useQuery(
+    {
+      queryKey: [SINGLE_GAME_QUERY_KEY, params.id],
+      queryFn: async () => {
+        const res = await fetch(`/api/collection/${params.id}`, {
+          headers: {
+            UserId: session?.user._id ? session?.user._id : '',
+          },
+        })
+        return res.json()
+      },
+      staleTime: 1000 * 60 * 5,
+      enabled: !!session,
+    }
+  )
 
   if (status === 'pending') {
     return (

@@ -1,10 +1,9 @@
 'use client'
 
 import Link from 'next/link'
-import Image from 'next/image'
 import GameGrid from '../_components/collection/GameGrid'
 import { useQuery } from '@tanstack/react-query'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import { COLLECTION_QUERY_KEY } from '@/lib/queryKeys'
 import { LuLoaderCircle } from 'react-icons/lu'
 import Dropdown from '../_components/collection/Dropdown'

@@ -12,7 +12,7 @@ import {
   TAddGameFormValues,
 } from '@/lib/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { signOut, useSession } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
