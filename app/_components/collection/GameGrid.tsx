@@ -15,7 +15,7 @@ export default function GameGrid({ collection }: { collection: TOwnedGame[] }) {
           <p className="center">
             Your collection is currently empty.
             <br />
-            If you add a game, it will appear here
+            If you add a game, it will appear here.
           </p>
         </div>
         <Link className="button main outlined small" href="/collection/add">

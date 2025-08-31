@@ -33,15 +33,19 @@ export default function Collection() {
     switch (status) {
       case 'pending':
         return (
-          <div className="loading-page">
-            <p className="form-info-white lg">Grabbing your collection...</p>
-            <LuLoaderCircle className="loader lg" />
+          <div className="game-grid-empty">
+            <div className="loading-page">
+              <p className="form-info-white lg">Grabbing your collection...</p>
+              <LuLoaderCircle className="loader lg" />
+            </div>
           </div>
         )
       case 'error':
         return (
-          <div className="loading-page">
-            <p className="form-info-white lg">There was an error grabbing your collection. Try reloading the page!</p>
+          <div className="game-grid-empty">
+            <div className="loading-page">
+              <p className="form-info-white lg">There was an error grabbing your collection. Try reloading the page!</p>
+            </div>
           </div>
         )
       default:

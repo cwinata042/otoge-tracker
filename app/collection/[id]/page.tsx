@@ -1,5 +1,6 @@
 'use client'
 
+import GameStatus from '@/app/_components/collection/GameStatus'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import { TGameDetails } from '@/lib/types'
 import { QueryObserverRefetchErrorResult, QueryStatus, useQuery, UseQueryResult } from '@tanstack/react-query'
@@ -51,9 +52,11 @@ export default function GameViewer() {
           </div>
         </div>
         <div className="body">
-          <div className="loading-page">
-            <p className="form-info-white lg">Grabbing game details...</p>
-            <LuLoaderCircle className="loader lg" />
+          <div className="game-grid-empty">
+            <div className="loading-page">
+              <p className="form-info-white lg">Grabbing game details...</p>
+              <LuLoaderCircle className="loader lg" />
+            </div>
           </div>
         </div>
       </div>
@@ -75,8 +78,10 @@ export default function GameViewer() {
           </div>
         </div>
         <div className="body">
-          <div className="loading-page">
-            <p className="form-info-white lg">There was an error grabbing your collection. Try reloading the page!</p>
+          <div className="game-grid-empty">
+            <div className="loading-page">
+              <p className="form-info-white lg">There was an error grabbing your collection. Try reloading the page!</p>
+            </div>
           </div>
         </div>
       </div>
@@ -98,8 +103,13 @@ export default function GameViewer() {
       </div>
       <div className="body">
         <div className="single-game-header">
-          <h1>{gameDetails.title}</h1>
-          <button className="small main outlined">Edit</button>
+          <div className="header-main">
+            <h1>{gameDetails.title}</h1>
+            <button className="small main outlined">Edit</button>
+          </div>
+          <Link href="/" className="button small nobg">
+            Back
+          </Link>
         </div>
         <div className="single-game-main">
           <div className="tabs">
@@ -112,8 +122,15 @@ export default function GameViewer() {
           </div>
           {currTab === 'Details' ? (
             <div className="single-game-details">
-              <div className="game-details-image">
+              <div className="single-game-details-image">
                 <Image src={gameDetails.img_link} alt={'Game Image'} fill={true} style={{ objectFit: 'cover' }} />
+              </div>
+              <div className="single-game-details-main">
+                <div className="form-field horizontal">
+                  <GameStatus status={gameDetails.status} />
+                  <div className={'gameType ' + gameDetails.type}>{gameDetails.type}</div>
+                </div>
+                <div className="form-field"></div>
               </div>
             </div>
           ) : (

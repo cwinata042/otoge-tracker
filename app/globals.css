@@ -176,11 +176,17 @@ div.main {
   align-items: center;
 }
 
-.gameStatus {
+.gameStatus,
+.gameType {
   padding: 2px 6px;
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 700;
+}
+
+.gameType.Main {
+  color: var(--light);
+  border: var(--light) solid 1px;
 }
 
 .gameStatus.Completed {
@@ -223,6 +229,12 @@ div.main {
   flex-direction: column;
   gap: 5px;
   width: 100%;
+}
+.form-field.horizontal {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 20px;
 }
 
 .sign-up-container,
@@ -604,6 +616,10 @@ button.nobg,
   background: none;
   color: var(--background);
 }
+button.nobg:hover,
+.button.nobg:hover {
+  color: var(--background-hover);
+}
 button.warn,
 .button.warn {
   color: var(--error-text);
@@ -694,6 +710,12 @@ p.lg {
   height: 480px;
   background: var(--dark);
 }
+.single-game-details-image {
+  position: relative;
+  width: 300px;
+  height: 405px;
+  background: var(--dark);
+}
 .game-details-form {
   flex: 1;
   gap: 20px;
@@ -767,8 +789,6 @@ select.placeholder {
   flex: 1;
   gap: 31px;
   padding: 60px 0px;
-  background: var(--dark);
-  justify-content: center;
   height: 100%;
   width: 100%;
   max-width: 930px;
@@ -793,11 +813,29 @@ p.center {
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 30px;
 }
 .single-game-header {
   display: flex;
   padding: 30px 0px;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.single-game-header > .header-main {
+  display: flex;
   gap: 60px;
   align-items: center;
+  flex-direction: row;
+}
+.single-game-details {
+  display: flex;
+  gap: 30px;
+  width: 100%;
+}
+.single-game-details-main {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   width: 100%;
 }
