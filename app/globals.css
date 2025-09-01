@@ -1057,35 +1057,39 @@ p.center {
   text-wrap: nowrap;
   margin-bottom: 8px;
 }
-.add-route-category.story,
+.story,
 textarea.story {
   color: var(--story);
 }
-.add-route-category.personality,
+.personality,
 textarea.personality {
   color: var(--personality);
 }
-.add-route-category.romance,
+.romance,
 textarea.romance {
   color: var(--romance);
 }
-.add-route-category.appearance,
+.appearance,
 textarea.appearance {
   color: var(--appearance);
 }
-input.story {
+input.story,
+.story > .review-category {
   background: var(--story);
   color: var(--darker);
 }
-input.personality {
+input.personality,
+.personality > .review-category {
   background: var(--personality);
   color: var(--darker);
 }
-input.romance {
+input.romance,
+.romance > .review-category {
   background: var(--romance);
   color: var(--darker);
 }
-input.appearance {
+input.appearance,
+.appearance > .review-category {
   background: var(--appearance);
   color: var(--darker);
 }
@@ -1097,4 +1101,45 @@ hr {
   display: flex;
   flex-direction: column;
   gap: 40px;
+}
+.review-score {
+  display: flex;
+  align-items: end;
+  font-weight: 600;
+}
+.review-total-score {
+  font-size: 20px;
+}
+.review-score-details {
+  font-size: 10px;
+  margin-bottom: 3px;
+}
+.review-category {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 10px;
+}
+.review {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+}
+.reviews {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+.final-score {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: solid 1px var(--background);
+  padding: 10px 20px;
+}
+.final-score-total {
+  font-size: 32px;
+  font-weight: 700;
 }

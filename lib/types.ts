@@ -87,6 +87,7 @@ export type TRoute = {
   review?: TCategoryReview[]
   game_id?: string
   _id?: string
+  final_score?: number
 }
 
 export type TAddGameFormValues = {

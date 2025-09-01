@@ -35,6 +35,9 @@ const routeSchema = new mongoose.Schema(
     completed_at: {
       type: Date,
     },
+    final_score: {
+      type: mongoose.Types.Double,
+    },
     review: [
       {
         category: {

@@ -4,7 +4,8 @@ import { useState } from 'react'
 import GameStatus from './GameStatus'
 import { useForm } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 
 export default function RouteCard({ route }: { route: TRoute }) {
   const { data: session } = useSession()
@@ -16,7 +17,10 @@ export default function RouteCard({ route }: { route: TRoute }) {
     { name: 'Appearance', total: 10 },
   ]
 
+  const queryClient = useQueryClient()
+
   const {
+    reset,
     register,
     handleSubmit,
     getValues,
@@ -41,13 +45,18 @@ export default function RouteCard({ route }: { route: TRoute }) {
     if (dialog && show) {
       dialog.showModal()
     } else if (dialog && !show) {
+      reset()
+      clearErrors()
       dialog.close()
     }
   }
 
   const categoriesList = categories.map((category, index) => {
     return (
-      <div className={`add-route-category ${category.name.toLowerCase()}`}>
+      <div
+        key={`${route._id}-${category.name.toLowerCase()}`}
+        className={`add-route-category ${category.name.toLowerCase()}`}
+      >
         <h3>{category.name}</h3>
         <div className="category-fields">
           <div className="category-score">
@@ -99,6 +108,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
         return {
           ...review,
           score: review.review_score && review.review_score !== 0 ? review.review_score / review.total_score : null,
+          review_score: Number(review.review_score),
         }
       })
 
@@ -115,6 +125,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
     },
     onSuccess: () => {
       toggleModal(false)
+      queryClient.invalidateQueries({ queryKey: [SINGLE_GAME_QUERY_KEY, route.game_id] })
     },
     onError: (error: any) => {
       setError('root', { message: 'Failed to add route. Please try again.' })
@@ -124,6 +135,18 @@ export default function RouteCard({ route }: { route: TRoute }) {
   const onSubmit = (data: any) => {
     mutate()
   }
+
+  const reviewCategories = route.review?.map((review) => {
+    return (
+      <div key={`${route._id}-${review.category}`} className={`review ${review.category.toLowerCase()}`}>
+        <p className="review-category">{review.category}</p>
+        <div className="review-score">
+          <p className="review-total-score">{review.review_score}</p>
+          <p className="review-score-details">{`/${review.total_score}`}</p>
+        </div>
+      </div>
+    )
+  })
 
   return (
     <div key={route.name} className="route-card" onClick={() => setIsExpanded(!isExpanded)}>
@@ -151,11 +174,14 @@ export default function RouteCard({ route }: { route: TRoute }) {
         </div>
         <div className="review-container">
           <div className="reviews">
-            {route.review && route.review.length > 0 ? <div>review</div> : <div>No review found</div>}
+            {route.review && route.review.length > 0 ? reviewCategories : <div>No review found</div>}
           </div>
           <div className="total-score">
             {route.review && route.review.length > 0 ? (
-              <div>review</div>
+              <div className="final-score">
+                <p className="final-score-title">Total</p>
+                <p className="final-score-total">{route.final_score}</p>
+              </div>
             ) : (
               <button onClick={() => toggleModal(true)}>Add Review</button>
             )}

@@ -82,10 +82,8 @@ export default function GameViewer() {
     )
   })
 
-  console.log(gameDetails)
-
   const routes = gameDetails.routes.map((route) => {
-    return <RouteCard route={route} />
+    return <RouteCard key={route._id} route={route} />
   })
 
   return (
