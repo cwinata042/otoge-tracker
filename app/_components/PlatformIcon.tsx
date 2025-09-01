@@ -29,5 +29,7 @@ export default function PlatformIcon({
           height={height ? `${height}` : '10'}
         />
       )
+    case TGamePlatforms['PC']:
+      return <p className="pc-icon">PC</p>
   }
 }

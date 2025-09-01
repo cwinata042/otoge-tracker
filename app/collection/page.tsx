@@ -107,7 +107,6 @@ export default function Collection() {
 
     return platform && status && language
   })
-  console.log(ownedGames)
 
   return (
     <div className="main-container">

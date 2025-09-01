@@ -35,42 +35,29 @@ const routeSchema = new mongoose.Schema(
     completed_at: {
       type: Date,
     },
-    review: {
-      scores: [
-        {
-          category: {
-            type: String,
-            required: true,
-          },
-          score: {
-            type: mongoose.Types.Double,
-            required: true,
-          },
-          review_score: {
-            type: mongoose.Types.Double,
-            required: true,
-          },
-          total_score: {
-            type: mongoose.Types.Double,
-            required: true,
-          },
+    review: [
+      {
+        category: {
+          type: String,
+          required: true,
         },
-      ],
-      notes: [
-        {
-          category: {
-            type: String,
-            required: true,
-          },
-          name: {
-            type: String,
-          },
-          content: {
-            type: String,
-          },
+        score: {
+          type: mongoose.Types.Double,
+          required: true,
         },
-      ],
-    },
+        review_score: {
+          type: mongoose.Types.Double,
+          required: true,
+        },
+        total_score: {
+          type: mongoose.Types.Double,
+          required: true,
+        },
+        note: {
+          type: String,
+        },
+      },
+    ],
   },
   { timestamps: true }
 )

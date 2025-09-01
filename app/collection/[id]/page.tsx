@@ -2,6 +2,7 @@
 
 import GameCopy from '@/app/_components/collection/GameCopy'
 import GameStatus from '@/app/_components/collection/GameStatus'
+import RouteCard from '@/app/_components/collection/RouteCard'
 import Header from '@/app/_components/Header'
 import LanguageIcon from '@/app/_components/LanguageIcon'
 import PlatformIcon from '@/app/_components/PlatformIcon'
@@ -81,6 +82,12 @@ export default function GameViewer() {
     )
   })
 
+  console.log(gameDetails)
+
+  const routes = gameDetails.routes.map((route) => {
+    return <RouteCard route={route} />
+  })
+
   return (
     <div className="main-container">
       <Header />
@@ -132,7 +139,7 @@ export default function GameViewer() {
               </div>
             </div>
           ) : (
-            <div className="single-game-details">Routes</div>
+            <div className="single-game-routes">{routes}</div>
           )}
         </div>
       </div>

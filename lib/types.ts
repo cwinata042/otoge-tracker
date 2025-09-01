@@ -21,8 +21,8 @@ export enum TGameLanguages {
 export enum TGamePlatforms {
   '' = '',
   'Switch' = 'Switch',
-  'PS Vita' = 'PS Vita',
   'PC' = 'PC',
+  'PS Vita' = 'PS Vita',
 }
 
 export enum TCopyTypes {
@@ -84,7 +84,9 @@ export type TRoute = {
   name: string
   route_img_link?: string
   status: TStatuses
-  review?: any
+  review?: TCategoryReview[]
+  game_id?: string
+  _id?: string
 }
 
 export type TAddGameFormValues = {
@@ -101,4 +103,16 @@ export type TAddGameFormValues = {
   price_currency: TCurrency
   description: string
   route_order: string
+}
+
+export type TAddRouteFormValues = {
+  reviews: TCategoryReview[]
+}
+
+export type TCategoryReview = {
+  category: string
+  score: number
+  review_score?: number
+  total_score: number
+  note?: string
 }

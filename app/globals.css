@@ -26,6 +26,10 @@
   --dark-gray: #384458;
   --darker-gray: #17171796;
   --medium: #606d8b;
+  --story: #dbead4;
+  --personality: #d4eaea;
+  --romance: #ead4d8;
+  --appearance: #eae2d4;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -33,6 +37,16 @@
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
 }
 
 html,
@@ -182,11 +196,14 @@ div.main {
 
 .gameStatus,
 .gameType {
+  display: flex;
+  align-items: center;
   padding: 2px 6px;
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 700;
   cursor: default;
+  height: fit-content;
 }
 
 .gameType.Main {
@@ -317,10 +334,6 @@ button,
   border: none;
 }
 
-textarea {
-  resize: none;
-}
-
 input,
 select,
 .game-info-field,
@@ -334,6 +347,10 @@ textarea {
   outline: none;
   width: 100%;
   cursor: pointer;
+}
+textarea {
+  resize: none;
+  cursor: text;
 }
 .game-info-field {
   cursor: default;
@@ -433,7 +450,8 @@ a:hover {
 ::backdrop {
   background: rgba(0, 0, 0, 0.5);
 }
-.vndb-import-container[open] {
+.vndb-import-container[open],
+.add-route-container[open] {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -499,7 +517,8 @@ input[type='text']#vndb-link::placeholder {
   background: var(--accent-dark);
   color: black;
 }
-.vndb-buttons {
+.vndb-buttons,
+.add-route-buttons {
   display: flex;
   align-items: center;
   justify-content: end;
@@ -749,10 +768,14 @@ p.lg {
 }
 .single-game-details-image {
   position: relative;
+  display: flex;
   width: 300px;
   height: 405px;
+  max-height: 405px;
   min-width: 300px;
   background: var(--dark);
+  align-items: center;
+  justify-content: center;
 }
 .game-details-form {
   flex: 1;
@@ -936,4 +959,142 @@ p.center {
 .owned-copies {
   display: flex;
   gap: 5px;
+}
+.pc-icon {
+  font-weight: 700;
+}
+.single-game-routes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.route-card {
+  background: var(--dark);
+  padding: 20px 30px;
+  display: flex;
+  gap: 20px;
+}
+.route-img-container {
+  position: relative;
+  display: flex;
+  width: 120px;
+  height: 150px;
+  min-width: 120px;
+  background: var(--dark);
+  align-items: center;
+  justify-content: center;
+}
+.route-info {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.review-container {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+.reviews {
+  display: flex;
+  align-items: center;
+}
+.route-header {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.add-route-modal {
+  display: flex;
+  max-width: 1000px;
+  width: 100%;
+  flex-direction: column;
+  background: var(--darker);
+  color: var(--background);
+  padding: 50px 80px;
+  gap: 40px;
+}
+.add-route-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+.add-route-category {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.category-fields {
+  display: flex;
+  gap: 10px;
+}
+.category-score,
+.category-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.category-score-number > input {
+  width: 80px;
+  height: 62px;
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+}
+.category-notes {
+  width: 100%;
+}
+.category-score-number {
+  display: flex;
+  gap: 10px;
+  align-items: end;
+}
+.category-score-number > p {
+  text-wrap: nowrap;
+  margin-bottom: 8px;
+}
+.add-route-category.story,
+textarea.story {
+  color: var(--story);
+}
+.add-route-category.personality,
+textarea.personality {
+  color: var(--personality);
+}
+.add-route-category.romance,
+textarea.romance {
+  color: var(--romance);
+}
+.add-route-category.appearance,
+textarea.appearance {
+  color: var(--appearance);
+}
+input.story {
+  background: var(--story);
+  color: var(--darker);
+}
+input.personality {
+  background: var(--personality);
+  color: var(--darker);
+}
+input.romance {
+  background: var(--romance);
+  color: var(--darker);
+}
+input.appearance {
+  background: var(--appearance);
+  color: var(--darker);
+}
+hr {
+  border-color: var(--medium);
+  margin-top: 10px;
+}
+.add-route-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
