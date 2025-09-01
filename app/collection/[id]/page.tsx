@@ -74,7 +74,9 @@ export default function GameViewer() {
         <LanguageIcon language={copy.language} />
         <PlatformIcon platform={copy.platform} />
         <div className="vertical-break"></div>
-        {copy.type}
+        <p>{copy.type}</p>
+        <div className="vertical-break"></div>
+        <p>{`${copy.price} ${copy.price_currency}`}</p>
       </div>
     )
   })

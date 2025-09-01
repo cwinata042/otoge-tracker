@@ -347,6 +347,7 @@ textarea.large {
   word-wrap: break-word;
   overflow-x: hidden;
   text-align: start;
+  white-space: pre-line;
 }
 select {
   border-right: 10px solid transparent;
@@ -931,4 +932,8 @@ p.center {
   height: 26px;
   border-left: 1px solid var(--medium);
   width: 1px;
+}
+.owned-copies {
+  display: flex;
+  gap: 5px;
 }
