@@ -161,10 +161,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
                   {...registerEditRoute(`review.${index}.review_score`, {
                     validate: {
                       checkScore: (score) => {
-                        if (!score) {
-                          return 'Please enter a score.'
-                        }
-                        if (score > category.total || score < 0) {
+                        if (score && (score > category.total || score < 0)) {
                           return 'Please enter a valid score.'
                         }
                       },
@@ -224,6 +221,8 @@ export default function RouteCard({ route }: { route: TRoute }) {
 
   const { mutate: mutateEditRoute, status: editRouteStatus } = useMutation({
     mutationFn: async () => {
+      const scores: any[] | undefined = getEditRouteValues('review')?.map((review) => review.review_score)
+
       clearEditRouteErrors('root')
       const body = getEditRouteValues()
       const calcScore = body.review?.map((review) => {
@@ -237,7 +236,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
       const res = await fetch(`/api/collection/${route.game_id}/route/${route._id}`, {
         method: 'PATCH',
         body: JSON.stringify({
-          route: { ...body, review: calcScore ?? [] },
+          route: { ...body, review: scores?.includes('') ? [] : calcScore ?? [] },
           user_id: session?.user?._id ? session?.user?._id : '',
           route_id: route._id,
         }),
