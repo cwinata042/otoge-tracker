@@ -48,7 +48,7 @@ export default function AddToCollection() {
     defaultValues: {
       orig_title: '',
       title: '',
-      img_link: '',
+      img_link: null,
       vndb_search: '',
       vndb_id: '',
       type: TGameTypes.Main,
@@ -610,7 +610,12 @@ export default function AddToCollection() {
               <div className="game-details">
                 <div className="game-details-image">
                   {getValues('img_link') !== '' && (
-                    <Image src={getValues('img_link')} alt={'Game Image'} fill={true} style={{ objectFit: 'cover' }} />
+                    <Image
+                      src={getValues('img_link') ?? 'https://placehold.co/120x150/png'}
+                      alt={'Game Image'}
+                      fill={true}
+                      style={{ objectFit: 'cover' }}
+                    />
                   )}
                 </div>
                 <div className="game-details-form">

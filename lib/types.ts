@@ -83,7 +83,7 @@ export type TOwnedGame = {
 export type TRoute = {
   type: TRouteTypes | string
   name: string
-  route_img_link?: string
+  route_img_link: string
   status: TStatuses
   review?: TCategoryReview[]
   game_id?: string
@@ -98,7 +98,7 @@ export type TAddGameFormValues = {
   title: string
   type: TGameTypes
   status: TStatuses
-  img_link: string
+  img_link: string | null
   owned_copies: TGameCopy[]
   routes: TRoute[]
   price: number
@@ -114,7 +114,7 @@ export type TAddReviewFormValues = {
 export type TEditRouteFormValues = {
   type: TRouteTypes | string
   name: string
-  route_img_link?: string
+  route_img_link: string | null
   status: TStatuses
   review?: TCategoryReview[]
 }

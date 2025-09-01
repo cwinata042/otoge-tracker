@@ -70,3 +70,20 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: error })
   }
 }
+
+// Delete this route
+export async function DELETE(req: Request) {
+  try {
+    await dbConnect()
+    const { user_id, route_id }: { user_id: string; route_id: string } = await req.json()
+
+    const deletedRoute = await Route.findOneAndDelete({
+      user_id: new mongoose.Types.ObjectId(user_id as string),
+      _id: new mongoose.Types.ObjectId(route_id as string),
+    })
+
+    return NextResponse.json(deletedRoute, { status: 201 })
+  } catch (error) {
+    return NextResponse.json({ error: error })
+  }
+}

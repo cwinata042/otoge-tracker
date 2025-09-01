@@ -452,7 +452,8 @@ a:hover {
 }
 .vndb-import-container[open],
 .add-review-container[open],
-.edit-route-container[open] {
+.edit-route-container[open],
+.add-route-container[open] {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -622,6 +623,10 @@ button.main,
   border: var(--accent-dark) solid 1px;
   background: var(--accent-dark);
   color: var(--darker);
+}
+button.full,
+.button.full {
+  width: 100%;
 }
 button.main:hover,
 .button.main:hover {
@@ -1018,7 +1023,8 @@ p.center {
   gap: 15px;
 }
 .add-review-modal,
-.edit-route-modal {
+.edit-route-modal,
+.add-route-modal {
   display: flex;
   max-width: 1000px;
   width: 100%;
@@ -1176,5 +1182,16 @@ hr.mb {
 }
 .form-field-group {
   display: flex;
+  gap: 15px;
+}
+.delete-button {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+}
+.single-game-routes-container {
+  display: flex;
+  flex-direction: column;
   gap: 15px;
 }

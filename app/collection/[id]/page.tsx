@@ -1,19 +1,20 @@
 'use client'
 
-import GameCopy from '@/app/_components/collection/GameCopy'
+import AddRouteModal from '@/app/_components/collection/AddRouteModal'
 import GameStatus from '@/app/_components/collection/GameStatus'
 import RouteCard from '@/app/_components/collection/RouteCard'
 import Header from '@/app/_components/Header'
 import LanguageIcon from '@/app/_components/LanguageIcon'
 import PlatformIcon from '@/app/_components/PlatformIcon'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
-import { TGameDetails, TGameLanguages, TGamePlatforms } from '@/lib/types'
-import { useQuery } from '@tanstack/react-query'
+import { TEditRouteFormValues, TGameDetails, TRouteTypes, TStatuses } from '@/lib/types'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useParams } from 'next/navigation'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
 import { LuLoaderCircle } from 'react-icons/lu'
 
 export default function GameViewer() {
@@ -86,10 +87,19 @@ export default function GameViewer() {
     return <RouteCard key={route._id} route={route} />
   })
 
+  function openModal() {
+    const dialog: HTMLDialogElement | null = document.querySelector('dialog.add-route-container')
+
+    if (dialog) {
+      dialog.showModal()
+    }
+  }
+
   return (
     <div className="main-container">
       <Header />
       <div className="body">
+        <AddRouteModal gameId={gameDetails?._id} />
         <div className="single-game-header">
           <div className="header-main">
             <h1>{gameDetails.title}</h1>
@@ -137,7 +147,12 @@ export default function GameViewer() {
               </div>
             </div>
           ) : (
-            <div className="single-game-routes">{routes}</div>
+            <div className="single-game-routes-container">
+              <div className="single-game-routes">{routes}</div>
+              <button type="button" className="add" onClick={() => openModal()}>
+                Add Route
+              </button>
+            </div>
           )}
         </div>
       </div>

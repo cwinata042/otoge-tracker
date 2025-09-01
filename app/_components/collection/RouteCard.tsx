@@ -4,9 +4,10 @@ import { useState } from 'react'
 import GameStatus from './GameStatus'
 import { useForm } from 'react-hook-form'
 import { useSession } from 'next-auth/react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import { CiEdit } from 'react-icons/ci'
+import { LuLoaderCircle } from 'react-icons/lu'
 
 export default function RouteCard({ route }: { route: TRoute }) {
   const { data: session } = useSession()
@@ -17,6 +18,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
     { name: 'Romance', total: 5 },
     { name: 'Appearance', total: 10 },
   ]
+  const [isDeletingRoute, setIsDeletingRoute] = useState<boolean>(false)
 
   const queryClient = useQueryClient()
 
@@ -62,6 +64,13 @@ export default function RouteCard({ route }: { route: TRoute }) {
     const dialog: HTMLDialogElement | null = document.querySelector(`.${modal}.route-${route._id}`)
 
     if (dialog && show) {
+      resetEditRoute({
+        type: route.type,
+        name: route.name,
+        route_img_link: route.route_img_link,
+        status: route.status,
+        review: route.review,
+      })
       dialog.showModal()
     } else if (dialog && !show) {
       if (modal === 'add-review-container') {
@@ -204,15 +213,8 @@ export default function RouteCard({ route }: { route: TRoute }) {
       return res.json()
     },
     onSuccess: () => {
-      resetEditRoute({
-        type: route.type,
-        name: route.name,
-        route_img_link: route.route_img_link,
-        status: route.status,
-        review: route.review,
-      })
-      toggleModal(false, 'add-review-container')
       queryClient.invalidateQueries({ queryKey: [SINGLE_GAME_QUERY_KEY, route.game_id] })
+      toggleModal(false, 'add-review-container')
     },
     onError: (error: any) => {
       setAddReviewError('root', { message: 'Failed to add review. Please try again.' })
@@ -243,8 +245,8 @@ export default function RouteCard({ route }: { route: TRoute }) {
       return res.json()
     },
     onSuccess: () => {
-      toggleModal(false, 'edit-route-container')
       queryClient.invalidateQueries({ queryKey: [SINGLE_GAME_QUERY_KEY, route.game_id] })
+      toggleModal(false, 'edit-route-container')
     },
     onError: (error: any) => {
       setEditRouteError('root', { message: 'Failed to edit route. Please try again.' })
@@ -285,6 +287,35 @@ export default function RouteCard({ route }: { route: TRoute }) {
       </option>
     )
   })
+
+  const { mutate: deleteRoute } = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`/api/collection/${route.game_id}/route/${route._id}`, {
+        method: 'DELETE',
+        body: JSON.stringify({
+          user_id: session?.user?._id ? session?.user?._id : '',
+          route_id: route._id,
+        }),
+      })
+
+      return res.json()
+    },
+    onSuccess: () => {
+      setIsDeletingRoute(false)
+      toggleModal(false, 'edit-route-container')
+      queryClient.invalidateQueries({ queryKey: [SINGLE_GAME_QUERY_KEY, route.game_id] })
+    },
+    onError: (err) => {
+      setIsDeletingRoute(false)
+      setEditRouteError('root', { message: 'Failed to delete route. Please try again.' })
+    },
+  })
+
+  const handleDeleteRoute = async () => {
+    setIsDeletingRoute(true)
+
+    deleteRoute()
+  }
 
   return (
     <div key={route.name} className="route-card" onClick={() => setIsExpanded(!isExpanded)}>
@@ -358,6 +389,15 @@ export default function RouteCard({ route }: { route: TRoute }) {
               </>
             )}
             <div className="form-buttons">
+              <button
+                type="button"
+                className="delete-button small nobg warn"
+                disabled={isDeletingRoute}
+                onClick={() => handleDeleteRoute()}
+              >
+                <p>{isDeletingRoute ? 'Deleting...' : 'Delete Route'}</p>
+                {isDeletingRoute && <LuLoaderCircle className="loader" />}
+              </button>
               <button type="button" autoFocus onClick={() => toggleModal(false, 'edit-route-container')}>
                 Cancel
               </button>
@@ -367,7 +407,12 @@ export default function RouteCard({ route }: { route: TRoute }) {
         </div>
       </dialog>
       <div className="route-img-container">
-        <Image src={route.route_img_link ?? ''} alt={'Game Image'} fill={true} style={{ objectFit: 'cover' }} />
+        <Image
+          src={route.route_img_link ?? 'https://placehold.co/120x150/png'}
+          alt={'Game Image'}
+          fill={true}
+          style={{ objectFit: 'cover' }}
+        />
       </div>
       <div className="route-info">
         <div className="route-header">
