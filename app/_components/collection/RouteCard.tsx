@@ -8,6 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import { CiEdit } from 'react-icons/ci'
 import { LuLoaderCircle } from 'react-icons/lu'
+import { isValidLink } from '@/lib/helper'
 
 export default function RouteCard({ route }: { route: TRoute }) {
   const { data: session } = useSession()
@@ -378,7 +379,18 @@ export default function RouteCard({ route }: { route: TRoute }) {
               </div>
               <div className="form-field">
                 <label htmlFor="route_img_link">Route Image Link</label>
-                <input type="text" {...registerEditRoute('route_img_link')}></input>
+                <input
+                  type="text"
+                  {...registerEditRoute('route_img_link', {
+                    validate: {
+                      checkUrl: (url) => {
+                        if (!isValidLink(url)) {
+                          return 'Please enter a valid link.'
+                        }
+                      },
+                    },
+                  })}
+                ></input>
               </div>
             </div>
             {route.review && route.review.length > 0 && (
@@ -408,7 +420,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
       </dialog>
       <div className="route-img-container">
         <Image
-          src={route.route_img_link ?? 'https://placehold.co/120x150/png'}
+          src={isValidLink(route.route_img_link) ? route.route_img_link : 'https://placehold.co/120x150/png'}
           alt={'Game Image'}
           fill={true}
           style={{ objectFit: 'cover' }}

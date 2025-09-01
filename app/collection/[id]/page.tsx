@@ -6,6 +6,7 @@ import RouteCard from '@/app/_components/collection/RouteCard'
 import Header from '@/app/_components/Header'
 import LanguageIcon from '@/app/_components/LanguageIcon'
 import PlatformIcon from '@/app/_components/PlatformIcon'
+import { isValidLink } from '@/lib/helper'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import { TEditRouteFormValues, TGameDetails, TRouteTypes, TStatuses } from '@/lib/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -121,7 +122,12 @@ export default function GameViewer() {
           {currTab === 'Details' ? (
             <div className="single-game-details">
               <div className="single-game-details-image">
-                <Image src={gameDetails.img_link} alt={'Game Image'} fill={true} style={{ objectFit: 'cover' }} />
+                <Image
+                  src={isValidLink(gameDetails.img_link) ? gameDetails.img_link : 'https://placehold.co/300x405/png'}
+                  alt={'Game Image'}
+                  fill={true}
+                  style={{ objectFit: 'cover' }}
+                />
               </div>
               <div className="single-game-details-main">
                 <div className="form-field horizontal">

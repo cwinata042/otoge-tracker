@@ -1,12 +1,17 @@
+import { isValidLink } from '@/lib/helper'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import { TEditRouteFormValues, TRouteTypes, TStatuses } from '@/lib/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
+import { LuLoaderCircle } from 'react-icons/lu'
 
 export default function AddRouteModal({ gameId }: { gameId: string }) {
   const { data: session } = useSession()
   const queryClient = useQueryClient()
+
+  const [isSaving, setIsSaving] = useState<boolean>(false)
 
   const {
     reset,
@@ -31,6 +36,7 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
   }
   const { mutate, status: addRouteStatus } = useMutation({
     mutationFn: async () => {
+      setIsSaving(true)
       clearErrors('root')
       const body = getValues()
 
@@ -46,10 +52,12 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
       return res.json()
     },
     onSuccess: () => {
+      setIsSaving(false)
       toggleModal(false)
       queryClient.invalidateQueries({ queryKey: [SINGLE_GAME_QUERY_KEY, gameId] })
     },
     onError: (error: any) => {
+      setIsSaving(false)
       setError('root', { message: 'Failed to add route. Please try again.' })
     },
   })
@@ -60,6 +68,7 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
     if (dialog && show) {
       dialog.showModal()
     } else if (dialog && !show) {
+      setIsSaving(false)
       reset()
       clearErrors()
       dialog.close()
@@ -124,14 +133,29 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
             </div>
             <div className="form-field">
               <label htmlFor="new-route-route_img_link">Route Image Link</label>
-              <input key="new-route-route_img_link" type="text" {...register('route_img_link')}></input>
+              <input
+                key="new-route-route_img_link"
+                type="text"
+                {...register('route_img_link', {
+                  validate: {
+                    checkUrl: (url) => {
+                      if (!isValidLink(url)) {
+                        return 'Please enter a valid link.'
+                      }
+                    },
+                  },
+                })}
+              ></input>
             </div>
           </div>
           <div className="form-buttons">
             <button type="button" autoFocus onClick={() => toggleModal(false)}>
               Cancel
             </button>
-            <button className="main">Save</button>
+            <button className="main">
+              <p>{isSaving ? 'Saving...' : 'Save'}</p>
+              {isSaving && <LuLoaderCircle className="loader" />}
+            </button>
           </div>
         </form>
       </div>

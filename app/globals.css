@@ -332,6 +332,9 @@ button,
   width: fit-content;
   outline: none;
   border: none;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
 }
 
 input,
@@ -1183,12 +1186,6 @@ hr.mb {
 .form-field-group {
   display: flex;
   gap: 15px;
-}
-.delete-button {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  justify-content: center;
 }
 .single-game-routes-container {
   display: flex;
