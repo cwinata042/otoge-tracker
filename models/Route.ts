@@ -21,7 +21,7 @@ const routeSchema = new mongoose.Schema(
     },
     route_img_link: {
       type: String,
-      default: 'https://placehold.co/400x600',
+      default: 'https://placehold.co/120x150/png',
     },
     status: {
       type: String,

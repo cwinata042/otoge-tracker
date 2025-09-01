@@ -1,5 +1,4 @@
 import { TGameCopy, TGameLanguages, TGamePlatforms } from '@/lib/types'
-import Image from 'next/image'
 import PlatformIcon from '../PlatformIcon'
 import LanguageIcon from '../LanguageIcon'
 

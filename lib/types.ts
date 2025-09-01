@@ -41,6 +41,7 @@ export type TGameCopy = {
 }
 
 export enum TRouteTypes {
+  '' = '',
   'Character' = 'Character',
   'Other' = 'Other',
 }
@@ -82,7 +83,7 @@ export type TOwnedGame = {
 export type TRoute = {
   type: TRouteTypes | string
   name: string
-  route_img_link?: string
+  route_img_link: string
   status: TStatuses
   review?: TCategoryReview[]
   game_id?: string
@@ -97,7 +98,7 @@ export type TAddGameFormValues = {
   title: string
   type: TGameTypes
   status: TStatuses
-  img_link: string
+  img_link: string | null
   owned_copies: TGameCopy[]
   routes: TRoute[]
   price: number
@@ -106,8 +107,16 @@ export type TAddGameFormValues = {
   route_order: string
 }
 
-export type TAddRouteFormValues = {
-  reviews: TCategoryReview[]
+export type TAddReviewFormValues = {
+  review: TCategoryReview[]
+}
+
+export type TEditRouteFormValues = {
+  type: TRouteTypes | string
+  name: string
+  route_img_link: string | null
+  status: TStatuses
+  review?: TCategoryReview[]
 }
 
 export type TCategoryReview = {

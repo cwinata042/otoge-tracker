@@ -21,6 +21,7 @@ import { LuLoaderCircle } from 'react-icons/lu'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import { useRouter } from 'next/navigation'
 import Header from '@/app/_components/Header'
+import { isValidLink } from '@/lib/helper'
 
 export default function AddToCollection() {
   const { data: session } = useSession()
@@ -41,6 +42,7 @@ export default function AddToCollection() {
     getValues,
     setValue,
     setError,
+    watch,
     clearErrors,
     control,
     formState: { errors },
@@ -48,7 +50,7 @@ export default function AddToCollection() {
     defaultValues: {
       orig_title: '',
       title: '',
-      img_link: '',
+      img_link: null,
       vndb_search: '',
       vndb_id: '',
       type: TGameTypes.Main,
@@ -609,8 +611,17 @@ export default function AddToCollection() {
             {currTab === 'Game Details' ? (
               <div className="game-details">
                 <div className="game-details-image">
-                  {getValues('img_link') !== '' && (
-                    <Image src={getValues('img_link')} alt={'Game Image'} fill={true} style={{ objectFit: 'cover' }} />
+                  {isValidLink(watch('img_link')) && (
+                    <Image
+                      src={
+                        isValidLink(watch('img_link'))
+                          ? watch('img_link') ?? 'https://placehold.co/120x150/png'
+                          : 'https://placehold.co/120x150/png'
+                      }
+                      alt={'Game Image'}
+                      fill={true}
+                      style={{ objectFit: 'cover' }}
+                    />
                   )}
                 </div>
                 <div className="game-details-form">
@@ -648,14 +659,20 @@ export default function AddToCollection() {
                   </div>
                   <div className="form-field">
                     <label htmlFor="img_link">Link to Cover Image</label>
-                    <input type="text" key="img_link" {...register('img_link')} />
-                    <button
-                      type="button"
-                      className="small"
-                      onClick={() => setValue('img_link', 'https://t.vndb.org/cv/30/45430.jpg')}
-                    >
-                      Load image
-                    </button>
+                    <input
+                      type="text"
+                      key="img_link"
+                      {...register('img_link', {
+                        validate: {
+                          checkUrl: (url) => {
+                            if (!isValidLink(url)) {
+                              return 'Please enter a valid link.'
+                            }
+                          },
+                        },
+                      })}
+                    />
+                    {errors.img_link && <div className="form-error">{errors.img_link.message}</div>}
                   </div>
                   <div className="form-field">
                     <label htmlFor="type">Type*</label>

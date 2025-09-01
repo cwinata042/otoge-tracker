@@ -30,7 +30,7 @@ const ownedGameSchema = new mongoose.Schema(
     },
     img_link: {
       type: String,
-      default: 'https://placehold.co/400x600',
+      default: 'https://placehold.co/400x600/png',
     },
     description: {
       type: String,
