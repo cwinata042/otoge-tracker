@@ -29,6 +29,12 @@ const routeSchema = new mongoose.Schema(
       default: 'Incomplete',
       required: true,
     },
+    started_at: {
+      type: Date,
+    },
+    completed_at: {
+      type: Date,
+    },
     review: {
       scores: [
         {

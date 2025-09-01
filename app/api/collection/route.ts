@@ -20,8 +20,31 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     await dbConnect()
-    const { user_id, vndb_id, orig_title, title, type, status, img_link, owned_copies, routes } = await req.json()
-    const newOwnedGame = new OwnedGame({ user_id, vndb_id, orig_title, title, type, status, img_link, owned_copies })
+    const {
+      user_id,
+      vndb_id,
+      orig_title,
+      title,
+      type,
+      status,
+      img_link,
+      owned_copies,
+      routes,
+      route_order,
+      description,
+    } = await req.json()
+    const newOwnedGame = new OwnedGame({
+      user_id,
+      vndb_id,
+      orig_title,
+      title,
+      type,
+      status,
+      img_link,
+      owned_copies,
+      route_order,
+      description,
+    })
     await newOwnedGame.save()
 
     if (routes.length > 0) {

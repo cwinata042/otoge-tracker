@@ -1,9 +1,12 @@
 'use client'
 
+import GameCopy from '@/app/_components/collection/GameCopy'
 import GameStatus from '@/app/_components/collection/GameStatus'
 import Header from '@/app/_components/Header'
+import LanguageIcon from '@/app/_components/LanguageIcon'
+import PlatformIcon from '@/app/_components/PlatformIcon'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
-import { TGameDetails } from '@/lib/types'
+import { TGameDetails, TGameLanguages, TGamePlatforms } from '@/lib/types'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
@@ -65,6 +68,17 @@ export default function GameViewer() {
     )
   }
 
+  const ownedCopies = gameDetails.owned_copies.map((copy) => {
+    return (
+      <div key={`${copy.platform}-${copy.language}`} className="owned-copy">
+        <LanguageIcon language={copy.language} />
+        <PlatformIcon platform={copy.platform} />
+        <div className="vertical-break"></div>
+        {copy.type}
+      </div>
+    )
+  })
+
   return (
     <div className="main-container">
       <Header />
@@ -97,7 +111,22 @@ export default function GameViewer() {
                   <GameStatus status={gameDetails.status} />
                   <div className={'gameType ' + gameDetails.type}>{gameDetails.type}</div>
                 </div>
-                <div className="form-field"></div>
+                <div className="form-field">
+                  <p className="form-info-white">Original Title</p>
+                  <p className="game-info-field">{gameDetails.orig_title ?? 'No original title'}</p>
+                </div>
+                <div className="form-field">
+                  <p className="form-info-white">Description</p>
+                  <p className="game-info-field large">{gameDetails.description}</p>
+                </div>
+                <div className="form-field">
+                  <p className="form-info-white">Owned Copies</p>
+                  <div className="owned-copies">{ownedCopies}</div>
+                </div>
+                <div className="form-field">
+                  <p className="form-info-white">Recommended Route Order</p>
+                  <p className="game-info-field">{gameDetails.route_order}</p>
+                </div>
               </div>
             </div>
           ) : (

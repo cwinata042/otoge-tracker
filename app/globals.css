@@ -62,6 +62,10 @@ a {
   text-decoration: none;
 }
 
+p {
+  cursor: default;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
@@ -182,6 +186,7 @@ div.main {
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 700;
+  cursor: default;
 }
 
 .gameType.Main {
@@ -312,8 +317,14 @@ button,
   border: none;
 }
 
+textarea {
+  resize: none;
+}
+
 input,
-select {
+select,
+.game-info-field,
+textarea {
   padding: 10px;
   font-size: 16px;
   font-family: 'DM Sans', sans-serif;
@@ -323,6 +334,19 @@ select {
   outline: none;
   width: 100%;
   cursor: pointer;
+}
+.game-info-field {
+  cursor: default;
+  min-height: 41px;
+}
+.game-info-field.large,
+textarea.large {
+  vertical-align: top;
+  height: 130px;
+  overflow-y: auto;
+  word-wrap: break-word;
+  overflow-x: hidden;
+  text-align: start;
 }
 select {
   border-right: 10px solid transparent;
@@ -726,6 +750,7 @@ p.lg {
   position: relative;
   width: 300px;
   height: 405px;
+  min-width: 300px;
   background: var(--dark);
 }
 .game-details-form {
@@ -893,4 +918,17 @@ p.center {
 }
 .dropdown-content li:hover {
   background: var(--dark);
+}
+.owned-copy {
+  display: flex;
+  padding: 7px 10px;
+  background: var(--dark);
+  width: fit-content;
+  gap: 10px;
+  align-items: center;
+}
+.vertical-break {
+  height: 26px;
+  border-left: 1px solid var(--medium);
+  width: 1px;
 }

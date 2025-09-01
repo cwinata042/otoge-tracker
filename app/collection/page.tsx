@@ -95,16 +95,19 @@ export default function Collection() {
   const displayedGames = ownedGames?.filter((game: TOwnedGame) => {
     const platform =
       currFilters.platform.length > 0
-        ? currFilters.platform.some((platform) => game.owned_copies.map((game) => game.platform).includes(platform))
+        ? currFilters.platform.some((platform) =>
+            game.owned_copies.map((game) => game.platform.toString()).includes(platform)
+          )
         : true
     const status = currFilters.status.length > 0 ? currFilters.status.includes(game.status) : true
     const language =
       currFilters.language.length > 0
-        ? currFilters.language.some((lang) => game.owned_copies.map((game) => game.language).includes(lang))
+        ? currFilters.language.some((lang) => game.owned_copies.map((game) => game.language.toString()).includes(lang))
         : true
 
     return platform && status && language
   })
+  console.log(ownedGames)
 
   return (
     <div className="main-container">
@@ -113,7 +116,7 @@ export default function Collection() {
         <div className="collection-header">
           <div className="collection-title">
             <div className="title">{`Collection (${displayedGames?.length ? displayedGames?.length : 0})`}</div>
-            {ownedGames?.length > 1 && (
+            {ownedGames?.length > 0 && (
               <Link className="button main outlined small" href="/collection/add">
                 Add new game
               </Link>

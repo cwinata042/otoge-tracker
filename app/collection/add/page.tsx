@@ -10,6 +10,7 @@ import {
   TGameTypes,
   TRouteTypes,
   TAddGameFormValues,
+  TCopyTypes,
 } from '@/lib/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
@@ -54,6 +55,8 @@ export default function AddToCollection() {
       status: TStatuses[''],
       owned_copies: [],
       routes: [],
+      description: '',
+      route_order: '',
     },
   })
 
@@ -82,6 +85,7 @@ export default function AddToCollection() {
     mutationFn: async () => {
       clearErrors('root')
       const body = getValues()
+      console.log(body)
 
       const res = await fetch('/api/collection', {
         method: 'POST',
@@ -119,14 +123,14 @@ export default function AddToCollection() {
   })
   const langDropdown = Object.values(TGameLanguages).map((lang) => {
     return (
-      <option key={lang.toString().toLowerCase()} disabled={lang.toString() === 'Language'} value={lang.toString()}>
+      <option key={lang.toString().toLowerCase()} disabled={lang.toString() === ''} value={lang.toString()}>
         {lang}
       </option>
     )
   })
   const platDropdown = Object.values(TGamePlatforms).map((plat) => {
     return (
-      <option key={plat.toString().toLowerCase()} disabled={plat.toString() === 'Platform'} value={plat.toString()}>
+      <option key={plat.toString().toLowerCase()} disabled={plat.toString() === ''} value={plat.toString()}>
         {plat}
       </option>
     )
@@ -140,8 +144,15 @@ export default function AddToCollection() {
   })
   const routeTypeDropdown = Object.values(TRouteTypes).map((route) => {
     return (
-      <option key={route.toString().toLowerCase()} value={route.toString()}>
+      <option key={route.toString().toLowerCase()} value={route.toString()} disabled={route.toString() === ''}>
         {route}
+      </option>
+    )
+  })
+  const copyTypeDropdown = Object.values(TCopyTypes).map((type) => {
+    return (
+      <option key={type.toString().toLowerCase()} value={type.toString()} disabled={type.toString() === ''}>
+        {type}
       </option>
     )
   })
@@ -187,6 +198,26 @@ export default function AddToCollection() {
           </select>
           {errors?.owned_copies && errors.owned_copies[index]?.platform && (
             <div className="form-error">{errors.owned_copies[index]?.platform.message}</div>
+          )}
+        </div>
+        <div className="form-field">
+          <label htmlFor={copy.id}>Type*</label>
+          <select
+            key={copy.id}
+            {...register(`owned_copies.${index}.type`, {
+              validate: {
+                checkType: (type) => {
+                  if (type === '') {
+                    return 'Please select a type.'
+                  }
+                },
+              },
+            })}
+          >
+            {copyTypeDropdown}
+          </select>
+          {errors?.owned_copies && errors.owned_copies[index]?.type && (
+            <div className="form-error">{errors.owned_copies[index]?.type.message}</div>
           )}
         </div>
         <div className="form-field">
@@ -362,7 +393,7 @@ export default function AddToCollection() {
               },
               body: JSON.stringify({
                 filters: ['id', '=', vndbImportId],
-                fields: 'title, alttitle, image.url, va.character{name, image.url, vns.role}',
+                fields: 'title, alttitle, image.url, va.character{name, image.url, vns.role}, description',
               }),
             })
 
@@ -375,6 +406,7 @@ export default function AddToCollection() {
         setValue('title', vndbData.results[0].title)
         setValue('orig_title', vndbData.results[0].alttitle ? vndbData.results[0].alttitle : vndbData.results[0].title)
         setValue('img_link', vndbData.results[0].image.url)
+        setValue('description', vndbData.results[0].description)
         clearErrors(['vndb_id', 'title', 'orig_title', 'img_link'])
         removeRoute()
 
@@ -608,6 +640,14 @@ export default function AddToCollection() {
                     )}
                   </div>
                   <div className="form-field">
+                    <label htmlFor="description">Description</label>
+                    <textarea className="large" key="title" {...register('description')} />
+                  </div>
+                  <div className="form-field">
+                    <label htmlFor="route_order">Recommended Route Order</label>
+                    <input type="text" key="title" {...register('route_order')} />
+                  </div>
+                  <div className="form-field">
                     <label htmlFor="img_link">Link to Cover Image</label>
                     <input type="text" key="img_link" {...register('img_link')} />
                     <button
@@ -651,6 +691,7 @@ export default function AddToCollection() {
                             orig_price: null,
                             price: null,
                             price_currency: '',
+                            type: TCopyTypes[''],
                           })
                         }
                       >

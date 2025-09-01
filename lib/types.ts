@@ -25,12 +25,19 @@ export enum TGamePlatforms {
   'PC' = 'PC',
 }
 
+export enum TCopyTypes {
+  '' = '',
+  'Digital' = 'Digital',
+  'Physical' = 'Physical',
+}
+
 export type TGameCopy = {
-  language: TGameLanguages | string
-  platform: TGamePlatforms | string
+  language: TGameLanguages
+  platform: TGamePlatforms
   orig_price?: number | null
   price?: number | null
   price_currency: TCurrency | string
+  type: TCopyTypes
 }
 
 export enum TRouteTypes {
@@ -55,6 +62,8 @@ export type TGameDetails = {
   price: number
   price_currency: TCurrency
   routes: TRoute[]
+  description?: string
+  route_order?: string
 }
 
 export type TOwnedGame = {
@@ -90,4 +99,6 @@ export type TAddGameFormValues = {
   routes: TRoute[]
   price: number
   price_currency: TCurrency
+  description: string
+  route_order: string
 }
