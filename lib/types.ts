@@ -41,6 +41,7 @@ export type TGameCopy = {
 }
 
 export enum TRouteTypes {
+  '' = '',
   'Character' = 'Character',
   'Other' = 'Other',
 }
@@ -106,8 +107,16 @@ export type TAddGameFormValues = {
   route_order: string
 }
 
-export type TAddRouteFormValues = {
-  reviews: TCategoryReview[]
+export type TAddReviewFormValues = {
+  review: TCategoryReview[]
+}
+
+export type TEditRouteFormValues = {
+  type: TRouteTypes | string
+  name: string
+  route_img_link?: string
+  status: TStatuses
+  review?: TCategoryReview[]
 }
 
 export type TCategoryReview = {

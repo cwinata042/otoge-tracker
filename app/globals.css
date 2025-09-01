@@ -448,10 +448,11 @@ a:hover {
 }
 
 ::backdrop {
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
 }
 .vndb-import-container[open],
-.add-route-container[open] {
+.add-review-container[open],
+.edit-route-container[open] {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -518,11 +519,14 @@ input[type='text']#vndb-link::placeholder {
   color: black;
 }
 .vndb-buttons,
-.add-route-buttons {
+.form-buttons {
   display: flex;
   align-items: center;
   justify-content: end;
   gap: 10px;
+}
+.form-buttons {
+  margin-top: 40px;
 }
 .vndb-header,
 .vndb-link-container {
@@ -972,7 +976,7 @@ p.center {
   background: var(--dark);
   padding: 20px 30px;
   display: flex;
-  gap: 20px;
+  gap: 30px;
 }
 .route-img-container {
   position: relative;
@@ -989,7 +993,7 @@ p.center {
   height: 100%;
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
 }
 .review-container {
   display: flex;
@@ -1003,12 +1007,18 @@ p.center {
   align-items: center;
 }
 .route-header {
-  margin-top: 15px;
+  margin-top: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.route-header-main {
   display: flex;
   align-items: center;
   gap: 15px;
 }
-.add-route-modal {
+.add-review-modal,
+.edit-route-modal {
   display: flex;
   max-width: 1000px;
   width: 100%;
@@ -1018,12 +1028,12 @@ p.center {
   padding: 50px 80px;
   gap: 40px;
 }
-.add-route-form {
+.form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
-.add-route-category {
+.form-category {
   display: flex;
   flex-direction: column;
   gap: 5px;
@@ -1095,7 +1105,12 @@ input.appearance,
 }
 hr {
   border-color: var(--medium);
+}
+hr.mt {
   margin-top: 10px;
+}
+hr.mb {
+  margin-bottom: 10px;
 }
 .add-route-form-container {
   display: flex;
@@ -1142,4 +1157,24 @@ hr {
 .final-score-total {
   font-size: 32px;
   font-weight: 700;
+}
+.edit-button-icon {
+  width: 31px;
+  height: 31px;
+}
+.edit-button-icon:hover {
+  color: var(--accent-dark);
+}
+.edit-button-icon:active {
+  color: var(--accent-dark-hover);
+}
+.form-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px 0px;
+}
+.form-field-group {
+  display: flex;
+  gap: 15px;
 }
