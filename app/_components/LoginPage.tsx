@@ -6,6 +6,7 @@ import { IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5'
 import { useRouter } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
+import { LuLoaderCircle } from 'react-icons/lu'
 
 export default function LoginPage() {
   const {
@@ -23,9 +24,11 @@ export default function LoginPage() {
   const router = useRouter()
 
   const [passHide, setPassHide] = useState<boolean>(true)
+  const [loggingIn, setLoggingIn] = useState<boolean>(false)
 
   const onSubmit = async (data: any) => {
     try {
+      setLoggingIn(true)
       const res = await signIn('credentials', {
         email: getValues('email'),
         password: getValues('password'),
@@ -33,13 +36,16 @@ export default function LoginPage() {
       })
 
       if (res && res.error) {
+        setLoggingIn(false)
         setError('password', { message: 'Invalid email or password.' })
         return
       }
 
+      setLoggingIn(false)
       router.replace('collection')
     } catch (err) {
       console.log(err)
+      setLoggingIn(false)
     }
   }
 
@@ -98,7 +104,14 @@ export default function LoginPage() {
           </div>
           <Link href="/sign-up">Sign up for an account</Link>
           <div className="submit-button-container">
-            <input type="submit" value="Log in" />
+            {loggingIn ? (
+              <button className="main disabled" disabled>
+                <p>Logging in</p>
+                <LuLoaderCircle className="loader" />
+              </button>
+            ) : (
+              <input className="button main" type="submit" value="Log in" />
+            )}
           </div>
         </form>
       </div>

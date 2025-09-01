@@ -32,6 +32,12 @@ const ownedGameSchema = new mongoose.Schema(
       type: String,
       default: 'https://placehold.co/400x600',
     },
+    description: {
+      type: String,
+    },
+    route_order: {
+      type: String,
+    },
     owned_copies: [
       {
         language: {
@@ -53,6 +59,11 @@ const ownedGameSchema = new mongoose.Schema(
         price_currency: {
           type: String,
           enum: ['USD', 'JPY'],
+        },
+        type: {
+          type: String,
+          enum: ['Digital', 'Physical'],
+          required: true,
         },
       },
     ],

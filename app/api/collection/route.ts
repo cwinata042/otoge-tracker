@@ -1,9 +1,7 @@
-import { NextApiRequest, NextApiResponse } from 'next'
 import dbConnect from '@/lib/mongoose'
 import OwnedGame from '@/models/OwnedGame'
 import { NextResponse } from 'next/server'
 import mongoose from 'mongoose'
-import { headers } from 'next/headers'
 import Route from '@/models/Route'
 
 export async function GET(req: Request) {
@@ -22,8 +20,31 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     await dbConnect()
-    const { user_id, vndb_id, orig_title, title, type, status, img_link, owned_copies, routes } = await req.json()
-    const newOwnedGame = new OwnedGame({ user_id, vndb_id, orig_title, title, type, status, img_link, owned_copies })
+    const {
+      user_id,
+      vndb_id,
+      orig_title,
+      title,
+      type,
+      status,
+      img_link,
+      owned_copies,
+      routes,
+      route_order,
+      description,
+    } = await req.json()
+    const newOwnedGame = new OwnedGame({
+      user_id,
+      vndb_id,
+      orig_title,
+      title,
+      type,
+      status,
+      img_link,
+      owned_copies,
+      route_order,
+      description,
+    })
     await newOwnedGame.save()
 
     if (routes.length > 0) {

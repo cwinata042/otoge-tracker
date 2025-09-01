@@ -4,6 +4,7 @@ export enum TGameTypes {
 }
 
 export enum TStatuses {
+  '' = '',
   'Incomplete' = 'Incomplete',
   'Playing' = 'Playing',
   'Completed' = 'Completed',
@@ -12,22 +13,31 @@ export enum TStatuses {
 }
 
 export enum TGameLanguages {
+  '' = '',
   'EN' = 'EN',
   'JP' = 'JP',
 }
 
 export enum TGamePlatforms {
+  '' = '',
   'Switch' = 'Switch',
-  'PS Vita' = 'PS Vita',
   'PC' = 'PC',
+  'PS Vita' = 'PS Vita',
+}
+
+export enum TCopyTypes {
+  '' = '',
+  'Digital' = 'Digital',
+  'Physical' = 'Physical',
 }
 
 export type TGameCopy = {
-  language: TGameLanguages | string
-  platform: TGamePlatforms | string
+  language: TGameLanguages
+  platform: TGamePlatforms
   orig_price?: number | null
   price?: number | null
   price_currency: TCurrency | string
+  type: TCopyTypes
 }
 
 export enum TRouteTypes {
@@ -40,7 +50,24 @@ export enum TCurrency {
   'JPY' = 'JPY',
 }
 
+export type TGameDetails = {
+  _id: string
+  vndb_id: string
+  orig_title: string
+  title: string
+  type: TGameTypes
+  status: TStatuses
+  img_link: string
+  owned_copies: TGameCopy[]
+  price: number
+  price_currency: TCurrency
+  routes: TRoute[]
+  description?: string
+  route_order?: string
+}
+
 export type TOwnedGame = {
+  _id: string
   vndb_id: string
   orig_title: string
   title: string
@@ -57,11 +84,14 @@ export type TRoute = {
   name: string
   route_img_link?: string
   status: TStatuses
-  review?: any
+  review?: TCategoryReview[]
+  game_id?: string
+  _id?: string
+  final_score?: number
 }
 
 export type TAddGameFormValues = {
-  vndb_link: string
+  vndb_search: string
   vndb_id: string
   orig_title: string
   title: string
@@ -72,4 +102,18 @@ export type TAddGameFormValues = {
   routes: TRoute[]
   price: number
   price_currency: TCurrency
+  description: string
+  route_order: string
+}
+
+export type TAddRouteFormValues = {
+  reviews: TCategoryReview[]
+}
+
+export type TCategoryReview = {
+  category: string
+  score: number
+  review_score?: number
+  total_score: number
+  note?: string
 }

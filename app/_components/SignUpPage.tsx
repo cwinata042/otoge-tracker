@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form'
 import { IoEyeOutline, IoEyeOffOutline } from 'react-icons/io5'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { LuLoaderCircle } from 'react-icons/lu'
 
 export default function SignUpPage() {
   const {
@@ -18,6 +19,7 @@ export default function SignUpPage() {
   } = useForm({
     defaultValues: {
       email: '',
+      username: '',
       password: '',
       confirmPassword: '',
     },
@@ -26,20 +28,25 @@ export default function SignUpPage() {
 
   const [passHide, setPassHide] = useState<boolean>(true)
   const [passConfirmHide, setPassConfirmHide] = useState<boolean>(true)
+  const [signingUp, setSigningUp] = useState<boolean>(false)
 
   const { mutate } = useMutation({
     mutationFn: async () => {
+      setSigningUp(true)
       const body = JSON.stringify({
         email: getValues('email'),
         password: getValues('password'),
+        username: getValues('username'),
       })
 
       const res = await fetch('/api/sign-up', { method: 'POST', body: body })
 
       if (!res.ok) {
+        setSigningUp(false)
         throw new Error('A user with this email already exists.')
       }
 
+      setSigningUp(false)
       return res.json()
     },
     onSuccess: () => {
@@ -84,6 +91,22 @@ export default function SignUpPage() {
       <div className="sign-up-container">
         <h1>Sign up</h1>
         <form className="sign-up-form" onSubmit={handleSubmit(onSubmit)}>
+          <div className="form-field">
+            <label htmlFor="email">Username</label>
+            <input
+              id="username"
+              {...register('username', {
+                validate: {
+                  checkUsername: (username) => {
+                    if (username === '' || !username) {
+                      return 'Please enter an email.'
+                    }
+                  },
+                },
+              })}
+            />
+            {errors.username && <div className="form-error">{errors.username.message}</div>}
+          </div>
           <div className="form-field">
             <label htmlFor="email">Email</label>
             <input
@@ -154,7 +177,14 @@ export default function SignUpPage() {
           </div>
           <Link href="/">Log in with your account</Link>
           <div className="submit-button-container">
-            <input type="submit" value="Sign up" />
+            {signingUp ? (
+              <button className="main disabled" disabled>
+                <p>Signing up</p>
+                <LuLoaderCircle className="loader" />
+              </button>
+            ) : (
+              <input className="button main" type="submit" value="Sign up" />
+            )}
           </div>
         </form>
       </div>
