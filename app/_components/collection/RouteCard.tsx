@@ -40,7 +40,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
   })
 
   function toggleModal(show: boolean) {
-    const dialog = document.querySelector('dialog')
+    const dialog: HTMLDialogElement | null = document.querySelector(`dialog.route-${route._id}`)
 
     if (dialog && show) {
       dialog.showModal()
@@ -150,13 +150,13 @@ export default function RouteCard({ route }: { route: TRoute }) {
 
   return (
     <div key={route.name} className="route-card" onClick={() => setIsExpanded(!isExpanded)}>
-      <dialog className="add-route-container">
+      <dialog className={`add-route-container route-${route._id}`}>
         <div className="add-route-modal">
           <h2>Add Review</h2>
           <form className="add-route-form-container" onSubmit={handleSubmit(onSubmit)}>
             <div className="add-route-form">{categoriesList}</div>
             <div className="add-route-buttons">
-              <button autoFocus onClick={() => toggleModal(false)}>
+              <button type="button" autoFocus onClick={() => toggleModal(false)}>
                 Cancel
               </button>
               <button className="main">Add</button>

@@ -85,7 +85,6 @@ export default function AddToCollection() {
     mutationFn: async () => {
       clearErrors('root')
       const body = getValues()
-      console.log(body)
 
       const res = await fetch('/api/collection', {
         method: 'POST',

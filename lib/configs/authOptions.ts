@@ -46,7 +46,6 @@ export const authOptions: AuthOptions = {
       if (user) {
         token.user = { _id: user._id, email: user.email, username: user.username }
       }
-      console.log(user)
 
       return Promise.resolve(token)
     },
