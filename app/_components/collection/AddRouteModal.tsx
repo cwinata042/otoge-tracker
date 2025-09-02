@@ -139,7 +139,7 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
                 {...register('route_img_link', {
                   validate: {
                     checkUrl: (url) => {
-                      if (!isValidLink(url)) {
+                      if (url && url !== '' && !isValidLink(url)) {
                         return 'Please enter a valid link.'
                       }
                     },
@@ -153,7 +153,7 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
               Cancel
             </button>
             <button className="main">
-              <p>{isSaving ? 'Saving...' : 'Save'}</p>
+              <p>{isSaving ? 'Adding...' : 'Add'}</p>
               {isSaving && <LuLoaderCircle className="loader" />}
             </button>
           </div>

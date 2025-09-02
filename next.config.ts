@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
 
 module.exports = {
   images: {
-    remotePatterns: [new URL('https://t.vndb.org/**'), new URL('https://placehold.co/**')],
+    domains: ['t.vndb.org', 'placehold.co'],
   },
 }
 

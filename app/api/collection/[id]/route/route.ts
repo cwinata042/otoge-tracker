@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import mongoose from 'mongoose'
 import Route from '@/models/Route'
 import { TRoute } from '@/lib/types'
+import OwnedGame from '@/models/OwnedGame'
 
 // Get all routes for this game
 export async function GET(req: Request) {
@@ -33,6 +34,17 @@ export async function POST(req: Request) {
     })
 
     await newRoute.save()
+
+    // Updates the game's updatedAt field
+    const updatedGame = await OwnedGame.findOneAndUpdate(
+      {
+        user_id: new mongoose.Types.ObjectId(user_id as string),
+        _id: new mongoose.Types.ObjectId(game_id as string),
+      },
+      {
+        updatedAt: new Date(0),
+      }
+    )
 
     return NextResponse.json(newRoute, { status: 201 })
   } catch (error) {
