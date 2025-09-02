@@ -20,6 +20,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
     { name: 'Appearance', total: 10 },
   ]
   const [isDeletingRoute, setIsDeletingRoute] = useState<boolean>(false)
+  const [isSavingRoute, setIsSavingRoute] = useState<boolean>(false)
 
   const queryClient = useQueryClient()
 
@@ -205,6 +206,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
           review: calcScore,
           user_id: session?.user?._id ? session?.user?._id : '',
           route_id: route._id,
+          game_id: route.game_id,
         }),
       })
 
@@ -221,6 +223,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
 
   const { mutate: mutateEditRoute, status: editRouteStatus } = useMutation({
     mutationFn: async () => {
+      setIsSavingRoute(true)
       const scores: any[] | undefined = getEditRouteValues('review')?.map((review) => review.review_score)
 
       clearEditRouteErrors('root')
@@ -239,16 +242,19 @@ export default function RouteCard({ route }: { route: TRoute }) {
           route: { ...body, review: scores?.includes('') ? [] : calcScore ?? [] },
           user_id: session?.user?._id ? session?.user?._id : '',
           route_id: route._id,
+          game_id: route.game_id,
         }),
       })
 
       return res.json()
     },
     onSuccess: () => {
+      setIsSavingRoute(false)
       queryClient.invalidateQueries({ queryKey: [SINGLE_GAME_QUERY_KEY, route.game_id] })
       toggleModal(false, 'edit-route-container')
     },
     onError: (error: any) => {
+      setIsSavingRoute(false)
       setEditRouteError('root', { message: 'Failed to edit route. Please try again.' })
     },
   })
@@ -295,6 +301,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
         body: JSON.stringify({
           user_id: session?.user?._id ? session?.user?._id : '',
           route_id: route._id,
+          game_id: route.game_id,
         }),
       })
 
@@ -383,7 +390,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
                   {...registerEditRoute('route_img_link', {
                     validate: {
                       checkUrl: (url) => {
-                        if (!isValidLink(url)) {
+                        if (url && url !== '' && !isValidLink(url)) {
                           return 'Please enter a valid link.'
                         }
                       },
@@ -412,7 +419,10 @@ export default function RouteCard({ route }: { route: TRoute }) {
               <button type="button" autoFocus onClick={() => toggleModal(false, 'edit-route-container')}>
                 Cancel
               </button>
-              <button className="main">Save</button>
+              <button disabled={isSavingRoute} className="main">
+                <p>{isSavingRoute ? 'Saving...' : 'Save'}</p>
+                {isSavingRoute && <LuLoaderCircle className="loader" />}
+              </button>
             </div>
           </form>
         </div>

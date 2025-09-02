@@ -16,7 +16,7 @@ import { RxCross2 } from 'react-icons/rx'
 export default function Collection() {
   const { data: session } = useSession()
   const [currFilters, setCurrFilters] = useState<TFilters>({ status: [], platform: [], language: [] })
-  const [currSort, setCurrSort] = useState<TSort>({})
+  const [currSort, setCurrSort] = useState<TSort>({ name: 'Name', isDesc: true })
   const filters = [
     { name: 'Status', options: Object.keys(TStatuses) },
     { name: 'Platform', options: Object.keys(TGamePlatforms) },
@@ -164,7 +164,7 @@ export default function Collection() {
     const status = currFilters.status.length === 0
     const platform = currFilters.platform.length === 0
     const language = currFilters.language.length === 0
-    const sort = Object.keys(currSort).length === 0
+    const sort = currSort.name === 'Name' && currSort.isDesc
 
     return status && platform && language && sort
   }
@@ -193,7 +193,7 @@ export default function Collection() {
               className="small nobg warn nopad"
               onClick={() => {
                 setCurrFilters({ status: [], platform: [], language: [] })
-                setCurrSort({})
+                setCurrSort({ name: 'Name', isDesc: true })
               }}
             >
               Reset
