@@ -120,11 +120,17 @@ div.main {
   font-weight: bold;
 }
 
+.collection-header-container {
+  display: flex;
+  flex-direction: column;
+  padding: 30px 0px 30px 0px;
+  align-items: end;
+}
+
 .collection-header {
   display: flex;
   width: calc(var(--game-card-width));
   justify-content: space-between;
-  padding: 30px 0px 30px 0px;
   align-items: center;
 }
 
@@ -230,6 +236,7 @@ div.main {
   display: inline-flex;
   gap: 10px;
   align-items: center;
+  color: var(--background);
 }
 
 .gameTitle {
@@ -666,6 +673,10 @@ button.small,
   font-size: 14px;
   font-weight: bold;
 }
+button.nopad,
+.button.nopad {
+  padding: 0px;
+}
 button.main.nobg,
 .button.main.nobg {
   border: none;
@@ -912,20 +923,28 @@ p.center {
   gap: 20px;
   width: 100%;
 }
-.dropdown-btn {
+.filter-sort {
+  display: flex;
+  gap: 30px;
+  align-items: center;
+}
+.dropdown-btn,
+.sort-btn {
   padding: 0;
 }
 .dropdowns {
   display: flex;
   gap: 30px;
 }
-.dropdown {
+.dropdown,
+.sort {
   position: relative;
   display: flex;
   flex-direction: column;
   width: 100%;
 }
-.dropdown-content {
+.dropdown-content,
+.sort-content {
   visibility: hidden;
 
   list-style: none;
@@ -938,10 +957,12 @@ p.center {
 
   border: var(--dark) 1px solid;
 }
-.dropdown:focus-within .dropdown-content {
+.dropdown:focus-within .dropdown-content,
+.sort:focus-within .sort-content {
   visibility: visible;
 }
-.dropdown-content li {
+.dropdown-content li,
+.sort-content li {
   display: flex;
   padding: 8px 15px;
   text-wrap: nowrap;
@@ -949,10 +970,12 @@ p.center {
   align-items: center;
   gap: 5px;
 }
-.dropdown-content li.selected {
+.dropdown-content li.selected,
+.sort-content li.selected {
   color: var(--accent-dark);
 }
-.dropdown-content li:hover {
+.dropdown-content li:hover,
+.sort-content li:hover {
   background: var(--dark);
 }
 .owned-copy {
@@ -971,9 +994,6 @@ p.center {
 .owned-copies {
   display: flex;
   gap: 5px;
-}
-.pc-icon {
-  font-weight: 700;
 }
 .single-game-routes {
   display: flex;

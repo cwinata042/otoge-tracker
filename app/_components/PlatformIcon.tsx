@@ -1,5 +1,6 @@
 import { TGamePlatforms } from '@/lib/types'
 import Image from 'next/image'
+import { PiDesktop } from 'react-icons/pi'
 
 export default function PlatformIcon({
   platform,
@@ -30,6 +31,6 @@ export default function PlatformIcon({
         />
       )
     case TGamePlatforms['PC']:
-      return <p className="pc-icon">PC</p>
+      return <PiDesktop size={width ? width : 20} />
   }
 }

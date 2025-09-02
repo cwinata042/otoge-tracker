@@ -78,6 +78,7 @@ export type TOwnedGame = {
   owned_copies: TGameCopy[]
   price: number
   price_currency: TCurrency
+  updatedAt?: Date
 }
 
 export type TRoute = {
@@ -125,4 +126,15 @@ export type TCategoryReview = {
   review_score?: number
   total_score: number
   note?: string
+}
+
+export type TFilters = {
+  status: string[]
+  platform: string[]
+  language: string[]
+}
+
+export type TSort = {
+  name?: string
+  isDesc?: boolean
 }
