@@ -76,8 +76,6 @@ export type TOwnedGame = {
   status: TStatuses
   img_link: string
   owned_copies: TGameCopy[]
-  price: number
-  price_currency: TCurrency
   updatedAt?: Date
 }
 
