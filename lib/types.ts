@@ -100,8 +100,6 @@ export type TAddGameFormValues = {
   img_link: string | null
   owned_copies: TGameCopy[]
   routes: TRoute[]
-  price: number
-  price_currency: TCurrency
   description: string
   route_order: string
 }
@@ -116,6 +114,17 @@ export type TEditRouteFormValues = {
   route_img_link: string | null
   status: TStatuses
   review?: TCategoryReview[]
+}
+
+export type TEditGameFormValues = {
+  orig_title: string
+  title: string
+  type: TGameTypes
+  status: TStatuses
+  img_link: string | null
+  owned_copies: TGameCopy[]
+  description: string
+  route_order: string
 }
 
 export type TCategoryReview = {

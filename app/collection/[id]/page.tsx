@@ -1,6 +1,7 @@
 'use client'
 
 import AddRouteModal from '@/app/_components/collection/AddRouteModal'
+import EditGameModal from '@/app/_components/collection/EditGameModal'
 import GameStatus from '@/app/_components/collection/GameStatus'
 import RouteCard from '@/app/_components/collection/RouteCard'
 import Header from '@/app/_components/Header'
@@ -33,7 +34,13 @@ export default function GameViewer() {
             UserId: session?.user._id ? session?.user._id : '',
           },
         })
-        return res.json()
+
+        if (!res.ok) {
+          const response = await res.json()
+          throw new Error('Game not found!')
+        }
+
+        return await res.json()
       },
       staleTime: 1000 * 60 * 5,
       enabled: !!session,
@@ -63,7 +70,10 @@ export default function GameViewer() {
         <div className="body">
           <div className="game-grid-empty">
             <div className="loading-page">
-              <p className="form-info-white lg">There was an error grabbing your collection. Try reloading the page!</p>
+              <p className="form-info-white lg">
+                There was an error fetching this game. Try reloading the page or doublechecking that this game exists in
+                your collection!
+              </p>
             </div>
           </div>
         </div>
@@ -88,8 +98,16 @@ export default function GameViewer() {
     return <RouteCard key={route._id} route={route} />
   })
 
-  function openModal() {
+  function openAddRouteModal() {
     const dialog: HTMLDialogElement | null = document.querySelector('dialog.add-route-container')
+
+    if (dialog) {
+      dialog.showModal()
+    }
+  }
+
+  function openEditGameModal() {
+    const dialog: HTMLDialogElement | null = document.querySelector('dialog.edit-game-container')
 
     if (dialog) {
       dialog.showModal()
@@ -101,10 +119,13 @@ export default function GameViewer() {
       <Header />
       <div className="body">
         <AddRouteModal gameId={gameDetails?._id} />
+        <EditGameModal gameData={gameDetails} />
         <div className="single-game-header">
           <div className="header-main">
             <h1>{gameDetails.title}</h1>
-            <button className="small main outlined">Edit</button>
+            <button className="small main outlined" onClick={() => openEditGameModal()}>
+              Edit
+            </button>
           </div>
           <Link href="/collection" className="button small nobg">
             Back
@@ -155,7 +176,7 @@ export default function GameViewer() {
           ) : (
             <div className="single-game-routes-container">
               <div className="single-game-routes">{routes}</div>
-              <button type="button" className="add" onClick={() => openModal()}>
+              <button type="button" className="add" onClick={() => openAddRouteModal()}>
                 Add Route
               </button>
             </div>

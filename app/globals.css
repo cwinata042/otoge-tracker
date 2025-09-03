@@ -456,7 +456,8 @@ a:hover {
 .vndb-import-container[open],
 .add-review-container[open],
 .edit-route-container[open],
-.add-route-container[open] {
+.add-route-container[open],
+.edit-game-container[open] {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -493,6 +494,7 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 45px;
+  width: 100%;
 }
 .vndb-search-options {
   display: flex;
@@ -537,6 +539,10 @@ input[type='text']#vndb-link::placeholder {
   display: flex;
   flex-direction: column;
   gap: 5px;
+  width: 100%;
+}
+.vndb-search {
+  align-items: end;
 }
 .vndb-search-button-loading,
 .vndb-import-button-loading {
@@ -1040,7 +1046,8 @@ p.center {
 }
 .add-review-modal,
 .edit-route-modal,
-.add-route-modal {
+.add-route-modal,
+.edit-game-modal {
   display: flex;
   max-width: 1000px;
   width: 100%;
@@ -1204,4 +1211,7 @@ hr.mb {
   display: flex;
   flex-direction: column;
   gap: 15px;
+}
+input[type='radio'] {
+  accent-color: var(--accent-dark);
 }

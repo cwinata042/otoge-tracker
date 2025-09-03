@@ -29,7 +29,7 @@ export default function AddToCollection() {
   const router = useRouter()
 
   const [currTab, setCurrTab] = useState<string>('Game Details')
-  const [vndbImportType, setVNDBImportType] = useState<string>('VNDB Link')
+  const [vndbImportType, setVNDBImportType] = useState<string>('Game Title')
   const [vndbImportId, setVNDBImportId] = useState<string | null>(null)
   const [vndbImportError, setVNDBImportError] = useState<string>('')
   const [isLoadingVNDBSearch, setIsLoadingVNDBSearch] = useState<boolean>(false)
@@ -461,10 +461,8 @@ export default function AddToCollection() {
   })
 
   function clearVNDBSearch() {
-    setValue('vndb_search', '')
     setVNDBImportId(null)
     setVNDBSearchResults(null)
-    setVNDBImportType('VNDB Link')
   }
 
   return (
@@ -486,17 +484,6 @@ export default function AddToCollection() {
                       <input
                         name="vndb-search-by"
                         type="radio"
-                        id="vndb-link"
-                        value="VNDB Link"
-                        checked={vndbImportType === 'VNDB Link'}
-                        onChange={() => setVNDBImportType('VNDB Link')}
-                      />
-                      <label htmlFor="vndb-link">VNDB Link/ID</label>
-                    </div>
-                    <div className="vndb-search-option">
-                      <input
-                        name="vndb-search-by"
-                        type="radio"
                         id="game-title"
                         value="Game Title"
                         checked={vndbImportType === 'Game Title'}
@@ -506,6 +493,17 @@ export default function AddToCollection() {
                         }}
                       />
                       <label htmlFor="game-title">Game Title</label>
+                    </div>
+                    <div className="vndb-search-option">
+                      <input
+                        name="vndb-search-by"
+                        type="radio"
+                        id="vndb-link"
+                        value="VNDB Link"
+                        checked={vndbImportType === 'VNDB Link'}
+                        onChange={() => setVNDBImportType('VNDB Link')}
+                      />
+                      <label htmlFor="vndb-link">VNDB Link/ID</label>
                     </div>
                   </div>
                 </div>
@@ -526,6 +524,11 @@ export default function AddToCollection() {
                   />
                   {errors.vndb_search && <div className="form-error">{errors.vndb_search.message}</div>}
                 </div>
+                {vndbSearchResults && (
+                  <button className="small nobg warn nopad" onClick={() => clearVNDBSearch()}>
+                    Clear search results
+                  </button>
+                )}
               </div>
               {vndbSearchResults && (
                 <>
@@ -547,9 +550,6 @@ export default function AddToCollection() {
                       </thead>
                       <tbody>{vndbSearchResultRows}</tbody>
                     </table>
-                    <button className="small nobg warn" onClick={() => clearVNDBSearch()}>
-                      Clear search results
-                    </button>
                   </div>
                 </>
               )}

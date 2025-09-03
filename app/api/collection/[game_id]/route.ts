@@ -15,6 +15,7 @@ export async function GET(req: Request) {
       user_id: new mongoose.Types.ObjectId(userId ? userId : ''),
       _id: new mongoose.Types.ObjectId(gameId ? gameId : ''),
     })
+    console.log(game)
     const gameRoutes = await Route.find({
       user_id: new mongoose.Types.ObjectId(userId ? userId : ''),
       game_id: new mongoose.Types.ObjectId(gameId ? gameId : ''),
@@ -26,9 +27,10 @@ export async function GET(req: Request) {
         routes: gameRoutes,
       }
     }
+
     return NextResponse.json(combined, { status: 200 })
   } catch (error) {
-    return NextResponse.json({ error: error })
+    return NextResponse.json({ error: error }, { status: 404 })
   }
 }
 
@@ -37,10 +39,10 @@ export async function GET(req: Request) {
 export async function DELETE(req: Request) {
   try {
     await dbConnect()
-    const { gameId, userId } = await req.json()
+    const { game_id, user_id } = await req.json()
 
-    const deletedGame = await OwnedGame.findOneAndDelete({ _id: gameId, user_id: userId })
-    const deletedRoutes = await Route.deleteMany({ _id: gameId, user_id: userId })
+    const deletedGame = await OwnedGame.findOneAndDelete({ _id: game_id, user_id: user_id })
+    const deletedRoutes = await Route.deleteMany({ _id: game_id, user_id: user_id })
 
     return NextResponse.json(deletedGame, { status: 200 })
   } catch (err) {
@@ -52,10 +54,10 @@ export async function DELETE(req: Request) {
 export async function PATCH(req: Request) {
   try {
     await dbConnect()
-    const { gameId, userId, game }: { gameId: string; userId: string; game: TOwnedGame } = await req.json()
+    const { game_id, user_id, game }: { game_id: string; user_id: string; game: TOwnedGame } = await req.json()
 
     const editedGame = await OwnedGame.findOneAndUpdate(
-      { _id: gameId, user_id: userId },
+      { _id: game_id, user_id: user_id },
       {
         vndb_id: game.vndb_id,
         orig_title: game.orig_title,
