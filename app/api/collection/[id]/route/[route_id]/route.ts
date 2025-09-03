@@ -15,23 +15,24 @@ export async function PATCH(req: Request) {
       game_id,
       review,
       route,
-    }: { user_id: string; route_id: string; game_id: string; review: TCategoryReview[]; route: TRoute } =
-      await req.json()
+    }: { user_id: string; route_id: string; game_id: string; review: TCategoryReview[]; route: TRoute } = await req.json()
+    const categoryWeights = [45, 30, 12.5, 12.5]
 
     let updatedRoute
 
     // If updating the entire route
     if (route) {
       const totalScore = route.review
-        ?.map((review) => review.review_score)
+        ?.map((review, index) => {
+          // If there is no score, return null
+          if (!review.review_score || review.review_score === 0) {
+              return 0
+            } else {
+              return (review.review_score / review.total_score) * categoryWeights[index]
+            }
+          }
+        )
         .reduce((sum: number, score) => sum + (score ?? 0), 0)
-      const totalPossibleScore = route.review
-        ?.map((review) => review.total_score)
-        .reduce((sum: number, score) => sum + (score ?? 0), 0)
-      const finalScore =
-        totalScore && totalPossibleScore && totalPossibleScore !== 0
-          ? ((totalScore / totalPossibleScore) * 100).toFixed(2)
-          : 0
 
       updatedRoute = await Route.findOneAndUpdate(
         {
@@ -44,27 +45,28 @@ export async function PATCH(req: Request) {
           route_img_link: route.route_img_link,
           status: route.status,
           review: route.review,
-          final_score: finalScore,
+          final_score: totalScore,
         }
       )
     } else {
       const totalScore = review
-        ?.map((review) => review.review_score)
+        ?.map((review, index) => {
+          // If there is no score, return null
+          if (!review.review_score || review.review_score === 0) {
+              return 0
+            } else {
+              return (review.review_score / review.total_score) * categoryWeights[index]
+            }
+          }
+        )
         .reduce((sum: number, score) => sum + (score ?? 0), 0)
-      const totalPossibleScore = review
-        ?.map((review) => review.total_score)
-        .reduce((sum: number, score) => sum + (score ?? 0), 0)
-      const finalScore =
-        totalScore && totalPossibleScore && totalPossibleScore !== 0
-          ? ((totalScore / totalPossibleScore) * 100).toFixed(2)
-          : 0
 
       updatedRoute = await Route.findOneAndUpdate(
         {
           user_id: new mongoose.Types.ObjectId(user_id as string),
           _id: new mongoose.Types.ObjectId(route_id as string),
         },
-        { review: review, final_score: finalScore }
+        { review: review, final_score: totalScore }
       )
     }
 
