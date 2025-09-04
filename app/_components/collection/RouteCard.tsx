@@ -41,6 +41,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
           total_score: category.total,
         }
       }),
+      notes: route.notes,
     },
   })
 
@@ -59,6 +60,9 @@ export default function RouteCard({ route }: { route: TRoute }) {
       route_img_link: route.route_img_link,
       status: route.status,
       review: route.review && route.review.length > 0 ? route.review : [],
+      started_date: route.started_date,
+      completed_date: route.completed_date,
+      notes: route.notes,
     },
   })
 
@@ -207,6 +211,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
           user_id: session?.user?._id ? session?.user?._id : '',
           route_id: route._id,
           game_id: route.game_id,
+          notes: body.notes,
         }),
       })
 
@@ -330,7 +335,17 @@ export default function RouteCard({ route }: { route: TRoute }) {
         <div className="add-review-modal">
           <h2>Add Review</h2>
           <form className="form-container" onSubmit={handleAddReviewSubmit(onAddReviewSubmit)}>
-            <div className="form">{addReviewCategories}</div>
+            <div className="form">
+              {
+                <>
+                  {addReviewCategories}
+                  <div className="form-field">
+                    <label htmlFor="route_img_link">Other Notes</label>
+                    <textarea {...registerAddReview('notes')}></textarea>
+                  </div>
+                </>
+              }
+            </div>
             <div className="form-buttons">
               <button type="button" autoFocus onClick={() => toggleModal(false, 'add-review-container')}>
                 Cancel
@@ -367,6 +382,16 @@ export default function RouteCard({ route }: { route: TRoute }) {
                   )}
                 </div>
               </div>
+              <div className="form-field-group">
+                <div className="form-field">
+                  <label htmlFor="new-route-type">Started</label>
+                  <input key="new-route-name" type="date" {...registerEditRoute('started_date')}></input>
+                </div>
+                <div className="form-field">
+                  <label htmlFor="new-route-type">Completed</label>
+                  <input key="new-route-name" type="date" {...registerEditRoute('completed_date')}></input>
+                </div>
+              </div>
               <div className="form-field">
                 <label htmlFor="name">
                   {getEditRouteValues('type') === 'Character' ? 'Character Name*' : 'Route Name*'}
@@ -397,6 +422,10 @@ export default function RouteCard({ route }: { route: TRoute }) {
                     },
                   })}
                 ></input>
+              </div>
+              <div className="form-field">
+                <label htmlFor="route_img_link">Other Notes</label>
+                <textarea {...registerEditRoute('notes')}></textarea>
               </div>
             </div>
             {route.review && route.review.length > 0 && (

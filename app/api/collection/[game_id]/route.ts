@@ -15,7 +15,6 @@ export async function GET(req: Request) {
       user_id: new mongoose.Types.ObjectId(userId ? userId : ''),
       _id: new mongoose.Types.ObjectId(gameId ? gameId : ''),
     })
-    console.log(game)
     const gameRoutes = await Route.find({
       user_id: new mongoose.Types.ObjectId(userId ? userId : ''),
       game_id: new mongoose.Types.ObjectId(gameId ? gameId : ''),

@@ -88,6 +88,9 @@ export type TRoute = {
   game_id?: string
   _id?: string
   final_score?: number
+  notes?: string
+  started_date?: Date | null
+  completed_date?: Date | null
 }
 
 export type TAddGameFormValues = {
@@ -106,6 +109,7 @@ export type TAddGameFormValues = {
 
 export type TAddReviewFormValues = {
   review: TCategoryReview[]
+  notes: string
 }
 
 export type TEditRouteFormValues = {
@@ -114,6 +118,9 @@ export type TEditRouteFormValues = {
   route_img_link: string | null
   status: TStatuses
   review?: TCategoryReview[]
+  notes?: string
+  started_date?: Date | null
+  completed_date?: Date | null
 }
 
 export type TEditGameFormValues = {

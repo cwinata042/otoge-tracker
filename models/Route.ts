@@ -61,6 +61,18 @@ const routeSchema = new mongoose.Schema(
         },
       },
     ],
+    notes: {
+      type: String,
+      default: '',
+    },
+    started_date: {
+      type: Date,
+      default: null,
+    },
+    completed_date: {
+      type: Date,
+      default: null,
+    },
   },
   { timestamps: true }
 )

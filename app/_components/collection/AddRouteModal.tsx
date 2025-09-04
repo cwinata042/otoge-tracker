@@ -29,6 +29,9 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
       route_img_link: null,
       status: TStatuses[''],
       review: [],
+      notes: '',
+      started_date: null,
+      completed_date: null,
     },
   })
   const onSubmit = (data: any) => {
@@ -130,6 +133,16 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
                 })}
               ></input>
               {errors?.name && <div className="form-error">{errors.name.message}</div>}
+            </div>
+            <div className="form-field-group">
+              <div className="form-field">
+                <label htmlFor="new-route-type">Started</label>
+                <input key="new-route-name" type="date" {...register('started_date')}></input>
+              </div>
+              <div className="form-field">
+                <label htmlFor="new-route-type">Completed</label>
+                <input key="new-route-name" type="date" {...register('completed_date')}></input>
+              </div>
             </div>
             <div className="form-field">
               <label htmlFor="new-route-route_img_link">Route Image Link</label>

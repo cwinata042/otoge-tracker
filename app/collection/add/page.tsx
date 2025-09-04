@@ -297,6 +297,9 @@ export default function AddToCollection() {
     if (dialog && show) {
       dialog.showModal()
     } else if (dialog && !show) {
+      setVNDBImportType('Game Title')
+      setVNDBImportId(null)
+      setValue('vndb_search', '')
       clearVNDBSearch()
       setIsLoadingVNDBSearch(false)
       setIsLoadingVNDBImport(false)
