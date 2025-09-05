@@ -164,95 +164,100 @@ export default function AddToCollection() {
   const ownedCopiesList = ownedCopies.map((copy, index) => {
     return (
       <div key={copy.id} className="owned-copy-field">
-        <div className="form-field">
-          <label htmlFor={copy.id}>Language*</label>
-          <select
-            key={copy.id}
-            {...register(`owned_copies.${index}.language`, {
-              validate: {
-                checkLang: (lang) => {
-                  if (lang === TGameLanguages['']) {
-                    return 'Please select a language.'
-                  }
+        {index !== 0 && <hr className="mobile-hr" />}
+        <div className="owned-copy-details">
+          <div className="form-field">
+            <label htmlFor={copy.id}>Language*</label>
+            <select
+              key={copy.id}
+              {...register(`owned_copies.${index}.language`, {
+                validate: {
+                  checkLang: (lang) => {
+                    if (lang === TGameLanguages['']) {
+                      return 'Please select a language.'
+                    }
+                  },
                 },
-              },
-            })}
-          >
-            {langDropdown}
-          </select>
-          {errors?.owned_copies && errors.owned_copies[index]?.language && (
-            <div className="form-error">{errors.owned_copies[index]?.language.message}</div>
-          )}
-        </div>
-        <div className="form-field">
-          <label htmlFor={copy.id}>Platform*</label>
-          <select
-            key={copy.id}
-            {...register(`owned_copies.${index}.platform`, {
-              validate: {
-                checkPlatform: (platform) => {
-                  if (platform === TGamePlatforms['']) {
-                    return 'Please select a platform.'
-                  }
+              })}
+            >
+              {langDropdown}
+            </select>
+            {errors?.owned_copies && errors.owned_copies[index]?.language && (
+              <div className="form-error">{errors.owned_copies[index]?.language.message}</div>
+            )}
+          </div>
+          <div className="form-field">
+            <label htmlFor={copy.id}>Platform*</label>
+            <select
+              key={copy.id}
+              {...register(`owned_copies.${index}.platform`, {
+                validate: {
+                  checkPlatform: (platform) => {
+                    if (platform === TGamePlatforms['']) {
+                      return 'Please select a platform.'
+                    }
+                  },
                 },
-              },
-            })}
-          >
-            {platDropdown}
-          </select>
-          {errors?.owned_copies && errors.owned_copies[index]?.platform && (
-            <div className="form-error">{errors.owned_copies[index]?.platform.message}</div>
-          )}
-        </div>
-        <div className="form-field">
-          <label htmlFor={copy.id}>Type*</label>
-          <select
-            key={copy.id}
-            {...register(`owned_copies.${index}.type`, {
-              validate: {
-                checkType: (type) => {
-                  if (type === '') {
-                    return 'Please select a type.'
-                  }
+              })}
+            >
+              {platDropdown}
+            </select>
+            {errors?.owned_copies && errors.owned_copies[index]?.platform && (
+              <div className="form-error">{errors.owned_copies[index]?.platform.message}</div>
+            )}
+          </div>
+          <div className="form-field">
+            <label htmlFor={copy.id}>Type*</label>
+            <select
+              key={copy.id}
+              {...register(`owned_copies.${index}.type`, {
+                validate: {
+                  checkType: (type) => {
+                    if (type === '') {
+                      return 'Please select a type.'
+                    }
+                  },
                 },
-              },
-            })}
-          >
-            {copyTypeDropdown}
-          </select>
-          {errors?.owned_copies && errors.owned_copies[index]?.type && (
-            <div className="form-error">{errors.owned_copies[index]?.type.message}</div>
-          )}
+              })}
+            >
+              {copyTypeDropdown}
+            </select>
+            {errors?.owned_copies && errors.owned_copies[index]?.type && (
+              <div className="form-error">{errors.owned_copies[index]?.type.message}</div>
+            )}
+          </div>
         </div>
-        <div className="form-field">
-          <label htmlFor={copy.id}>Original Price</label>
-          <input key={copy.id} type="number" min={0} step=".01" {...register(`owned_copies.${index}.orig_price`)} />
-        </div>
-        <div className="form-field">
-          <label htmlFor={copy.id}>Price</label>
-          <input key={copy.id} type="number" min={0} step=".01" {...register(`owned_copies.${index}.price`)} />
-        </div>
-        <div className="form-field">
-          <label htmlFor={copy.id}>Currency</label>
-          <select
-            key={copy.id}
-            {...register(`owned_copies.${index}.price_currency`, {
-              validate: {
-                checkCurrency: (currency: TCurrency | string) => {
-                  if (getValues(`owned_copies.${index}.price`) && (currency === '' || !currency)) {
-                    return 'Please enter a currency.'
-                  }
+        <div className="owned-copy-prices">
+          <div className="form-field">
+            <label htmlFor={copy.id}>Original Price</label>
+            <input key={copy.id} type="number" min={0} step=".01" {...register(`owned_copies.${index}.orig_price`)} />
+          </div>
+          <div className="form-field">
+            <label htmlFor={copy.id}>Price</label>
+            <input key={copy.id} type="number" min={0} step=".01" {...register(`owned_copies.${index}.price`)} />
+          </div>
+          <div className="form-field">
+            <label htmlFor={copy.id}>Currency</label>
+            <select
+              key={copy.id}
+              {...register(`owned_copies.${index}.price_currency`, {
+                validate: {
+                  checkCurrency: (currency: TCurrency | string) => {
+                    if (getValues(`owned_copies.${index}.price`) && (currency === '' || !currency)) {
+                      return 'Please enter a currency.'
+                    }
+                  },
                 },
-              },
-            })}
-          >
-            {currDropdown}
-          </select>
-          {errors?.owned_copies && errors.owned_copies[index]?.price_currency && (
-            <div className="form-error">Please select a currency.</div>
-          )}
+              })}
+            >
+              {currDropdown}
+            </select>
+            {errors?.owned_copies && errors.owned_copies[index]?.price_currency && (
+              <div className="form-error">Please select a currency.</div>
+            )}
+          </div>
+          <FaRegTrashAlt className="trash-icon" onClick={() => remove(index)} />
         </div>
-        <FaRegTrashAlt className="trash-icon" onClick={() => remove(index)} />
       </div>
     )
   })
@@ -260,6 +265,7 @@ export default function AddToCollection() {
   const routesList = routes.map((route, index) => {
     return (
       <div key={route.id} className="owned-copy-field">
+        {index !== 0 && <hr className="mobile-hr" />}
         <div className="form-field">
           <label htmlFor={route.id}>Type*</label>
           <select key={route.id} {...register(`routes.${index}.type`, { required: true })}>

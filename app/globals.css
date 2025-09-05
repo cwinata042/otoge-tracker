@@ -40,6 +40,7 @@ input[type='number']::-webkit-inner-spin-button {
 
 input[type='number'] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 html,
@@ -111,6 +112,7 @@ div.main {
 .title {
   font-size: 32px;
   font-weight: bold;
+  text-wrap: nowrap;
 }
 
 .collection-header-container {
@@ -237,6 +239,11 @@ div.main {
   font-weight: 700;
   line-height: 20px;
   color: var(--light);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
 }
 
 .squareContainer {
@@ -335,6 +342,7 @@ button,
   gap: 5px;
   align-items: center;
   justify-content: center;
+  text-wrap: nowrap;
 }
 
 input,
@@ -531,6 +539,12 @@ input[type='text']#vndb-link::placeholder {
   justify-content: end;
   gap: 10px;
 }
+.form-buttons-main {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 10px;
+}
 .form-buttons {
   margin-top: 40px;
 }
@@ -707,8 +721,8 @@ button.warn:hover,
   color: var(--error-text-hover);
 }
 hr.solid {
+  border: none;
   border-top: 1px solid var(--dark);
-  border-color: var(--dark);
   width: 100%;
 }
 button:disabled {
@@ -823,6 +837,14 @@ option.disabled {
 }
 
 .owned-copy-field {
+  display: flex;
+  gap: 10px;
+}
+.owned-copy-details {
+  width: 100%;
+}
+.owned-copy-details,
+.owned-copy-prices {
   display: flex;
   gap: 10px;
 }
@@ -1133,7 +1155,8 @@ input.appearance,
   color: var(--darker);
 }
 hr {
-  border-color: var(--medium);
+  border: none;
+  border-top: 1px solid var(--dark);
 }
 hr.mt {
   margin-top: 10px;
@@ -1215,8 +1238,228 @@ hr.mb {
 input[type='radio'] {
   accent-color: var(--accent-dark);
 }
+
 ::-webkit-calendar-picker-indicator {
   filter: brightness(0) saturate(100%) invert(92%) sepia(70%) saturate(6517%) hue-rotate(319deg) brightness(91%)
     contrast(98%);
   cursor: pointer;
+}
+
+.mobile-hr {
+  display: none;
+}
+
+@media (width < 1226px) {
+  .game-details {
+    flex-direction: column;
+    align-items: center;
+  }
+  .game-details-form {
+    width: 100%;
+  }
+}
+
+/* Game Grid - 1 column */
+@media (width < 1190px) {
+  .collection-header {
+    flex-direction: column;
+    gap: 30px;
+  }
+  .collection-header-container {
+    padding-bottom: 15px;
+  }
+}
+
+/* Mobile View */
+@media (width < 600px) {
+  :root {
+    --game-card-width: 340px;
+  }
+  .body {
+    padding: 30px 30px 60px 30px;
+  }
+  .login-container {
+    width: 100%;
+    padding: 40px;
+    border: none;
+  }
+  .sign-up-container {
+    width: 100%;
+    padding: 40px;
+    border: none;
+  }
+  .mobile-hr {
+    display: block;
+    border-top: 1px solid var(--dark);
+    width: 100%;
+  }
+
+  /* HEADER */
+  .header {
+    padding: 30px;
+  }
+
+  /* COLLECTION */
+  .collection-title {
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+  }
+  .collection-header {
+    align-items: start;
+  }
+  .filter-sort {
+    flex-direction: column;
+    gap: 5px;
+    align-items: end;
+    width: 100%;
+  }
+  .sort {
+    width: fit-content;
+  }
+  .dropdowns {
+    width: 100%;
+  }
+  .gameCard {
+    height: 130px;
+  }
+  .squareContainer {
+    min-width: 100px;
+    min-height: 100px;
+    width: 100px;
+    height: 100px;
+  }
+  .gameInfo {
+    flex: 1;
+  }
+  .gameDetails {
+    width: 100%;
+  }
+  .gameTitle {
+    width: 100%;
+    text-overflow: ellipsis;
+    word-break: break-word;
+  }
+
+  /* ADD GAME */
+  .add-game-container {
+    padding: 30px 30px 60px 30px;
+  }
+  .add-game-header {
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+  }
+  .game-details {
+    flex-direction: column;
+  }
+  .game-details-image {
+    min-width: 100%;
+    width: 100%;
+  }
+  .owned-copy-field {
+    flex-direction: column;
+  }
+  .owned-copy-prices {
+    align-items: center;
+  }
+  .owned-copy-prices > .trash-icon {
+    width: 60px;
+  }
+  .routes-list > .owned-copy-field > .trash-icon,
+  .owned-copy-field > .trash-icon {
+    width: 20px;
+    margin-top: 0;
+  }
+
+  /* VNDB IMPORT */
+  .vndb-import-modal,
+  .add-review-modal,
+  .edit-route-modal,
+  .add-route-modal,
+  .edit-game-modal {
+    padding: 30px 30px;
+  }
+  .vndb-import-container[open],
+  .add-review-container[open],
+  .edit-route-container[open],
+  .add-route-container[open],
+  .edit-game-container[open] {
+    padding: 30px 20px;
+  }
+  .vndb-search-options-container {
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+  }
+  input[type='radio'] {
+    width: fit-content;
+  }
+
+  /* SINGLE GAME VIEW */
+  .single-game-details {
+    flex-direction: column;
+    align-items: center;
+  }
+  .single-game-header {
+    align-items: start;
+  }
+  .single-game-header > .button {
+    margin-top: 8px;
+  }
+  .single-game-header > .header-main {
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+  }
+  .header-main > h1 {
+    word-break: break-word;
+  }
+  .form-buttons {
+    flex-direction: column;
+    align-items: end;
+  }
+  button.delete-button {
+    padding: 5px 0px;
+  }
+
+  /* ROUTES */
+  .route-header-main {
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+  }
+  .route-header {
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+  }
+  .route-img-container {
+    width: 80px;
+    min-width: 80px;
+    min-height: 100px;
+    height: 100px;
+  }
+  .route-card {
+    gap: 15px;
+    padding: 15px;
+  }
+  .total-score > button {
+    text-wrap: wrap;
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  .reviews,
+  .review-container {
+    flex-direction: column;
+    align-items: start;
+  }
+  .review {
+    justify-content: start;
+    flex-direction: row;
+    gap: 5px;
+  }
+  .review-container {
+    gap: 15px;
+  }
 }

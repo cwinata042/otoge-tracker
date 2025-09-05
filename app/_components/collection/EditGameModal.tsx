@@ -184,6 +184,7 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
   const ownedCopiesList = ownedCopies.map((copy, index) => {
     return (
       <div key={copy.id} className="owned-copy-field">
+        {index !== 0 && <hr className="mobile-hr" />}
         <div className="form-field">
           <label htmlFor={copy.id}>Language*</label>
           <select
@@ -403,13 +404,15 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
               <p>{isDeletingGame ? 'Deleting...' : 'Delete Game'}</p>
               {isDeletingGame && <LuLoaderCircle className="loader" />}
             </button>
-            <button type="button" autoFocus onClick={() => toggleModal(false)}>
-              Cancel
-            </button>
-            <button className="main">
-              <p>{isSaving ? 'Saving...' : 'Save'}</p>
-              {isSaving && <LuLoaderCircle className="loader" />}
-            </button>
+            <div className="form-buttons-main">
+              <button type="button" autoFocus onClick={() => toggleModal(false)}>
+                Cancel
+              </button>
+              <button className="main">
+                <p>{isSaving ? 'Saving...' : 'Save'}</p>
+                {isSaving && <LuLoaderCircle className="loader" />}
+              </button>
+            </div>
           </div>
         </form>
       </div>
