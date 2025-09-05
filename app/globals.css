@@ -40,6 +40,7 @@ input[type='number']::-webkit-inner-spin-button {
 
 input[type='number'] {
   -moz-appearance: textfield;
+  appearance: textfield;
 }
 
 html,
@@ -1418,8 +1419,6 @@ input[type='radio'] {
   /* ROUTES */
   .route-header-main {
     flex-direction: column;
-    text-wrap: nowrap;
-    overflow: hidden;
     align-items: start;
     gap: 5px;
   }
