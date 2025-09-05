@@ -332,10 +332,12 @@ export default function RouteCard({ route }: { route: TRoute }) {
           <form className="form-container" onSubmit={handleAddReviewSubmit(onAddReviewSubmit)}>
             <div className="form">{addReviewCategories}</div>
             <div className="form-buttons">
-              <button type="button" autoFocus onClick={() => toggleModal(false, 'add-review-container')}>
-                Cancel
-              </button>
-              <button className="main">Add</button>
+              <div className="form-buttons-main">
+                <button type="button" autoFocus onClick={() => toggleModal(false, 'add-review-container')}>
+                  Cancel
+                </button>
+                <button className="main">Add</button>
+              </div>
             </div>
           </form>
         </div>
@@ -416,13 +418,15 @@ export default function RouteCard({ route }: { route: TRoute }) {
                 <p>{isDeletingRoute ? 'Deleting...' : 'Delete Route'}</p>
                 {isDeletingRoute && <LuLoaderCircle className="loader" />}
               </button>
-              <button type="button" autoFocus onClick={() => toggleModal(false, 'edit-route-container')}>
-                Cancel
-              </button>
-              <button disabled={isSavingRoute} className="main">
-                <p>{isSavingRoute ? 'Saving...' : 'Save'}</p>
-                {isSavingRoute && <LuLoaderCircle className="loader" />}
-              </button>
+              <div className="form-buttons-main">
+                <button type="button" autoFocus onClick={() => toggleModal(false, 'edit-route-container')}>
+                  Cancel
+                </button>
+                <button disabled={isSavingRoute} className="main">
+                  <p>{isSavingRoute ? 'Saving...' : 'Save'}</p>
+                  {isSavingRoute && <LuLoaderCircle className="loader" />}
+                </button>
+              </div>
             </div>
           </form>
         </div>

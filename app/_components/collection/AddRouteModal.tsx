@@ -149,13 +149,15 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
             </div>
           </div>
           <div className="form-buttons">
-            <button type="button" autoFocus onClick={() => toggleModal(false)}>
-              Cancel
-            </button>
-            <button className="main">
-              <p>{isSaving ? 'Adding...' : 'Add'}</p>
-              {isSaving && <LuLoaderCircle className="loader" />}
-            </button>
+            <div className="form-buttons-main">
+              <button type="button" autoFocus onClick={() => toggleModal(false)}>
+                Cancel
+              </button>
+              <button className="main">
+                <p>{isSaving ? 'Adding...' : 'Add'}</p>
+                {isSaving && <LuLoaderCircle className="loader" />}
+              </button>
+            </div>
           </div>
         </form>
       </div>
