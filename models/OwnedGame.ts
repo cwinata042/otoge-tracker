@@ -8,6 +8,7 @@ const ownedGameSchema = new mongoose.Schema(
     },
     vndb_id: {
       type: String,
+      default: null,
     },
     orig_title: {
       type: String,

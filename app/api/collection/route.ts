@@ -58,8 +58,8 @@ export async function POST(req: Request) {
       const routesArray = routes.map((route: any) => {
         return {
           ...route,
-          user_id: new mongoose.Types.ObjectId(user_id),
-          game_id: new mongoose.Types.ObjectId(newOwnedGameId),
+          user_id: new mongoose.Types.ObjectId(user_id as string),
+          game_id: new mongoose.Types.ObjectId(newOwnedGameId as string),
         }
       })
       const newRoutes = await Route.insertMany(routesArray)

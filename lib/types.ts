@@ -55,7 +55,7 @@ export enum TCurrency {
 
 export type TGameDetails = {
   _id: string
-  vndb_id: string
+  vndb_id: string | null
   orig_title: string
   title: string
   type: TGameTypes
@@ -74,7 +74,7 @@ export type TGameDetails = {
 
 export type TOwnedGame = {
   _id: string
-  vndb_id: string
+  vndb_id: string | null
   orig_title: string
   title: string
   type: TGameTypes
@@ -88,6 +88,7 @@ export type TOwnedGame = {
 }
 
 export type TRoute = {
+  vndb_id: string | null
   type: TRouteTypes | string
   name: string
   route_img_link: string
@@ -107,7 +108,7 @@ export type TRoute = {
 
 export type TAddGameFormValues = {
   vndb_search: string
-  vndb_id: string
+  vndb_id: string | null
   orig_title: string
   title: string
   type: TGameTypes
@@ -128,6 +129,7 @@ export type TAddReviewFormValues = {
 }
 
 export type TEditRouteFormValues = {
+  vndb_id?: string | null
   type: TRouteTypes | string
   name: string
   route_img_link: string | null

@@ -52,7 +52,7 @@ export default function AddToCollection() {
       title: '',
       img_link: null,
       vndb_search: '',
-      vndb_id: '',
+      vndb_id: null,
       type: TGameTypes.Main,
       status: TStatuses[''],
       owned_copies: [],
@@ -435,10 +435,11 @@ export default function AddToCollection() {
         for (const character of vndbData.results[0].va) {
           const characterObj = character.character
           const staffObj = character.staff
-          console.log(character)
+
           // Only pull characters with primary roles
           if (characterObj.vns[0].role === 'primary') {
             appendRoute({
+              vndb_id: characterObj.id,
               type: TRouteTypes.Character,
               name: characterObj.name,
               route_img_link: characterObj.image.url,
@@ -762,7 +763,9 @@ export default function AddToCollection() {
                     <button
                       className="add"
                       type="button"
-                      onClick={() => appendRoute({ name: '', type: '', route_img_link: '', status: TStatuses[''] })}
+                      onClick={() =>
+                        appendRoute({ vndb_id: null, name: '', type: '', route_img_link: '', status: TStatuses[''] })
+                      }
                     >
                       Add Route
                     </button>

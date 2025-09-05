@@ -83,6 +83,10 @@ const routeSchema = new mongoose.Schema(
         default: '',
       },
     },
+    vndb_id: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true }
 )
