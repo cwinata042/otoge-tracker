@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     }) /* find all owned games in the database */
     return NextResponse.json(ownedGames, { status: 200 })
   } catch (error) {
-    return NextResponse.json({ error: error })
+    return NextResponse.json({ error: error }, { status: 400 })
   }
 }
 
@@ -32,6 +32,9 @@ export async function POST(req: Request) {
       routes,
       route_order,
       description,
+      started_date,
+      completed_date,
+      notes,
     } = await req.json()
     const newOwnedGame = new OwnedGame({
       user_id,
@@ -44,6 +47,9 @@ export async function POST(req: Request) {
       owned_copies,
       route_order,
       description,
+      started_date,
+      completed_date,
+      notes,
     })
     await newOwnedGame.save()
 
@@ -52,8 +58,8 @@ export async function POST(req: Request) {
       const routesArray = routes.map((route: any) => {
         return {
           ...route,
-          user_id: new mongoose.Types.ObjectId(user_id),
-          game_id: new mongoose.Types.ObjectId(newOwnedGameId),
+          user_id: new mongoose.Types.ObjectId(user_id as string),
+          game_id: new mongoose.Types.ObjectId(newOwnedGameId as string),
         }
       })
       const newRoutes = await Route.insertMany(routesArray)
@@ -61,6 +67,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json(newOwnedGame, { status: 201 })
   } catch (error) {
-    return NextResponse.json({ error: error })
+    return NextResponse.json({ error: error }, { status: 400 })
   }
 }

@@ -8,6 +8,7 @@ const ownedGameSchema = new mongoose.Schema(
     },
     vndb_id: {
       type: String,
+      default: null,
     },
     orig_title: {
       type: String,
@@ -58,7 +59,7 @@ const ownedGameSchema = new mongoose.Schema(
         },
         price_currency: {
           type: String,
-          enum: ['USD', 'JPY'],
+          enum: ['USD', 'JPY', ''],
         },
         type: {
           type: String,
@@ -67,6 +68,18 @@ const ownedGameSchema = new mongoose.Schema(
         },
       },
     ],
+    started_date: {
+      type: Date,
+      default: null,
+    },
+    completed_date: {
+      type: Date,
+      default: null,
+    },
+    notes: {
+      type: String,
+      default: '',
+    },
   },
   { timestamps: true }
 )

@@ -17,7 +17,7 @@ export async function GET(req: Request) {
     })
     return NextResponse.json(routes, { status: 200 })
   } catch (error) {
-    return NextResponse.json({ error: error })
+    return NextResponse.json({ error: error }, { status: 400 })
   }
 }
 
@@ -48,6 +48,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json(newRoute, { status: 201 })
   } catch (error) {
-    return NextResponse.json({ error: error })
+    return NextResponse.json({ error: error }, { status: 400 })
   }
 }

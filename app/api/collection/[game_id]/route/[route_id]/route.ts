@@ -15,7 +15,9 @@ export async function PATCH(req: Request) {
       game_id,
       review,
       route,
-    }: { user_id: string; route_id: string; game_id: string; review: TCategoryReview[]; route: TRoute } = await req.json()
+      notes,
+    }: { user_id: string; route_id: string; game_id: string; review: TCategoryReview[]; route: TRoute; notes: string } =
+      await req.json()
     const categoryWeights = [45, 30, 12.5, 12.5]
 
     let updatedRoute
@@ -26,12 +28,11 @@ export async function PATCH(req: Request) {
         ?.map((review, index) => {
           // If there is no score, return null
           if (!review.review_score || review.review_score === 0) {
-              return 0
-            } else {
-              return (review.review_score / review.total_score) * categoryWeights[index]
-            }
+            return 0
+          } else {
+            return (review.review_score / review.total_score) * categoryWeights[index]
           }
-        )
+        })
         .reduce((sum: number, score) => sum + (score ?? 0), 0)
 
       updatedRoute = await Route.findOneAndUpdate(
@@ -46,6 +47,10 @@ export async function PATCH(req: Request) {
           status: route.status,
           review: route.review,
           final_score: totalScore,
+          started_date: route.started_date,
+          completed_date: route.completed_date,
+          notes: route.notes,
+          voice_actor: route.voice_actor,
         }
       )
     } else {
@@ -53,12 +58,11 @@ export async function PATCH(req: Request) {
         ?.map((review, index) => {
           // If there is no score, return null
           if (!review.review_score || review.review_score === 0) {
-              return 0
-            } else {
-              return (review.review_score / review.total_score) * categoryWeights[index]
-            }
+            return 0
+          } else {
+            return (review.review_score / review.total_score) * categoryWeights[index]
           }
-        )
+        })
         .reduce((sum: number, score) => sum + (score ?? 0), 0)
 
       updatedRoute = await Route.findOneAndUpdate(
@@ -66,7 +70,7 @@ export async function PATCH(req: Request) {
           user_id: new mongoose.Types.ObjectId(user_id as string),
           _id: new mongoose.Types.ObjectId(route_id as string),
         },
-        { review: review, final_score: totalScore }
+        { review: review, final_score: totalScore, notes: notes }
       )
     }
 
@@ -83,7 +87,7 @@ export async function PATCH(req: Request) {
 
     return NextResponse.json(updatedRoute, { status: 201 })
   } catch (error) {
-    return NextResponse.json({ error: error })
+    return NextResponse.json({ error: error }, { status: 400 })
   }
 }
 
@@ -111,6 +115,6 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json(deletedRoute, { status: 201 })
   } catch (error) {
-    return NextResponse.json({ error: error })
+    return NextResponse.json({ error: error }, { status: 400 })
   }
 }

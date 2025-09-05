@@ -52,13 +52,16 @@ export default function AddToCollection() {
       title: '',
       img_link: null,
       vndb_search: '',
-      vndb_id: '',
+      vndb_id: null,
       type: TGameTypes.Main,
       status: TStatuses[''],
       owned_copies: [],
       routes: [],
       description: '',
       route_order: '',
+      started_date: null,
+      completed_date: null,
+      notes: '',
     },
   })
 
@@ -264,6 +267,15 @@ export default function AddToCollection() {
       <div key={route.id} className="owned-copy-field">
         {index !== 0 && <hr className="mobile-hr" />}
         <div className="form-field">
+          <label htmlFor={route.id}>Status*</label>
+          <select key={route.id} {...register(`routes.${index}.status`, { required: true })}>
+            {statusDropdown}
+          </select>
+          {errors?.routes && errors.routes[index]?.status?.type === 'required' && (
+            <div className="form-error">Please select a route status.</div>
+          )}
+        </div>
+        <div className="form-field">
           <label htmlFor={route.id}>Type*</label>
           <select key={route.id} {...register(`routes.${index}.type`, { required: true })}>
             {routeTypeDropdown}
@@ -280,17 +292,16 @@ export default function AddToCollection() {
           )}
         </div>
         <div className="form-field">
-          <label htmlFor={route.id}>Image Link</label>
-          <input type="text" key={route.id} {...register(`routes.${index}.route_img_link`)} />
+          <label htmlFor={route.id}>Voice Actor (Romanized)</label>
+          <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.romanized`)} />
         </div>
         <div className="form-field">
-          <label htmlFor={route.id}>Status*</label>
-          <select key={route.id} {...register(`routes.${index}.status`, { required: true })}>
-            {statusDropdown}
-          </select>
-          {errors?.routes && errors.routes[index]?.status?.type === 'required' && (
-            <div className="form-error">Please select a route status.</div>
-          )}
+          <label htmlFor={route.id}>Voice Actor (Original)</label>
+          <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.orig`)} />
+        </div>
+        <div className="form-field">
+          <label htmlFor={route.id}>Image Link</label>
+          <input type="text" key={route.id} {...register(`routes.${index}.route_img_link`)} />
         </div>
         <FaRegTrashAlt className="trash-icon" onClick={() => removeRoute(index)} />
       </div>
@@ -303,6 +314,9 @@ export default function AddToCollection() {
     if (dialog && show) {
       dialog.showModal()
     } else if (dialog && !show) {
+      setVNDBImportType('Game Title')
+      setVNDBImportId(null)
+      setValue('vndb_search', '')
       clearVNDBSearch()
       setIsLoadingVNDBSearch(false)
       setIsLoadingVNDBImport(false)
@@ -400,7 +414,8 @@ export default function AddToCollection() {
               },
               body: JSON.stringify({
                 filters: ['id', '=', vndbImportId],
-                fields: 'title, alttitle, image.url, va.character{name, image.url, vns.role}, description',
+                fields:
+                  'title, alttitle, image.url, va.character{name, image.url, vns.role}, va.staff{original, name}, description',
               }),
             })
 
@@ -419,13 +434,20 @@ export default function AddToCollection() {
 
         for (const character of vndbData.results[0].va) {
           const characterObj = character.character
+          const staffObj = character.staff
+
           // Only pull characters with primary roles
           if (characterObj.vns[0].role === 'primary') {
             appendRoute({
+              vndb_id: characterObj.id,
               type: TRouteTypes.Character,
               name: characterObj.name,
               route_img_link: characterObj.image.url,
               status: TStatuses.Incomplete,
+              voice_actor: {
+                romanized: staffObj.name,
+                orig: staffObj.original,
+              },
             })
           }
         }
@@ -696,6 +718,16 @@ export default function AddToCollection() {
                     </div>
                     {errors.status?.type === 'required' && <div className="form-error">Please select a status.</div>}
                   </div>
+                  <div className="form-field-group">
+                    <div className="form-field">
+                      <label htmlFor="new-route-type">Started</label>
+                      <input key="new-route-name" type="date" {...register('started_date')}></input>
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="new-route-type">Completed</label>
+                      <input key="new-route-name" type="date" {...register('completed_date')}></input>
+                    </div>
+                  </div>
                   <div className="form-field">
                     <p className="label">Owned Copies*</p>
                     <div className="owned-copies-list">
@@ -731,7 +763,9 @@ export default function AddToCollection() {
                     <button
                       className="add"
                       type="button"
-                      onClick={() => appendRoute({ name: '', type: '', route_img_link: '', status: TStatuses[''] })}
+                      onClick={() =>
+                        appendRoute({ vndb_id: null, name: '', type: '', route_img_link: '', status: TStatuses[''] })
+                      }
                     >
                       Add Route
                     </button>

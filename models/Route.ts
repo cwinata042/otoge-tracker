@@ -61,6 +61,32 @@ const routeSchema = new mongoose.Schema(
         },
       },
     ],
+    notes: {
+      type: String,
+      default: '',
+    },
+    started_date: {
+      type: Date,
+      default: null,
+    },
+    completed_date: {
+      type: Date,
+      default: null,
+    },
+    voice_actor: {
+      romanized: {
+        type: String,
+        default: '',
+      },
+      orig: {
+        type: String,
+        default: '',
+      },
+    },
+    vndb_id: {
+      type: String,
+      default: null,
+    },
   },
   { timestamps: true }
 )

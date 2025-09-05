@@ -1238,6 +1238,13 @@ hr.mb {
 input[type='radio'] {
   accent-color: var(--accent-dark);
 }
+
+::-webkit-calendar-picker-indicator {
+  filter: brightness(0) saturate(100%) invert(92%) sepia(70%) saturate(6517%) hue-rotate(319deg) brightness(91%)
+    contrast(98%);
+  cursor: pointer;
+}
+
 .mobile-hr {
   display: none;
 }
