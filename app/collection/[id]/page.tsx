@@ -164,12 +164,26 @@ export default function GameViewer() {
                   <p className="game-info-field large">{gameDetails.description}</p>
                 </div>
                 <div className="form-field">
+                  <p className="form-info-white">Notes</p>
+                  <p className="game-info-field large">{gameDetails.notes}</p>
+                </div>
+                <div className="form-field">
                   <p className="form-info-white">Owned Copies</p>
                   <div className="owned-copies">{ownedCopies}</div>
                 </div>
                 <div className="form-field">
                   <p className="form-info-white">Recommended Route Order</p>
                   <p className="game-info-field">{gameDetails.route_order}</p>
+                </div>
+                <div className="form-field-group">
+                  <div className="form-field">
+                    <p className="form-info-white">Started</p>
+                    <p className="game-info-field">{gameDetails.started_date?.toLocaleString('en-CA')}</p>
+                  </div>
+                  <div className="form-field">
+                    <p className="form-info-white">Completed</p>
+                    <p className="game-info-field">{gameDetails.completed_date?.toLocaleString('en-CA')}</p>
+                  </div>
                 </div>
               </div>
             </div>

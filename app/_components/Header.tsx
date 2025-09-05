@@ -2,9 +2,24 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { signOut } from 'next-auth/react'
+import { useCallback, useEffect } from 'react'
 
 export default function Header() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
+
+  const logout = useCallback(() => {
+    signOut()
+  }, [session])
+
+  useEffect(() => {
+    if (status === 'loading') {
+      return
+    }
+    if (session?.error === 'AccessTokenError') {
+      logout()
+    }
+  }, [session, logout])
+
   return (
     <div className="header">
       <Link href="/collection">

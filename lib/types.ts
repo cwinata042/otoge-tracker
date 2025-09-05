@@ -1,3 +1,5 @@
+export const CHECK_SESSION_EXP_TIME = 60 * 60
+
 export enum TGameTypes {
   'Main' = 'Main',
   'Fandisc' = 'Fandisc',
