@@ -32,6 +32,10 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
       notes: '',
       started_date: null,
       completed_date: null,
+      voice_actor: {
+        romanized: '',
+        orig: '',
+      },
     },
   })
   const onSubmit = (data: any) => {
@@ -117,6 +121,16 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
                 {errors?.status?.type === 'required' && <div className="form-error">Please select a route status.</div>}
               </div>
             </div>
+            <div className="form-field-group">
+              <div className="form-field">
+                <label htmlFor="new-route-date_started">Started</label>
+                <input key="new-route-date_started" type="date" {...register('started_date')}></input>
+              </div>
+              <div className="form-field">
+                <label htmlFor="new-route-date_completed">Completed</label>
+                <input key="new-route-date_completed" type="date" {...register('completed_date')}></input>
+              </div>
+            </div>
             <div className="form-field">
               <label htmlFor="new-route-name">
                 {watch('type') === 'Character' ? 'Character Name*' : 'Route Name*'}
@@ -136,12 +150,12 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
             </div>
             <div className="form-field-group">
               <div className="form-field">
-                <label htmlFor="new-route-type">Started</label>
-                <input key="new-route-name" type="date" {...register('started_date')}></input>
+                <label htmlFor="new-route-va_romanized">Voice Actor (Romanized)</label>
+                <input key="new-route-va_romanized" type="text" {...register('voice_actor.romanized')}></input>
               </div>
               <div className="form-field">
-                <label htmlFor="new-route-type">Completed</label>
-                <input key="new-route-name" type="date" {...register('completed_date')}></input>
+                <label htmlFor="new-route-va_orig">Voice Actor (Original)</label>
+                <input key="new-route-va_orig" type="text" {...register('voice_actor.orig')}></input>
               </div>
             </div>
             <div className="form-field">

@@ -99,6 +99,10 @@ export type TRoute = {
   notes?: string
   started_date?: Date | null
   completed_date?: Date | null
+  voice_actor?: {
+    romanized: string
+    orig: string
+  }
 }
 
 export type TAddGameFormValues = {
@@ -132,6 +136,10 @@ export type TEditRouteFormValues = {
   notes?: string
   started_date?: Date | null | string
   completed_date?: Date | null | string
+  voice_actor?: {
+    romanized: string
+    orig: string
+  }
 }
 
 export type TEditGameFormValues = {

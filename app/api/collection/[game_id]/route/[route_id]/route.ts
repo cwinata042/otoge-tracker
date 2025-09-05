@@ -50,6 +50,7 @@ export async function PATCH(req: Request) {
           started_date: route.started_date,
           completed_date: route.completed_date,
           notes: route.notes,
+          voice_actor: route.voice_actor,
         }
       )
     } else {

@@ -63,6 +63,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
       started_date: route.started_date ? formatDate(route.started_date) : route.started_date,
       completed_date: route.completed_date ? formatDate(route.completed_date) : route.completed_date,
       notes: route.notes,
+      voice_actor: route.voice_actor,
     },
   })
 
@@ -79,6 +80,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
         notes: route.notes,
         started_date: route.started_date ? formatDate(route.started_date) : route.started_date,
         completed_date: route.completed_date ? formatDate(route.completed_date) : route.completed_date,
+        voice_actor: route.voice_actor,
       })
       dialog.showModal()
     } else if (dialog && !show) {
@@ -95,6 +97,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
           notes: route.notes,
           started_date: route.started_date ? formatDate(route.started_date) : route.started_date,
           completed_date: route.completed_date ? formatDate(route.completed_date) : route.completed_date,
+          voice_actor: route.voice_actor,
         })
         clearEditRouteErrors()
       }
@@ -236,6 +239,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
         notes: route.notes,
         started_date: route.started_date ? formatDate(route.started_date) : route.started_date,
         completed_date: route.completed_date ? formatDate(route.completed_date) : route.completed_date,
+        voice_actor: route.voice_actor,
       })
       toggleModal(false, 'add-review-container')
     },
@@ -427,6 +431,20 @@ export default function RouteCard({ route }: { route: TRoute }) {
                   })}
                 ></input>
                 {editRouteErrors?.name && <div className="form-error">{editRouteErrors.name.message}</div>}
+              </div>
+              <div className="form-field-group">
+                <div className="form-field">
+                  <label htmlFor="new-route-va_romanized">Voice Actor (Romanized)</label>
+                  <input
+                    key="new-route-va_romanized"
+                    type="text"
+                    {...registerEditRoute('voice_actor.romanized')}
+                  ></input>
+                </div>
+                <div className="form-field">
+                  <label htmlFor="new-route-va_orig">Voice Actor (Original)</label>
+                  <input key="new-route-va_orig" type="text" {...registerEditRoute('voice_actor.orig')}></input>
+                </div>
               </div>
               <div className="form-field">
                 <label htmlFor="route_img_link">Route Image Link</label>

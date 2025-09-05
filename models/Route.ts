@@ -73,6 +73,16 @@ const routeSchema = new mongoose.Schema(
       type: Date,
       default: null,
     },
+    voice_actor: {
+      romanized: {
+        type: String,
+        default: '',
+      },
+      orig: {
+        type: String,
+        default: '',
+      },
+    },
   },
   { timestamps: true }
 )

@@ -267,6 +267,15 @@ export default function AddToCollection() {
       <div key={route.id} className="owned-copy-field">
         {index !== 0 && <hr className="mobile-hr" />}
         <div className="form-field">
+          <label htmlFor={route.id}>Status*</label>
+          <select key={route.id} {...register(`routes.${index}.status`, { required: true })}>
+            {statusDropdown}
+          </select>
+          {errors?.routes && errors.routes[index]?.status?.type === 'required' && (
+            <div className="form-error">Please select a route status.</div>
+          )}
+        </div>
+        <div className="form-field">
           <label htmlFor={route.id}>Type*</label>
           <select key={route.id} {...register(`routes.${index}.type`, { required: true })}>
             {routeTypeDropdown}
@@ -283,17 +292,16 @@ export default function AddToCollection() {
           )}
         </div>
         <div className="form-field">
-          <label htmlFor={route.id}>Image Link</label>
-          <input type="text" key={route.id} {...register(`routes.${index}.route_img_link`)} />
+          <label htmlFor={route.id}>Voice Actor (Romanized)</label>
+          <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.romanized`)} />
         </div>
         <div className="form-field">
-          <label htmlFor={route.id}>Status*</label>
-          <select key={route.id} {...register(`routes.${index}.status`, { required: true })}>
-            {statusDropdown}
-          </select>
-          {errors?.routes && errors.routes[index]?.status?.type === 'required' && (
-            <div className="form-error">Please select a route status.</div>
-          )}
+          <label htmlFor={route.id}>Voice Actor (Original)</label>
+          <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.orig`)} />
+        </div>
+        <div className="form-field">
+          <label htmlFor={route.id}>Image Link</label>
+          <input type="text" key={route.id} {...register(`routes.${index}.route_img_link`)} />
         </div>
         <FaRegTrashAlt className="trash-icon" onClick={() => removeRoute(index)} />
       </div>
@@ -406,7 +414,8 @@ export default function AddToCollection() {
               },
               body: JSON.stringify({
                 filters: ['id', '=', vndbImportId],
-                fields: 'title, alttitle, image.url, va.character{name, image.url, vns.role}, description',
+                fields:
+                  'title, alttitle, image.url, va.character{name, image.url, vns.role}, va.staff{original, name}, description',
               }),
             })
 
@@ -425,6 +434,8 @@ export default function AddToCollection() {
 
         for (const character of vndbData.results[0].va) {
           const characterObj = character.character
+          const staffObj = character.staff
+          console.log(character)
           // Only pull characters with primary roles
           if (characterObj.vns[0].role === 'primary') {
             appendRoute({
@@ -432,6 +443,10 @@ export default function AddToCollection() {
               name: characterObj.name,
               route_img_link: characterObj.image.url,
               status: TStatuses.Incomplete,
+              voice_actor: {
+                romanized: staffObj.name,
+                orig: staffObj.original,
+              },
             })
           }
         }
