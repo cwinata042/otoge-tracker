@@ -1,7 +1,7 @@
 'use client'
 
-import AddRouteModal from '@/app/_components/collection/AddRouteModal'
-import EditGameModal from '@/app/_components/collection/EditGameModal'
+import AddRouteModal from '@/app/_components/modals/AddRouteModal'
+import EditGameModal from '@/app/_components/modals/EditGameModal'
 import GameStatus from '@/app/_components/collection/GameStatus'
 import RouteCard from '@/app/_components/collection/RouteCard'
 import Header from '@/app/_components/Header'

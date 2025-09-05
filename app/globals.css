@@ -487,6 +487,7 @@ a:hover {
   color: var(--background);
   padding: 50px 80px;
   gap: 40px;
+  overflow-y: auto;
 }
 .vndb-main {
   display: flex;
@@ -523,7 +524,7 @@ input[type='text']#vndb-link {
   color: var(--background);
   font-size: 16px;
 }
-input[type='text']#vndb-link::placeholder {
+input[type='text']::placeholder {
   color: var(--medium);
   font-style: italic;
 }
