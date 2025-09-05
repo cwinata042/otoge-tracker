@@ -19,7 +19,7 @@ import { useFieldArray, useForm } from 'react-hook-form'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import { LuLoaderCircle } from 'react-icons/lu'
 
-export default function AddRouteModal({ gameData }: { gameData: TGameDetails }) {
+export default function EditGameModal({ gameData }: { gameData: TGameDetails }) {
   const { data: session } = useSession()
   const queryClient = useQueryClient()
   const router = useRouter()
@@ -47,6 +47,9 @@ export default function AddRouteModal({ gameData }: { gameData: TGameDetails }) 
       owned_copies: gameData.owned_copies,
       description: gameData.description,
       route_order: gameData.route_order,
+      started_date: gameData.started_date,
+      completed_date: gameData.completed_date,
+      notes: gameData.notes,
     },
   })
   const {
@@ -317,6 +320,10 @@ export default function AddRouteModal({ gameData }: { gameData: TGameDetails }) 
               <textarea className="large" key="title" {...register('description')} />
             </div>
             <div className="form-field">
+              <label htmlFor="route_img_link">Notes</label>
+              <textarea {...register('notes')}></textarea>
+            </div>
+            <div className="form-field">
               <label htmlFor="route_order">Recommended Route Order</label>
               <input type="text" key="title" {...register('route_order')} />
             </div>
@@ -334,6 +341,16 @@ export default function AddRouteModal({ gameData }: { gameData: TGameDetails }) 
                   {statusDropdown}
                 </select>
                 {errors?.status?.type === 'required' && <div className="form-error">Please select a route status.</div>}
+              </div>
+            </div>
+            <div className="form-field-group">
+              <div className="form-field">
+                <label htmlFor="new-route-type">Started</label>
+                <input key="new-route-name" type="date" {...register('started_date')}></input>
+              </div>
+              <div className="form-field">
+                <label htmlFor="new-route-type">Completed</label>
+                <input key="new-route-name" type="date" {...register('completed_date')}></input>
               </div>
             </div>
             <div className="form-field">

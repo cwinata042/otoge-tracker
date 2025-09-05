@@ -86,7 +86,7 @@ export async function PATCH(req: Request) {
 
     return NextResponse.json(updatedRoute, { status: 201 })
   } catch (error) {
-    return NextResponse.json({ error: error })
+    return NextResponse.json({ error: error }, { status: 400 })
   }
 }
 
@@ -114,6 +114,6 @@ export async function DELETE(req: Request) {
 
     return NextResponse.json(deletedRoute, { status: 201 })
   } catch (error) {
-    return NextResponse.json({ error: error })
+    return NextResponse.json({ error: error }, { status: 400 })
   }
 }

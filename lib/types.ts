@@ -65,6 +65,9 @@ export type TGameDetails = {
   routes: TRoute[]
   description?: string
   route_order?: string
+  started_date?: Date | null | string
+  completed_date?: Date | null | string
+  notes?: string
 }
 
 export type TOwnedGame = {
@@ -77,6 +80,9 @@ export type TOwnedGame = {
   img_link: string
   owned_copies: TGameCopy[]
   updatedAt?: Date
+  started_date?: Date | null | string
+  completed_date?: Date | null | string
+  notes?: string
 }
 
 export type TRoute = {
@@ -105,6 +111,9 @@ export type TAddGameFormValues = {
   routes: TRoute[]
   description: string
   route_order: string
+  started_date?: Date | null | string
+  completed_date?: Date | null | string
+  notes?: string
 }
 
 export type TAddReviewFormValues = {
@@ -119,8 +128,8 @@ export type TEditRouteFormValues = {
   status: TStatuses
   review?: TCategoryReview[]
   notes?: string
-  started_date?: Date | null
-  completed_date?: Date | null
+  started_date?: Date | null | string
+  completed_date?: Date | null | string
 }
 
 export type TEditGameFormValues = {
@@ -132,6 +141,9 @@ export type TEditGameFormValues = {
   owned_copies: TGameCopy[]
   description: string
   route_order: string
+  started_date?: Date | null | string
+  completed_date?: Date | null | string
+  notes?: string
 }
 
 export type TCategoryReview = {

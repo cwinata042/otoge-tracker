@@ -41,7 +41,7 @@ export async function DELETE(req: Request) {
     const { game_id, user_id } = await req.json()
 
     const deletedGame = await OwnedGame.findOneAndDelete({ _id: game_id, user_id: user_id })
-    const deletedRoutes = await Route.deleteMany({ _id: game_id, user_id: user_id })
+    const deletedRoutes = await Route.deleteMany({ game_id: game_id, user_id: user_id })
 
     return NextResponse.json(deletedGame, { status: 200 })
   } catch (err) {
@@ -65,6 +65,9 @@ export async function PATCH(req: Request) {
         status: game.status,
         img_link: game.img_link,
         owned_copies: game.owned_copies,
+        started_date: game.started_date,
+        completed_date: game.completed_date,
+        notes: game.notes,
       }
     )
 

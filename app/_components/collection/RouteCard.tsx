@@ -8,7 +8,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import { CiEdit } from 'react-icons/ci'
 import { LuLoaderCircle } from 'react-icons/lu'
-import { isValidLink } from '@/lib/helper'
+import { formatDate, isValidLink } from '@/lib/helper'
 
 export default function RouteCard({ route }: { route: TRoute }) {
   const { data: session } = useSession()
@@ -60,8 +60,8 @@ export default function RouteCard({ route }: { route: TRoute }) {
       route_img_link: route.route_img_link,
       status: route.status,
       review: route.review && route.review.length > 0 ? route.review : [],
-      started_date: route.started_date,
-      completed_date: route.completed_date,
+      started_date: route.started_date ? formatDate(route.started_date) : route.started_date,
+      completed_date: route.completed_date ? formatDate(route.completed_date) : route.completed_date,
       notes: route.notes,
     },
   })
@@ -76,6 +76,9 @@ export default function RouteCard({ route }: { route: TRoute }) {
         route_img_link: route.route_img_link,
         status: route.status,
         review: route.review,
+        notes: route.notes,
+        started_date: route.started_date ? formatDate(route.started_date) : route.started_date,
+        completed_date: route.completed_date ? formatDate(route.completed_date) : route.completed_date,
       })
       dialog.showModal()
     } else if (dialog && !show) {
@@ -89,12 +92,17 @@ export default function RouteCard({ route }: { route: TRoute }) {
           route_img_link: route.route_img_link,
           status: route.status,
           review: route.review,
+          notes: route.notes,
+          started_date: route.started_date ? formatDate(route.started_date) : route.started_date,
+          completed_date: route.completed_date ? formatDate(route.completed_date) : route.completed_date,
         })
         clearEditRouteErrors()
       }
       dialog.close()
     }
   }
+  console.log(route)
+  console.log(getEditRouteValues())
 
   const addReviewCategories = categories.map((category, index) => {
     return (
@@ -219,6 +227,16 @@ export default function RouteCard({ route }: { route: TRoute }) {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: [SINGLE_GAME_QUERY_KEY, route.game_id] })
+      resetEditRoute({
+        type: route.type,
+        name: route.name,
+        route_img_link: route.route_img_link,
+        status: route.status,
+        review: route.review,
+        notes: route.notes,
+        started_date: route.started_date ? formatDate(route.started_date) : route.started_date,
+        completed_date: route.completed_date ? formatDate(route.completed_date) : route.completed_date,
+      })
       toggleModal(false, 'add-review-container')
     },
     onError: (error: any) => {
@@ -331,7 +349,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
 
   return (
     <div key={route.name} className="route-card" onClick={() => setIsExpanded(!isExpanded)}>
-      <dialog className={`add-review-container route-${route._id}`}>
+      <dialog className={`add-review-container route-${route._id}`} tabIndex={-1}>
         <div className="add-review-modal">
           <h2>Add Review</h2>
           <form className="form-container" onSubmit={handleAddReviewSubmit(onAddReviewSubmit)}>
@@ -355,7 +373,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
           </form>
         </div>
       </dialog>
-      <dialog className={`edit-route-container route-${route._id}`}>
+      <dialog className={`edit-route-container route-${route._id}`} tabIndex={-1}>
         <div className="edit-route-modal">
           <h2>Edit Route</h2>
           <form className="form-container" onSubmit={handleEditRouteSubmit(onEditRouteSubmit)}>
@@ -423,10 +441,12 @@ export default function RouteCard({ route }: { route: TRoute }) {
                   })}
                 ></input>
               </div>
-              <div className="form-field">
-                <label htmlFor="route_img_link">Other Notes</label>
-                <textarea {...registerEditRoute('notes')}></textarea>
-              </div>
+              {route.review && route.review.length > 0 && (
+                <div className="form-field">
+                  <label htmlFor="route_img_link">Other Notes</label>
+                  <textarea {...registerEditRoute('notes')}></textarea>
+                </div>
+              )}
             </div>
             {route.review && route.review.length > 0 && (
               <>

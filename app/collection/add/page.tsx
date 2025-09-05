@@ -59,6 +59,9 @@ export default function AddToCollection() {
       routes: [],
       description: '',
       route_order: '',
+      started_date: null,
+      completed_date: null,
+      notes: '',
     },
   })
 
@@ -692,6 +695,16 @@ export default function AddToCollection() {
                       </select>
                     </div>
                     {errors.status?.type === 'required' && <div className="form-error">Please select a status.</div>}
+                  </div>
+                  <div className="form-field-group">
+                    <div className="form-field">
+                      <label htmlFor="new-route-type">Started</label>
+                      <input key="new-route-name" type="date" {...register('started_date')}></input>
+                    </div>
+                    <div className="form-field">
+                      <label htmlFor="new-route-type">Completed</label>
+                      <input key="new-route-name" type="date" {...register('completed_date')}></input>
+                    </div>
                   </div>
                   <div className="form-field">
                     <p className="label">Owned Copies*</p>
