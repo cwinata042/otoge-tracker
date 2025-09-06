@@ -48,6 +48,7 @@ export default function VNDBSearchModal({
   const [vndbSearchError, setVNDBSearchError] = useState<string>('')
   const [vndbImportError, setVNDBImportError] = useState<string>('')
 
+  // VNDB API Endpoint to hit
   const url = type === 'Game' ? 'https://api.vndb.org/kana/vn' : 'https://api.vndb.org/kana/ch'
 
   function closeModal() {
@@ -121,30 +122,38 @@ export default function VNDBSearchModal({
 
   // TO DO
   const handleImportClick = async () => {
-    // Only fetch if valid VNDB link
-    if (vndbImportId) {
-      setIsLoadingVNDBImport(true)
-      try {
-        const vndbData = await queryClient.fetchQuery({
-          queryKey: ['vndb', vndbImportId],
-          queryFn: async () => {
-            const res = await fetch('https://api.vndb.org/kana/vn', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                filters: ['id', '=', vndbImportId],
-                fields:
-                  'title, alttitle, image.url, va.character{name, image.url, vns.role}, va.staff{original, name}, description',
-              }),
-            })
+    if (!vndbImportId) {
+      setVNDBImportError(`Please select the ${type.toLocaleLowerCase()} to import.`)
+      return
+    }
 
-            return res.json()
-          },
-          staleTime: 0,
-        })
+    setIsLoadingVNDBImport(true)
+    const fields =
+      type === 'Game'
+        ? 'title, alttitle, image.url, va.character{name, image.url, vns.role}, va.staff{original, name}, description'
+        : ''
 
+    try {
+      const vndbData = await queryClient.fetchQuery({
+        queryKey: ['vndb', vndbImportId],
+        queryFn: async () => {
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              filters: ['id', '=', vndbImportId],
+              fields: fields,
+            }),
+          })
+
+          return res.json()
+        },
+        staleTime: 0,
+      })
+
+      if (type === 'Game') {
         setValue('vndb_id', vndbData.results[0].id)
         setValue('title', vndbData.results[0].title)
         setValue('orig_title', vndbData.results[0].alttitle ? vndbData.results[0].alttitle : vndbData.results[0].title)
@@ -172,13 +181,21 @@ export default function VNDBSearchModal({
             })
           }
         }
-        setIsLoadingVNDBImport(false)
-        closeModal()
-      } catch (err) {
-        setIsLoadingVNDBImport(false)
+      } else {
+        // Logic to set fields for route
+        setValue('vndb_id', vndbData.results[0].id)
+        setValue('type', TRouteTypes.Character)
+        setValue('name', vndbData.results[0].name)
+        setValue('route_img_link', vndbData.results[0].image.url)
+        setValue('status', TStatuses.Incomplete)
+        // Voice actors don't seem to come back from /ch...?
       }
-    } else {
-      setVNDBImportError('Select a game to import.')
+
+      setIsLoadingVNDBImport(false)
+      closeModal()
+    } catch (err) {
+      setIsLoadingVNDBImport(false)
+      setVNDBImportError(`There was an error importing ${type.toLocaleLowerCase()} data from VNDB.`)
     }
   }
 
