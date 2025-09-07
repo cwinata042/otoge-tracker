@@ -84,7 +84,7 @@ export default function AddReviewModal({ route }: { route: TRoute }) {
     )
   })
 
-  const { mutate: mutateAddReview, status: addRouteStatus } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: async () => {
       clearErrors('root')
       const body = getValues()
@@ -118,8 +118,8 @@ export default function AddReviewModal({ route }: { route: TRoute }) {
     },
   })
 
-  const onAddReviewSubmit = (data: any) => {
-    mutateAddReview()
+  const onSubmit = (data: any) => {
+    mutate()
   }
 
   function closeModal() {
@@ -137,7 +137,7 @@ export default function AddReviewModal({ route }: { route: TRoute }) {
     <dialog className={`add-review-container route-${route._id}`} tabIndex={-1}>
       <div className="add-review-modal">
         <h2>Add Review</h2>
-        <form className="form-container" onSubmit={handleSubmit(onAddReviewSubmit)}>
+        <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
           <div className="form">
             {
               <>
