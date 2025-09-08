@@ -188,7 +188,7 @@ export default function EditRouteModal({ route }: { route: TRoute }) {
     <dialog className={`edit-route-container route-${route._id}`} tabIndex={-1}>
       <div className="edit-route-modal">
         <h2>Edit Route</h2>
-        <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete="off" className="form-container" onSubmit={handleSubmit(onSubmit)}>
           <h3>Route Details</h3>
           <hr className="mt" />
           <div className="form-fields">

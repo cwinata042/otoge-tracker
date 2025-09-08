@@ -101,7 +101,7 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
     <dialog className="add-route-container">
       <div className="add-route-modal">
         <h2>Add Route</h2>
-        <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete="off" className="form-container" onSubmit={handleSubmit(onSubmit)}>
           <h3>Route Details</h3>
           <hr className="mt" />
           <div className="form-fields">

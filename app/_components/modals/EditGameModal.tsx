@@ -363,7 +363,7 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
             </button>
           )}
         </div>
-        <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete="off" className="form-container" onSubmit={handleSubmit(onSubmit)}>
           <h3>Game Details</h3>
           <hr className="mt" />
           <div className="form-fields">

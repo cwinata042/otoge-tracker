@@ -342,7 +342,7 @@ export default function AddToCollection() {
               Routes
             </div>
           </div>
-          <form className="add-game-form" onSubmit={handleSubmit(onSubmit)}>
+          <form autoComplete="off" className="add-game-form" onSubmit={handleSubmit(onSubmit)}>
             {currTab === 'Game Details' ? (
               <div className="game-details">
                 <div className="game-details-image">

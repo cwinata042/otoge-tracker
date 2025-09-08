@@ -137,7 +137,7 @@ export default function AddReviewModal({ route }: { route: TRoute }) {
     <dialog className={`add-review-container route-${route._id}`} tabIndex={-1}>
       <div className="add-review-modal">
         <h2>Add Review</h2>
-        <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete="off" className="form-container" onSubmit={handleSubmit(onSubmit)}>
           <div className="form">
             {
               <>
