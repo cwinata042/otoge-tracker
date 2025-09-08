@@ -49,7 +49,7 @@ export async function DELETE(req: Request) {
   }
 }
 
-// Edits a single game's details but not its routes
+// Edits a single game's details
 export async function PATCH(req: Request) {
   try {
     await dbConnect()
@@ -70,6 +70,16 @@ export async function PATCH(req: Request) {
         notes: game.notes,
       }
     )
+
+    if (game.routes && game.routes.length > 0) {
+      for (let route of game.routes) {
+        const editedRoute = await Route.findOneAndUpdate(
+          { game_id: game_id, user_id: user_id, name: route.name },
+          route,
+          { upsert: true }
+        )
+      }
+    }
 
     return NextResponse.json(editedGame, { status: 200 })
   } catch (err) {

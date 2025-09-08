@@ -123,9 +123,11 @@ export default function GameViewer() {
         <div className="single-game-header">
           <div className="header-main">
             <h1>{gameDetails.title}</h1>
-            <button className="small main outlined" onClick={() => openEditGameModal()}>
-              Edit
-            </button>
+            <div className="button-group">
+              <button className="small main outlined" onClick={() => openEditGameModal()}>
+                Edit
+              </button>
+            </div>
           </div>
           <Link href="/collection" className="button small nobg">
             Back

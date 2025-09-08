@@ -247,7 +247,7 @@ export default function VNDBSearchModal({
   }
 
   return (
-    <dialog className="vndb-import-container">
+    <dialog className={dialogName}>
       <div className="vndb-import-modal">
         <div className="vndb-main">
           <div className="vndb-header">

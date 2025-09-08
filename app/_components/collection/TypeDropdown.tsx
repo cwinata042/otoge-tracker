@@ -1,4 +1,4 @@
-import { TRouteTypes, TStatuses } from '@/lib/types'
+import { TCopyTypes, TCurrency, TGameLanguages, TGamePlatforms, TGameTypes, TRouteTypes, TStatuses } from '@/lib/types'
 
 export default function TypeDropdown({ type }: { type: string }) {
   let enumType
@@ -8,6 +8,21 @@ export default function TypeDropdown({ type }: { type: string }) {
       break
     case 'TStatuses':
       enumType = TStatuses
+      break
+    case 'TGameTypes':
+      enumType = TGameTypes
+      break
+    case 'TGameLanguages':
+      enumType = TGameLanguages
+      break
+    case 'TGamePlatforms':
+      enumType = TGamePlatforms
+      break
+    case 'TCurrency':
+      enumType = TCurrency
+      break
+    case 'TCopyTypes':
+      enumType = TCopyTypes
       break
     default:
       enumType = TStatuses
