@@ -1,4 +1,4 @@
-import { isValidLink } from '@/lib/helper'
+import { formatDate, isValidLink } from '@/lib/helper'
 import { COLLECTION_QUERY_KEY, SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import {
   TCopyTypes,
@@ -52,8 +52,8 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
       owned_copies: gameData.owned_copies,
       description: gameData.description,
       route_order: gameData.route_order,
-      started_date: gameData.started_date,
-      completed_date: gameData.completed_date,
+      started_date: gameData.started_date ? formatDate(gameData.started_date) : gameData.started_date,
+      completed_date: gameData.completed_date ? formatDate(gameData.completed_date) : gameData.completed_date,
       notes: gameData.notes,
       routes: gameData.routes,
     },
@@ -139,7 +139,21 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
       dialog.showModal()
     } else if (dialog && !show) {
       setIsSaving(false)
-      reset()
+      reset({
+        vndb_id: gameData.vndb_id,
+        orig_title: gameData.orig_title,
+        title: gameData.title,
+        type: gameData.type,
+        status: gameData.status,
+        img_link: gameData.img_link,
+        owned_copies: gameData.owned_copies,
+        description: gameData.description,
+        route_order: gameData.route_order,
+        started_date: gameData.started_date ? formatDate(gameData.started_date) : gameData.started_date,
+        completed_date: gameData.completed_date ? formatDate(gameData.completed_date) : gameData.completed_date,
+        notes: gameData.notes,
+        routes: gameData.routes,
+      })
       clearErrors()
       dialog.close()
     }

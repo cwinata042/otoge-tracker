@@ -386,11 +386,15 @@ export default function AddToCollection() {
                   </div>
                   <div className="form-field">
                     <label htmlFor="description">Description</label>
-                    <textarea className="large" key="title" {...register('description')} />
+                    <textarea className="large" key="description" {...register('description')} />
+                  </div>
+                  <div className="form-field">
+                    <label htmlFor="notes">Notes</label>
+                    <textarea className="large" key="notes" {...register('notes')} />
                   </div>
                   <div className="form-field">
                     <label htmlFor="route_order">Recommended Route Order</label>
-                    <input type="text" key="title" {...register('route_order')} />
+                    <input type="text" key="route_order" {...register('route_order')} />
                   </div>
                   <div className="form-field">
                     <label htmlFor="img_link">Link to Cover Image</label>

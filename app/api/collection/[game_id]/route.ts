@@ -72,7 +72,7 @@ export async function PATCH(req: Request) {
     )
 
     if (game.routes && game.routes.length > 0) {
-      for (let route of game.routes) {
+      for (const route of game.routes) {
         const editedRoute = await Route.findOneAndUpdate(
           { game_id: game_id, user_id: user_id, name: route.name },
           route,

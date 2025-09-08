@@ -122,6 +122,13 @@ div.main {
   align-items: end;
 }
 
+.collection-search-container {
+  display: flex;
+  gap: 10px;
+  width: calc(var(--game-card-width));
+  align-items: center;
+}
+
 .collection-header {
   display: flex;
   width: calc(var(--game-card-width));
@@ -133,6 +140,8 @@ div.main {
   display: flex;
   gap: 60px;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .main-container {
@@ -153,7 +162,8 @@ div.main {
   .gameGrid {
     grid-template-columns: var(--game-card-width) var(--game-card-width);
   }
-  .collection-header {
+  .collection-header,
+  .collection-search-container {
     width: calc(var(--game-card-width) * 2 + var(--game-card-grid-gap));
   }
 }
@@ -162,7 +172,8 @@ div.main {
   .gameGrid {
     grid-template-columns: var(--game-card-width) var(--game-card-width) var(--game-card-width);
   }
-  .collection-header {
+  .collection-header,
+  .collection-search-container {
     width: calc(var(--game-card-width) * 3 + var(--game-card-grid-gap) * 2);
   }
 }
@@ -1477,4 +1488,11 @@ input[type='radio'] {
   .review-container {
     gap: 15px;
   }
+}
+.search {
+  width: 100%;
+}
+.search::placeholder {
+  color: var(--medium);
+  font-style: italic;
 }
