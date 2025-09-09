@@ -419,7 +419,7 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
                 {errors?.status?.type === 'required' && <div className="form-error">Please select a route status.</div>}
               </div>
             </div>
-            <div className="form-field-group">
+            <div className="form-field-group breakable">
               <div className="form-field">
                 <label htmlFor="new-route-type">Started</label>
                 <input key="new-route-name" type="date" {...register('started_date')}></input>

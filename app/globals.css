@@ -30,6 +30,7 @@
   --personality: #d4eaea;
   --romance: #ead4d8;
   --appearance: #eae2d4;
+  overflow-x: hidden;
 }
 
 input[type='number']::-webkit-outer-spin-button,
@@ -41,6 +42,10 @@ input[type='number']::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
+}
+
+html {
+  padding-left: calc(100vw - 100%);
 }
 
 html,
@@ -849,9 +854,15 @@ option.disabled {
   appearance: none;
 }
 
-.owned-copy-field {
+.owned-copy-field,
+.owned-copy-other,
+.owned-copy-main {
   display: flex;
   gap: 10px;
+}
+.owned-copy-main,
+.owned-copy-other {
+  width: 100%;
 }
 .owned-copy-details {
   width: 100%;
@@ -867,8 +878,8 @@ option.disabled {
 
 .trash-icon {
   margin-top: 26px;
-  height: 43px;
-  width: 103px;
+  height: 41px;
+  width: 41px;
   color: var(--error-text);
   cursor: pointer;
 }
@@ -1242,6 +1253,7 @@ hr.mb {
 .form-field-group {
   display: flex;
   gap: 15px;
+  width: 100%;
 }
 .single-game-routes-container {
   display: flex;
@@ -1274,6 +1286,9 @@ input[type='radio'] {
   }
   .game-details-form {
     width: 100%;
+  }
+  .owned-copy-field {
+    flex-direction: column;
   }
 }
 
@@ -1450,6 +1465,9 @@ input[type='radio'] {
   }
 
   /* ROUTES */
+  .form-field-group.breakable {
+    flex-direction: column;
+  }
   .route-header-main {
     flex-direction: column;
     align-items: start;

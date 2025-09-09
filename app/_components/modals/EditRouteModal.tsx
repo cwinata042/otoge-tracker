@@ -208,7 +208,7 @@ export default function EditRouteModal({ route }: { route: TRoute }) {
                 {errors?.status?.type === 'required' && <div className="form-error">Please select a route status.</div>}
               </div>
             </div>
-            <div className="form-field-group">
+            <div className="form-field-group breakable">
               <div className="form-field">
                 <label htmlFor="new-route-type">Started</label>
                 <input key="new-route-name" type="date" {...register('started_date')}></input>
@@ -232,7 +232,7 @@ export default function EditRouteModal({ route }: { route: TRoute }) {
               ></input>
               {errors?.name && <div className="form-error">{errors.name.message}</div>}
             </div>
-            <div className="form-field-group">
+            <div className="form-field-group breakable">
               <div className="form-field">
                 <label htmlFor="new-route-va_romanized">Voice Actor (Romanized)</label>
                 <input key="new-route-va_romanized" type="text" {...register('voice_actor.romanized')}></input>

@@ -257,46 +257,61 @@ export default function AddToCollection() {
     )
   })
 
+  function markCompleted() {
+    const completedRoutes = routes.map((route) => {
+      return {
+        ...route,
+        status: TStatuses.Completed,
+      }
+    })
+
+    setValue('routes', completedRoutes)
+  }
+
   const routesList = routes.map((route, index) => {
     return (
       <div key={route.id} className="owned-copy-field">
         {index !== 0 && <hr className="mobile-hr" />}
-        <div className="form-field">
-          <label htmlFor={route.id}>Status*</label>
-          <select key={route.id} {...register(`routes.${index}.status`, { required: true })}>
-            {statusDropdown}
-          </select>
-          {errors?.routes && errors.routes[index]?.status?.type === 'required' && (
-            <div className="form-error">Please select a route status.</div>
-          )}
+        <div className="owned-copy-main">
+          <div className="form-field">
+            <label htmlFor={route.id}>Status*</label>
+            <select key={route.id} {...register(`routes.${index}.status`, { required: true })}>
+              {statusDropdown}
+            </select>
+            {errors?.routes && errors.routes[index]?.status?.type === 'required' && (
+              <div className="form-error">Please select a route status.</div>
+            )}
+          </div>
+          <div className="form-field">
+            <label htmlFor={route.id}>Type*</label>
+            <select key={route.id} {...register(`routes.${index}.type`, { required: true })}>
+              {routeTypeDropdown}
+            </select>
+            {errors?.routes && errors.routes[index]?.type?.type === 'required' && (
+              <div className="form-error">Please select a route type.</div>
+            )}
+          </div>
+          <div className="form-field">
+            <label htmlFor={route.id}>Character/Route Name*</label>
+            <input type="text" key={route.id} {...register(`routes.${index}.name`, { required: true })} />
+            {errors?.routes && errors.routes[index]?.name?.type === 'required' && (
+              <div className="form-error">Please enter a character/route name.</div>
+            )}
+          </div>
         </div>
-        <div className="form-field">
-          <label htmlFor={route.id}>Type*</label>
-          <select key={route.id} {...register(`routes.${index}.type`, { required: true })}>
-            {routeTypeDropdown}
-          </select>
-          {errors?.routes && errors.routes[index]?.type?.type === 'required' && (
-            <div className="form-error">Please select a route type.</div>
-          )}
-        </div>
-        <div className="form-field">
-          <label htmlFor={route.id}>Character/Route Name*</label>
-          <input type="text" key={route.id} {...register(`routes.${index}.name`, { required: true })} />
-          {errors?.routes && errors.routes[index]?.name?.type === 'required' && (
-            <div className="form-error">Please enter a character/route name.</div>
-          )}
-        </div>
-        <div className="form-field">
-          <label htmlFor={route.id}>Voice Actor (Romanized)</label>
-          <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.romanized`)} />
-        </div>
-        <div className="form-field">
-          <label htmlFor={route.id}>Voice Actor (Original)</label>
-          <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.orig`)} />
-        </div>
-        <div className="form-field">
-          <label htmlFor={route.id}>Image Link</label>
-          <input type="text" key={route.id} {...register(`routes.${index}.route_img_link`)} />
+        <div className="owned-copy-other">
+          <div className="form-field">
+            <label htmlFor={route.id}>VA (Romanized)</label>
+            <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.romanized`)} />
+          </div>
+          <div className="form-field">
+            <label htmlFor={route.id}>VA (Original)</label>
+            <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.orig`)} />
+          </div>
+          <div className="form-field">
+            <label htmlFor={route.id}>Image Link</label>
+            <input type="text" key={route.id} {...register(`routes.${index}.route_img_link`)} />
+          </div>
         </div>
         <FaRegTrashAlt className="trash-icon" onClick={() => removeRoute(index)} />
       </div>
@@ -470,6 +485,9 @@ export default function AddToCollection() {
               <>
                 <div className="form-field">
                   <div className="routes-list">
+                    <button className="main nobg nopad" onClick={() => markCompleted()}>
+                      Mark all as Completed
+                    </button>
                     {routesList}
                     <button
                       className="add"
