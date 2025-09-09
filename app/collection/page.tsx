@@ -17,6 +17,7 @@ export default function Collection() {
   const { data: session } = useSession()
   const [currFilters, setCurrFilters] = useState<TFilters>({ status: [], platform: [], language: [] })
   const [currSort, setCurrSort] = useState<TSort>({ name: 'Name', isDesc: true })
+  const [currSearch, setCurrSearch] = useState<string>('')
   const filters = [
     { name: 'Status', options: Object.keys(TStatuses) },
     { name: 'Platform', options: Object.keys(TGamePlatforms) },
@@ -105,8 +106,9 @@ export default function Collection() {
               game.owned_copies.map((game) => game.language.toString()).includes(lang)
             )
           : true
+      const search = currSearch !== '' ? game.title.toLocaleLowerCase().includes(currSearch.toLocaleLowerCase()) : true
 
-      return platform && status && language
+      return platform && status && language && search
     })
     .sort(sortFn)
 
@@ -169,10 +171,27 @@ export default function Collection() {
     return status && platform && language && sort
   }
 
+  function handleSearch() {
+    const searchText: string = (document.getElementById('collection-search') as HTMLInputElement)?.value
+    setCurrSearch(searchText)
+  }
+
+  function clearSearch() {
+    setCurrSearch('')
+    const search = document.getElementById('collection-search') as HTMLInputElement
+    search.value = ''
+  }
+
   return (
     <div className="main-container">
       <Header />
       <div className="body">
+        <div className="collection-search-container">
+          <input id="collection-search" className="search" type="search" placeholder="BUSTAFELLOWS..."></input>
+          <button onClick={() => handleSearch()} className="small">
+            Search
+          </button>
+        </div>
         <div className="collection-header-container">
           <div className="collection-header">
             <div className="collection-title">
@@ -188,12 +207,13 @@ export default function Collection() {
               <Sort sortOptions={sortOptions} currSort={currSort} setCurrSort={setCurrSort} />
             </div>
           </div>
-          {!hasNoFiltersSort() && (
+          {(!hasNoFiltersSort() || currSearch !== '') && (
             <button
               className="small nobg warn nopad"
               onClick={() => {
                 setCurrFilters({ status: [], platform: [], language: [] })
                 setCurrSort({ name: 'Name', isDesc: true })
+                clearSearch()
               }}
             >
               Reset

@@ -1,13 +1,13 @@
 'use client'
 
-import AddRouteModal from '@/app/_components/collection/AddRouteModal'
-import EditGameModal from '@/app/_components/collection/EditGameModal'
+import AddRouteModal from '@/app/_components/modals/AddRouteModal'
+import EditGameModal from '@/app/_components/modals/EditGameModal'
 import GameStatus from '@/app/_components/collection/GameStatus'
 import RouteCard from '@/app/_components/collection/RouteCard'
 import Header from '@/app/_components/Header'
 import LanguageIcon from '@/app/_components/LanguageIcon'
 import PlatformIcon from '@/app/_components/PlatformIcon'
-import { isValidLink } from '@/lib/helper'
+import { formatDate, isValidLink } from '@/lib/helper'
 import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import { TEditRouteFormValues, TGameDetails, TRouteTypes, TStatuses } from '@/lib/types'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -123,9 +123,11 @@ export default function GameViewer() {
         <div className="single-game-header">
           <div className="header-main">
             <h1>{gameDetails.title}</h1>
-            <button className="small main outlined" onClick={() => openEditGameModal()}>
-              Edit
-            </button>
+            <div className="button-group">
+              <button className="small main outlined" onClick={() => openEditGameModal()}>
+                Edit
+              </button>
+            </div>
           </div>
           <Link href="/collection" className="button small nobg">
             Back
@@ -178,11 +180,15 @@ export default function GameViewer() {
                 <div className="form-field-group">
                   <div className="form-field">
                     <p className="form-info-white">Started</p>
-                    <p className="game-info-field">{gameDetails.started_date?.toLocaleString('en-CA')}</p>
+                    <p className="game-info-field">
+                      {gameDetails.started_date ? formatDate(gameDetails.started_date) : ''}
+                    </p>
                   </div>
                   <div className="form-field">
                     <p className="form-info-white">Completed</p>
-                    <p className="game-info-field">{gameDetails.completed_date?.toLocaleString('en-CA')}</p>
+                    <p className="game-info-field">
+                      {gameDetails.completed_date ? formatDate(gameDetails.completed_date) : ''}
+                    </p>
                   </div>
                 </div>
               </div>

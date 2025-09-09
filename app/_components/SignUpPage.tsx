@@ -90,7 +90,7 @@ export default function SignUpPage() {
     <div className="main">
       <div className="sign-up-container">
         <h1>Sign up</h1>
-        <form className="sign-up-form" onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete="off" className="sign-up-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-field">
             <label htmlFor="email">Username</label>
             <input

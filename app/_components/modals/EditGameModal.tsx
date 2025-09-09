@@ -1,4 +1,4 @@
-import { isValidLink } from '@/lib/helper'
+import { formatDate, isValidLink } from '@/lib/helper'
 import { COLLECTION_QUERY_KEY, SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import {
   TCopyTypes,
@@ -7,7 +7,7 @@ import {
   TGameDetails,
   TGameLanguages,
   TGamePlatforms,
-  TGameTypes,
+  TRoute,
   TRouteTypes,
   TStatuses,
 } from '@/lib/types'
@@ -18,6 +18,7 @@ import { useState } from 'react'
 import { useFieldArray, useForm } from 'react-hook-form'
 import { FaRegTrashAlt } from 'react-icons/fa'
 import { LuLoaderCircle } from 'react-icons/lu'
+import TypeDropdown from '../collection/TypeDropdown'
 
 export default function EditGameModal({ gameData }: { gameData: TGameDetails }) {
   const { data: session } = useSession()
@@ -26,6 +27,7 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
 
   const [isSaving, setIsSaving] = useState<boolean>(false)
   const [isDeletingGame, setIsDeletingGame] = useState<boolean>(false)
+  const [isFetching, setIsFetching] = useState<boolean>(false)
 
   const {
     reset,
@@ -34,11 +36,14 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
     getValues,
     setError,
     clearErrors,
+    setValue,
     watch,
     control,
     formState: { errors },
   } = useForm<TEditGameFormValues>({
+    disabled: isFetching,
     defaultValues: {
+      vndb_id: gameData.vndb_id,
       orig_title: gameData.orig_title,
       title: gameData.title,
       type: gameData.type,
@@ -47,9 +52,10 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
       owned_copies: gameData.owned_copies,
       description: gameData.description,
       route_order: gameData.route_order,
-      started_date: gameData.started_date,
-      completed_date: gameData.completed_date,
+      started_date: gameData.started_date ? formatDate(gameData.started_date) : gameData.started_date,
+      completed_date: gameData.completed_date ? formatDate(gameData.completed_date) : gameData.completed_date,
       notes: gameData.notes,
+      routes: gameData.routes,
     },
   })
   const {
@@ -117,6 +123,14 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
       setError('root', { message: 'Failed to delete game. Please try again.' })
     },
   })
+  const {
+    fields: routes,
+    append: appendRoute,
+    remove: removeRoute,
+  } = useFieldArray({
+    control,
+    name: 'routes',
+  })
 
   function toggleModal(show: boolean) {
     const dialog: HTMLDialogElement | null = document.querySelector('dialog.edit-game-container')
@@ -125,61 +139,25 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
       dialog.showModal()
     } else if (dialog && !show) {
       setIsSaving(false)
-      reset()
+      reset({
+        vndb_id: gameData.vndb_id,
+        orig_title: gameData.orig_title,
+        title: gameData.title,
+        type: gameData.type,
+        status: gameData.status,
+        img_link: gameData.img_link,
+        owned_copies: gameData.owned_copies,
+        description: gameData.description,
+        route_order: gameData.route_order,
+        started_date: gameData.started_date ? formatDate(gameData.started_date) : gameData.started_date,
+        completed_date: gameData.completed_date ? formatDate(gameData.completed_date) : gameData.completed_date,
+        notes: gameData.notes,
+        routes: gameData.routes,
+      })
       clearErrors()
       dialog.close()
     }
   }
-
-  const gameTypeDropdown = Object.values(TGameTypes).map((game) => {
-    return (
-      <option key={game.toString().toLowerCase()} value={game.toString()} disabled={game.toString() === ''}>
-        {game}
-      </option>
-    )
-  })
-  const statusDropdown = Object.values(TStatuses).map((status) => {
-    return (
-      <option key={status.toString().toLowerCase()} disabled={status.toString() === ''} value={status.toString()}>
-        {status}
-      </option>
-    )
-  })
-  const langDropdown = Object.values(TGameLanguages).map((lang) => {
-    return (
-      <option key={lang.toString().toLowerCase()} disabled={lang.toString() === ''} value={lang.toString()}>
-        {lang}
-      </option>
-    )
-  })
-  const platDropdown = Object.values(TGamePlatforms).map((plat) => {
-    return (
-      <option key={plat.toString().toLowerCase()} disabled={plat.toString() === ''} value={plat.toString()}>
-        {plat}
-      </option>
-    )
-  })
-  const currDropdown = Object.values(TCurrency).map((curr) => {
-    return (
-      <option key={curr.toString().toLowerCase()} value={curr.toString()}>
-        {curr}
-      </option>
-    )
-  })
-  const routeTypeDropdown = Object.values(TRouteTypes).map((route) => {
-    return (
-      <option key={route.toString().toLowerCase()} value={route.toString()} disabled={route.toString() === ''}>
-        {route}
-      </option>
-    )
-  })
-  const copyTypeDropdown = Object.values(TCopyTypes).map((type) => {
-    return (
-      <option key={type.toString().toLowerCase()} value={type.toString()} disabled={type.toString() === ''}>
-        {type}
-      </option>
-    )
-  })
 
   const ownedCopiesList = ownedCopies.map((copy, index) => {
     return (
@@ -199,7 +177,7 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
               },
             })}
           >
-            {langDropdown}
+            <TypeDropdown type="TGameLanguages" />
           </select>
           {errors?.owned_copies && errors.owned_copies[index]?.language && (
             <div className="form-error">{errors.owned_copies[index]?.language.message}</div>
@@ -219,7 +197,7 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
               },
             })}
           >
-            {platDropdown}
+            <TypeDropdown type="TGamePlatforms" />
           </select>
           {errors?.owned_copies && errors.owned_copies[index]?.platform && (
             <div className="form-error">{errors.owned_copies[index]?.platform.message}</div>
@@ -239,7 +217,7 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
               },
             })}
           >
-            {copyTypeDropdown}
+            <TypeDropdown type="TCopyTypes" />
           </select>
           {errors?.owned_copies && errors.owned_copies[index]?.type && (
             <div className="form-error">{errors.owned_copies[index]?.type.message}</div>
@@ -267,7 +245,7 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
               },
             })}
           >
-            {currDropdown}
+            <TypeDropdown type="TCurrency" />
           </select>
           {errors?.owned_copies && errors.owned_copies[index]?.price_currency && (
             <div className="form-error">Please select a currency.</div>
@@ -284,11 +262,108 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
     deleteGame()
   }
 
+  const refetchFromVNDB = async () => {
+    setIsFetching(true)
+
+    try {
+      const vndbData = await queryClient.fetchQuery({
+        queryKey: ['vndb', gameData.vndb_id],
+        queryFn: async () => {
+          const res = await fetch('https://api.vndb.org/kana/vn', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              filters: ['id', '=', gameData.vndb_id],
+              fields:
+                'title, alttitle, image.url, va.character{name, image.url, vns.role}, va.staff{original, name}, description',
+            }),
+          })
+
+          return res.json()
+        },
+        staleTime: 0,
+      })
+
+      setValue('vndb_id', vndbData.results[0].id)
+      setValue('title', vndbData.results[0].title)
+      setValue('orig_title', vndbData.results[0].alttitle ? vndbData.results[0].alttitle : vndbData.results[0].title)
+      setValue('img_link', vndbData.results[0].image.url)
+      setValue('description', vndbData.results[0].description)
+      clearErrors(['vndb_id', 'title', 'orig_title', 'img_link'])
+
+      for (const character of vndbData.results[0].va) {
+        const characterObj = character.character
+        const staffObj = character.staff
+
+        // Only pull characters with primary roles
+        if (characterObj.vns[0].role === 'primary') {
+          // Checks if route already exists
+          const routes: TRoute[] = getValues('routes') ?? []
+          const existingChar = routes.filter(
+            (route) => route.vndb_id === characterObj.id || route.name === characterObj.name
+          )
+
+          // If route exists
+          if (existingChar && existingChar.length > 0) {
+            setValue(
+              'routes',
+              routes.map((route) => {
+                if (route.name === characterObj.name || route.vndb_id === characterObj.id) {
+                  return {
+                    ...route,
+                    vndb_id: characterObj.id,
+                    type: TRouteTypes.Character,
+                    name: characterObj.name,
+                    route_img_link: characterObj.image.url,
+                    status: TStatuses.Incomplete,
+                    voice_actor: {
+                      romanized: staffObj.name,
+                      orig: staffObj.original ? staffObj.original : staffObj.name,
+                    },
+                  }
+                } else {
+                  return route
+                }
+              })
+            )
+          } else {
+            appendRoute({
+              vndb_id: characterObj.id,
+              type: TRouteTypes.Character,
+              name: characterObj.name,
+              route_img_link: characterObj.image.url,
+              status: TStatuses.Incomplete,
+              voice_actor: {
+                romanized: staffObj.name,
+                orig: staffObj.original ? staffObj.original : staffObj.name,
+              },
+            })
+          }
+        }
+      }
+
+      setIsFetching(false)
+    } catch (err) {
+      setIsFetching(false)
+      setError('root', { message: 'There was an error refetching from VNDB.' })
+    }
+  }
+
   return (
     <dialog className="edit-game-container">
       <div className="edit-game-modal">
-        <h2>Edit Game Details</h2>
-        <form className="form-container" onSubmit={handleSubmit(onSubmit)}>
+        <div className="edit-game-header">
+          <h2>Edit Game Details</h2>
+          {gameData.vndb_id && gameData.vndb_id !== '' && (
+            <button disabled={isFetching} className="small outlined" onClick={() => refetchFromVNDB()}>
+              {!isFetching ? 'Refetch from VNDB' : 'Refetching...'}
+              {isFetching && <LuLoaderCircle className="loader" />}
+            </button>
+          )}
+        </div>
+        <form autoComplete="off" className="form-container" onSubmit={handleSubmit(onSubmit)}>
           <h3>Game Details</h3>
           <hr className="mt" />
           <div className="form-fields">
@@ -332,19 +407,19 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
               <div className="form-field">
                 <label htmlFor="edit-game-type">Type*</label>
                 <select key="edit-game-type" {...register('type', { required: true })}>
-                  {gameTypeDropdown}
+                  <TypeDropdown type="TGameTypes" />
                 </select>
                 {errors.type?.type === 'required' && <div className="form-error">Please select a route type.</div>}
               </div>
               <div className="form-field">
                 <label htmlFor="new-route-status">Status*</label>
                 <select key="new-route-status" {...register('status', { required: true })}>
-                  {statusDropdown}
+                  <TypeDropdown type="TStatuses" />
                 </select>
                 {errors?.status?.type === 'required' && <div className="form-error">Please select a route status.</div>}
               </div>
             </div>
-            <div className="form-field-group">
+            <div className="form-field-group breakable">
               <div className="form-field">
                 <label htmlFor="new-route-type">Started</label>
                 <input key="new-route-name" type="date" {...register('started_date')}></input>

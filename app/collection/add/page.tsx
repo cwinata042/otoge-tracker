@@ -22,6 +22,7 @@ import { FaRegTrashAlt } from 'react-icons/fa'
 import { useRouter } from 'next/navigation'
 import Header from '@/app/_components/Header'
 import { isValidLink } from '@/lib/helper'
+import VNDBSearchModal from '@/app/_components/modals/VNDBSearchModal'
 
 export default function AddToCollection() {
   const { data: session } = useSession()
@@ -29,12 +30,6 @@ export default function AddToCollection() {
   const router = useRouter()
 
   const [currTab, setCurrTab] = useState<string>('Game Details')
-  const [vndbImportType, setVNDBImportType] = useState<string>('Game Title')
-  const [vndbImportId, setVNDBImportId] = useState<string | null>(null)
-  const [vndbImportError, setVNDBImportError] = useState<string>('')
-  const [isLoadingVNDBSearch, setIsLoadingVNDBSearch] = useState<boolean>(false)
-  const [vndbSearchResults, setVNDBSearchResults] = useState<any | null>(null)
-  const [isLoadingVNDBImport, setIsLoadingVNDBImport] = useState<boolean>(false)
 
   const {
     register,
@@ -262,364 +257,91 @@ export default function AddToCollection() {
     )
   })
 
+  function markCompleted() {
+    const completedRoutes = routes.map((route) => {
+      return {
+        ...route,
+        status: TStatuses.Completed,
+      }
+    })
+
+    setValue('routes', completedRoutes)
+  }
+
   const routesList = routes.map((route, index) => {
     return (
       <div key={route.id} className="owned-copy-field">
         {index !== 0 && <hr className="mobile-hr" />}
-        <div className="form-field">
-          <label htmlFor={route.id}>Status*</label>
-          <select key={route.id} {...register(`routes.${index}.status`, { required: true })}>
-            {statusDropdown}
-          </select>
-          {errors?.routes && errors.routes[index]?.status?.type === 'required' && (
-            <div className="form-error">Please select a route status.</div>
-          )}
+        <div className="owned-copy-main">
+          <div className="form-field">
+            <label htmlFor={route.id}>Status*</label>
+            <select key={route.id} {...register(`routes.${index}.status`, { required: true })}>
+              {statusDropdown}
+            </select>
+            {errors?.routes && errors.routes[index]?.status?.type === 'required' && (
+              <div className="form-error">Please select a route status.</div>
+            )}
+          </div>
+          <div className="form-field">
+            <label htmlFor={route.id}>Type*</label>
+            <select key={route.id} {...register(`routes.${index}.type`, { required: true })}>
+              {routeTypeDropdown}
+            </select>
+            {errors?.routes && errors.routes[index]?.type?.type === 'required' && (
+              <div className="form-error">Please select a route type.</div>
+            )}
+          </div>
+          <div className="form-field">
+            <label htmlFor={route.id}>Character/Route Name*</label>
+            <input type="text" key={route.id} {...register(`routes.${index}.name`, { required: true })} />
+            {errors?.routes && errors.routes[index]?.name?.type === 'required' && (
+              <div className="form-error">Please enter a character/route name.</div>
+            )}
+          </div>
         </div>
-        <div className="form-field">
-          <label htmlFor={route.id}>Type*</label>
-          <select key={route.id} {...register(`routes.${index}.type`, { required: true })}>
-            {routeTypeDropdown}
-          </select>
-          {errors?.routes && errors.routes[index]?.type?.type === 'required' && (
-            <div className="form-error">Please select a route type.</div>
-          )}
-        </div>
-        <div className="form-field">
-          <label htmlFor={route.id}>Character/Route Name*</label>
-          <input type="text" key={route.id} {...register(`routes.${index}.name`, { required: true })} />
-          {errors?.routes && errors.routes[index]?.name?.type === 'required' && (
-            <div className="form-error">Please enter a character/route name.</div>
-          )}
-        </div>
-        <div className="form-field">
-          <label htmlFor={route.id}>Voice Actor (Romanized)</label>
-          <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.romanized`)} />
-        </div>
-        <div className="form-field">
-          <label htmlFor={route.id}>Voice Actor (Original)</label>
-          <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.orig`)} />
-        </div>
-        <div className="form-field">
-          <label htmlFor={route.id}>Image Link</label>
-          <input type="text" key={route.id} {...register(`routes.${index}.route_img_link`)} />
+        <div className="owned-copy-other">
+          <div className="form-field">
+            <label htmlFor={route.id}>VA (Romanized)</label>
+            <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.romanized`)} />
+          </div>
+          <div className="form-field">
+            <label htmlFor={route.id}>VA (Original)</label>
+            <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.orig`)} />
+          </div>
+          <div className="form-field">
+            <label htmlFor={route.id}>Image Link</label>
+            <input type="text" key={route.id} {...register(`routes.${index}.route_img_link`)} />
+          </div>
         </div>
         <FaRegTrashAlt className="trash-icon" onClick={() => removeRoute(index)} />
       </div>
     )
   })
 
-  function toggleModal(show: boolean) {
-    const dialog = document.querySelector('dialog')
+  function openModal() {
+    const dialog: HTMLDialogElement | null = document.querySelector('dialog.vndb-import-container')
 
-    if (dialog && show) {
+    if (dialog) {
       dialog.showModal()
-    } else if (dialog && !show) {
-      setVNDBImportType('Game Title')
-      setVNDBImportId(null)
-      setValue('vndb_search', '')
-      clearVNDBSearch()
-      setIsLoadingVNDBSearch(false)
-      setIsLoadingVNDBImport(false)
-      dialog.close()
     }
-  }
-
-  const handleSearchClick = async () => {
-    if (vndbImportType === 'VNDB Link') {
-      const vndbId = getValues('vndb_search').split('/').pop()
-      const vndbIdFormat = /^[v]\d+$/
-
-      if (vndbId && vndbIdFormat.test(vndbId)) {
-        setIsLoadingVNDBSearch(true)
-
-        try {
-          const vndbSearchData = await queryClient.fetchQuery({
-            queryKey: ['vndb', vndbId],
-            queryFn: async () => {
-              const res = await fetch('https://api.vndb.org/kana/vn', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  filters: ['id', '=', vndbId],
-                  fields: 'title, alttitle, released',
-                }),
-              })
-
-              return res.json()
-            },
-            staleTime: 0,
-          })
-
-          setVNDBSearchResults(vndbSearchData)
-          setIsLoadingVNDBSearch(false)
-        } catch (err) {
-          setVNDBSearchResults([])
-          setIsLoadingVNDBSearch(false)
-        }
-      } else {
-        setError('vndb_search', { message: 'Please enter a valid VNDB link.' })
-      }
-    } else {
-      const vndbName = getValues('vndb_search')
-
-      if (vndbName && vndbName !== '') {
-        setIsLoadingVNDBSearch(true)
-
-        try {
-          const vndbSearchData = await queryClient.fetchQuery({
-            queryKey: ['vndb', vndbName],
-            queryFn: async () => {
-              const res = await fetch('https://api.vndb.org/kana/vn', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  filters: ['search', '=', vndbName],
-                  fields: 'title, alttitle, released',
-                }),
-              })
-
-              return res.json()
-            },
-            staleTime: 0,
-          })
-
-          setVNDBSearchResults(vndbSearchData)
-          setIsLoadingVNDBSearch(false)
-        } catch (err) {
-          setVNDBSearchResults([])
-          setIsLoadingVNDBSearch(false)
-        }
-      } else {
-        setError('vndb_search', { message: 'Please enter a search value.' })
-      }
-    }
-  }
-
-  const handleImportClick = async () => {
-    // Only fetch if valid VNDB link
-    if (vndbImportId) {
-      setIsLoadingVNDBImport(true)
-      try {
-        const vndbData = await queryClient.fetchQuery({
-          queryKey: ['vndb', vndbImportId],
-          queryFn: async () => {
-            const res = await fetch('https://api.vndb.org/kana/vn', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                filters: ['id', '=', vndbImportId],
-                fields:
-                  'title, alttitle, image.url, va.character{name, image.url, vns.role}, va.staff{original, name}, description',
-              }),
-            })
-
-            return res.json()
-          },
-          staleTime: 0,
-        })
-
-        setValue('vndb_id', vndbData.results[0].id)
-        setValue('title', vndbData.results[0].title)
-        setValue('orig_title', vndbData.results[0].alttitle ? vndbData.results[0].alttitle : vndbData.results[0].title)
-        setValue('img_link', vndbData.results[0].image.url)
-        setValue('description', vndbData.results[0].description)
-        clearErrors(['vndb_id', 'title', 'orig_title', 'img_link'])
-        removeRoute()
-
-        for (const character of vndbData.results[0].va) {
-          const characterObj = character.character
-          const staffObj = character.staff
-
-          // Only pull characters with primary roles
-          if (characterObj.vns[0].role === 'primary') {
-            appendRoute({
-              vndb_id: characterObj.id,
-              type: TRouteTypes.Character,
-              name: characterObj.name,
-              route_img_link: characterObj.image.url,
-              status: TStatuses.Incomplete,
-              voice_actor: {
-                romanized: staffObj.name,
-                orig: staffObj.original,
-              },
-            })
-          }
-        }
-        setIsLoadingVNDBImport(false)
-        toggleModal(false)
-      } catch (err) {
-        setIsLoadingVNDBImport(false)
-      }
-    } else {
-      setVNDBImportError('Select a game to import.')
-    }
-  }
-
-  const vndbSearchResultHeadersData = ['Title', 'Released', '']
-  const vndbSearchResultHeaders = vndbSearchResultHeadersData.map((header) => {
-    return <th key={header}>{header}</th>
-  })
-  const vndbSearchResultRows = vndbSearchResults?.results.map((result: any) => {
-    return (
-      <tr key={`result-${result.id}`} className={vndbImportId === result.id ? 'selected' : ''}>
-        <td>{result.title ?? 'No title available'}</td>
-        <td>{result.released ?? 'No release date available'}</td>
-        <td className="checkbox">
-          <input
-            type="checkbox"
-            checked={vndbImportId === result.id}
-            onChange={() => {
-              if (vndbImportId === result.id) {
-                setVNDBImportId(null)
-              } else {
-                setVNDBImportId(result.id)
-                setVNDBImportError('')
-              }
-            }}
-          />
-        </td>
-      </tr>
-    )
-  })
-
-  function clearVNDBSearch() {
-    setVNDBImportId(null)
-    setVNDBSearchResults(null)
   }
 
   return (
     <div className="main-container">
       <Header />
       <div className="add-game-container">
-        <dialog className="vndb-import-container">
-          <div className="vndb-import-modal">
-            <div className="vndb-main">
-              <div className="vndb-header">
-                <h2>Import from VNDB</h2>
-                <div className="form-info">NOTE: This will overwrite any existing values.</div>
-              </div>
-              <div className="vndb-search">
-                <div className="vndb-search-options-container">
-                  <p className="form-info-white">Search by</p>
-                  <div className="vndb-search-options">
-                    <div className="vndb-search-option">
-                      <input
-                        name="vndb-search-by"
-                        type="radio"
-                        id="game-title"
-                        value="Game Title"
-                        checked={vndbImportType === 'Game Title'}
-                        onChange={() => {
-                          clearErrors('vndb_search')
-                          setVNDBImportType('Game Title')
-                        }}
-                      />
-                      <label htmlFor="game-title">Game Title</label>
-                    </div>
-                    <div className="vndb-search-option">
-                      <input
-                        name="vndb-search-by"
-                        type="radio"
-                        id="vndb-link"
-                        value="VNDB Link"
-                        checked={vndbImportType === 'VNDB Link'}
-                        onChange={() => setVNDBImportType('VNDB Link')}
-                      />
-                      <label htmlFor="vndb-link">VNDB Link/ID</label>
-                    </div>
-                  </div>
-                </div>
-                <div className="vndb-link-container">
-                  <input
-                    id="vndb-link"
-                    type="text"
-                    placeholder={
-                      vndbImportType === 'VNDB Link' ? 'https://vndb.org/v25197, v25197...' : 'BUSTAFELLOWS...'
-                    }
-                    {...register('vndb_search')}
-                    onChange={(e) => {
-                      if (errors.vndb_search && e.target.value.length === 1) {
-                        clearErrors('vndb_search')
-                      }
-                    }}
-                    disabled={vndbSearchResults !== null}
-                  />
-                  {errors.vndb_search && <div className="form-error">{errors.vndb_search.message}</div>}
-                </div>
-                {vndbSearchResults && (
-                  <button className="small nobg warn nopad" onClick={() => clearVNDBSearch()}>
-                    Clear search results
-                  </button>
-                )}
-              </div>
-              {vndbSearchResults && (
-                <>
-                  <hr className="solid" />
-                  <div className="vndb-search-results-container">
-                    <div className="vndb-search-result-prompt">
-                      <p className="form-info-white">Please select the game you want to import:</p>
-                      <p className="form-info-pale">
-                        {vndbSearchResults.more
-                          ? 'More than 10 results'
-                          : `${vndbSearchResults.results.length} ${
-                              vndbSearchResults.results.length > 1 ? 'results' : 'result'
-                            }`}
-                      </p>
-                    </div>
-                    <table className="vndb-search-result-table">
-                      <thead>
-                        <tr>{vndbSearchResultHeaders}</tr>
-                      </thead>
-                      <tbody>{vndbSearchResultRows}</tbody>
-                    </table>
-                  </div>
-                </>
-              )}
-            </div>
-            <div className="vndb-buttons">
-              {!isLoadingVNDBSearch && !isLoadingVNDBImport && (
-                <button autoFocus onClick={() => toggleModal(false)}>
-                  Cancel
-                </button>
-              )}
-              {!vndbSearchResults &&
-                (!isLoadingVNDBSearch ? (
-                  <button className="main outlined" onClick={handleSearchClick}>
-                    Search
-                  </button>
-                ) : (
-                  <button className="main outlined disabled" disabled>
-                    <p>Searching...</p>
-                    <LuLoaderCircle className="loader" />
-                  </button>
-                ))}
-              {vndbSearchResults &&
-                (!isLoadingVNDBImport ? (
-                  <button
-                    className={`main ${!vndbImportId ? 'disabled' : ''}`}
-                    onClick={handleImportClick}
-                    disabled={!vndbImportId}
-                  >
-                    Import
-                  </button>
-                ) : (
-                  <button className="main disabled" disabled>
-                    <p>Importing...</p>
-                    <LuLoaderCircle className="loader" />
-                  </button>
-                ))}
-            </div>
-          </div>
-        </dialog>
+        <VNDBSearchModal
+          type="Game"
+          setValue={setValue}
+          getValues={getValues}
+          dialogName="vndb-import-container"
+          clearErrors={clearErrors}
+          removeRoute={removeRoute}
+          appendRoute={appendRoute}
+        />
         <div className="add-game-header">
           <h1>Add New Game</h1>
-          <button type="button" className="small main outlined" onClick={() => toggleModal(true)}>
+          <button type="button" className="small main outlined" onClick={() => openModal()}>
             Import from VNDB
           </button>
         </div>
@@ -635,7 +357,7 @@ export default function AddToCollection() {
               Routes
             </div>
           </div>
-          <form className="add-game-form" onSubmit={handleSubmit(onSubmit)}>
+          <form autoComplete="off" className="add-game-form" onSubmit={handleSubmit(onSubmit)}>
             {currTab === 'Game Details' ? (
               <div className="game-details">
                 <div className="game-details-image">
@@ -679,11 +401,15 @@ export default function AddToCollection() {
                   </div>
                   <div className="form-field">
                     <label htmlFor="description">Description</label>
-                    <textarea className="large" key="title" {...register('description')} />
+                    <textarea className="large" key="description" {...register('description')} />
+                  </div>
+                  <div className="form-field">
+                    <label htmlFor="notes">Notes</label>
+                    <textarea className="large" key="notes" {...register('notes')} />
                   </div>
                   <div className="form-field">
                     <label htmlFor="route_order">Recommended Route Order</label>
-                    <input type="text" key="title" {...register('route_order')} />
+                    <input type="text" key="route_order" {...register('route_order')} />
                   </div>
                   <div className="form-field">
                     <label htmlFor="img_link">Link to Cover Image</label>
@@ -759,6 +485,9 @@ export default function AddToCollection() {
               <>
                 <div className="form-field">
                   <div className="routes-list">
+                    <button className="main nobg nopad" onClick={() => markCompleted()}>
+                      Mark all as Completed
+                    </button>
                     {routesList}
                     <button
                       className="add"

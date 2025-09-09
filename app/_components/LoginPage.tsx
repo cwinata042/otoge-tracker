@@ -65,7 +65,7 @@ export default function LoginPage() {
     <div className="main">
       <div className="login-container">
         <h1>Log in</h1>
-        <form className="sign-up-form" onSubmit={handleSubmit(onSubmit)}>
+        <form autoComplete="off" className="sign-up-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="form-field">
             <label htmlFor="email">Email</label>
             <input

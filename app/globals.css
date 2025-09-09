@@ -30,6 +30,7 @@
   --personality: #d4eaea;
   --romance: #ead4d8;
   --appearance: #eae2d4;
+  overflow-x: hidden;
 }
 
 input[type='number']::-webkit-outer-spin-button,
@@ -41,6 +42,10 @@ input[type='number']::-webkit-inner-spin-button {
 input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
+}
+
+html {
+  padding-left: calc(100vw - 100%);
 }
 
 html,
@@ -122,6 +127,13 @@ div.main {
   align-items: end;
 }
 
+.collection-search-container {
+  display: flex;
+  gap: 10px;
+  width: calc(var(--game-card-width));
+  align-items: center;
+}
+
 .collection-header {
   display: flex;
   width: calc(var(--game-card-width));
@@ -133,6 +145,8 @@ div.main {
   display: flex;
   gap: 60px;
   align-items: center;
+  justify-content: space-between;
+  width: 100%;
 }
 
 .main-container {
@@ -153,7 +167,8 @@ div.main {
   .gameGrid {
     grid-template-columns: var(--game-card-width) var(--game-card-width);
   }
-  .collection-header {
+  .collection-header,
+  .collection-search-container {
     width: calc(var(--game-card-width) * 2 + var(--game-card-grid-gap));
   }
 }
@@ -162,7 +177,8 @@ div.main {
   .gameGrid {
     grid-template-columns: var(--game-card-width) var(--game-card-width) var(--game-card-width);
   }
-  .collection-header {
+  .collection-header,
+  .collection-search-container {
     width: calc(var(--game-card-width) * 3 + var(--game-card-grid-gap) * 2);
   }
 }
@@ -465,7 +481,8 @@ a:hover {
 .add-review-container[open],
 .edit-route-container[open],
 .add-route-container[open],
-.edit-game-container[open] {
+.edit-game-container[open],
+.refetch-vndb-container[open] {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -487,6 +504,7 @@ a:hover {
   color: var(--background);
   padding: 50px 80px;
   gap: 40px;
+  overflow-y: auto;
 }
 .vndb-main {
   display: flex;
@@ -523,7 +541,7 @@ input[type='text']#vndb-link {
   color: var(--background);
   font-size: 16px;
 }
-input[type='text']#vndb-link::placeholder {
+input[type='text']::placeholder {
   color: var(--medium);
   font-style: italic;
 }
@@ -836,9 +854,15 @@ option.disabled {
   appearance: none;
 }
 
-.owned-copy-field {
+.owned-copy-field,
+.owned-copy-other,
+.owned-copy-main {
   display: flex;
   gap: 10px;
+}
+.owned-copy-main,
+.owned-copy-other {
+  width: 100%;
 }
 .owned-copy-details {
   width: 100%;
@@ -854,8 +878,8 @@ option.disabled {
 
 .trash-icon {
   margin-top: 26px;
-  height: 43px;
-  width: 103px;
+  height: 41px;
+  width: 41px;
   color: var(--error-text);
   cursor: pointer;
 }
@@ -1229,6 +1253,7 @@ hr.mb {
 .form-field-group {
   display: flex;
   gap: 15px;
+  width: 100%;
 }
 .single-game-routes-container {
   display: flex;
@@ -1249,6 +1274,11 @@ input[type='radio'] {
   display: none;
 }
 
+.edit-game-header {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (width < 1226px) {
   .game-details {
     flex-direction: column;
@@ -1256,6 +1286,9 @@ input[type='radio'] {
   }
   .game-details-form {
     width: 100%;
+  }
+  .owned-copy-field {
+    flex-direction: column;
   }
 }
 
@@ -1377,14 +1410,17 @@ input[type='radio'] {
   .add-review-modal,
   .edit-route-modal,
   .add-route-modal,
-  .edit-game-modal {
+  .edit-game-modal,
+  .refetch-vndb-modal {
     padding: 30px 30px;
+    overflow-y: auto;
   }
   .vndb-import-container[open],
   .add-review-container[open],
   .edit-route-container[open],
   .add-route-container[open],
-  .edit-game-container[open] {
+  .edit-game-container[open],
+  .refetch-vndb-container[open] {
     padding: 30px 20px;
   }
   .vndb-search-options-container {
@@ -1394,6 +1430,11 @@ input[type='radio'] {
   }
   input[type='radio'] {
     width: fit-content;
+  }
+  .edit-game-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
 
   /* SINGLE GAME VIEW */
@@ -1424,6 +1465,9 @@ input[type='radio'] {
   }
 
   /* ROUTES */
+  .form-field-group.breakable {
+    flex-direction: column;
+  }
   .route-header-main {
     flex-direction: column;
     align-items: start;
@@ -1462,4 +1506,11 @@ input[type='radio'] {
   .review-container {
     gap: 15px;
   }
+}
+.search {
+  width: 100%;
+}
+.search::placeholder {
+  color: var(--medium);
+  font-style: italic;
 }

@@ -67,8 +67,8 @@ export type TGameDetails = {
   routes: TRoute[]
   description?: string
   route_order?: string
-  started_date?: Date | null | string
-  completed_date?: Date | null | string
+  started_date?: Date | null
+  completed_date?: Date | null
   notes?: string
 }
 
@@ -85,6 +85,7 @@ export type TOwnedGame = {
   started_date?: Date | null | string
   completed_date?: Date | null | string
   notes?: string
+  routes?: TRoute[] | null
 }
 
 export type TRoute = {
@@ -156,6 +157,8 @@ export type TEditGameFormValues = {
   started_date?: Date | null | string
   completed_date?: Date | null | string
   notes?: string
+  routes?: TRoute[]
+  vndb_id?: string | null
 }
 
 export type TCategoryReview = {
