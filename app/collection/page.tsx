@@ -11,12 +11,11 @@ import { useState } from 'react'
 import { TFilters, TGameLanguages, TGamePlatforms, TOwnedGame, TSort, TStatuses } from '@/lib/types'
 import Header from '../_components/Header'
 import Sort from '../_components/collection/Sort'
-import { RxCross2 } from 'react-icons/rx'
 
 export default function Collection() {
   const { data: session } = useSession()
   const [currFilters, setCurrFilters] = useState<TFilters>({ status: [], platform: [], language: [] })
-  const [currSort, setCurrSort] = useState<TSort>({ name: 'Name', isDesc: true })
+  const [currSort, setCurrSort] = useState<TSort>({ name: 'Last Updated', isDesc: true })
   const [currSearch, setCurrSearch] = useState<string>('')
   const filters = [
     { name: 'Status', options: Object.keys(TStatuses) },
@@ -209,7 +208,8 @@ export default function Collection() {
           </div>
           {(!hasNoFiltersSort() || currSearch !== '') && (
             <button
-              className="small nobg warn nopad"
+              type="button"
+              className="small nobg warn nopad reset"
               onClick={() => {
                 setCurrFilters({ status: [], platform: [], language: [] })
                 setCurrSort({ name: 'Name', isDesc: true })

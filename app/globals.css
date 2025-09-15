@@ -145,7 +145,6 @@ div.main {
   display: flex;
   gap: 60px;
   align-items: center;
-  justify-content: space-between;
   width: 100%;
 }
 
@@ -1301,6 +1300,82 @@ input[type='radio'] {
   .collection-header-container {
     padding-bottom: 15px;
   }
+
+  /* ROUTES */
+  .form-field-group.breakable {
+    flex-direction: column;
+  }
+  .route-header-main {
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+  }
+  .route-header {
+    flex-direction: column;
+    align-items: start;
+    gap: 5px;
+  }
+  .route-img-container {
+    width: 80px;
+    min-width: 80px;
+    min-height: 100px;
+    height: 100px;
+  }
+  .route-card {
+    gap: 15px;
+    padding: 15px;
+  }
+  .total-score > button {
+    text-wrap: wrap;
+    padding: 5px 10px;
+    font-size: 14px;
+  }
+  .reviews {
+    flex-direction: column;
+    align-items: start;
+  }
+  .review {
+    justify-content: start;
+    flex-direction: row;
+    gap: 5px;
+  }
+  .review-container {
+    gap: 15px;
+  }
+}
+
+@media (width < 860px) {
+  /* SINGLE GAME VIEW */
+  .single-game-details {
+    flex-direction: column;
+    align-items: center;
+  }
+  .single-game-header {
+    align-items: start;
+  }
+  .single-game-header > .button {
+    margin-top: 8px;
+  }
+  .single-game-header > .header-main {
+    flex-direction: column;
+    gap: 10px;
+    align-items: start;
+  }
+  .header-main > h1 {
+    word-break: break-word;
+  }
+  .form-buttons {
+    flex-direction: column;
+    align-items: end;
+  }
+  button.delete-button {
+    padding: 5px 0px;
+  }
+
+  .review-container {
+    flex-direction: column;
+    align-items: start;
+  }
 }
 
 /* Mobile View */
@@ -1437,33 +1512,6 @@ input[type='radio'] {
     gap: 10px;
   }
 
-  /* SINGLE GAME VIEW */
-  .single-game-details {
-    flex-direction: column;
-    align-items: center;
-  }
-  .single-game-header {
-    align-items: start;
-  }
-  .single-game-header > .button {
-    margin-top: 8px;
-  }
-  .single-game-header > .header-main {
-    flex-direction: column;
-    gap: 10px;
-    align-items: start;
-  }
-  .header-main > h1 {
-    word-break: break-word;
-  }
-  .form-buttons {
-    flex-direction: column;
-    align-items: end;
-  }
-  button.delete-button {
-    padding: 5px 0px;
-  }
-
   /* ROUTES */
   .form-field-group.breakable {
     flex-direction: column;
@@ -1493,11 +1541,6 @@ input[type='radio'] {
     padding: 5px 10px;
     font-size: 14px;
   }
-  .reviews,
-  .review-container {
-    flex-direction: column;
-    align-items: start;
-  }
   .review {
     justify-content: start;
     flex-direction: row;
@@ -1505,6 +1548,10 @@ input[type='radio'] {
   }
   .review-container {
     gap: 15px;
+  }
+
+  .reset {
+    margin-top: 5px;
   }
 }
 .search {
