@@ -3,7 +3,7 @@ import { SINGLE_GAME_QUERY_KEY } from '@/lib/queryKeys'
 import { TEditRouteFormValues, TRoute } from '@/lib/types'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import TypeDropdown from '../collection/TypeDropdown'
 import { LuLoaderCircle } from 'react-icons/lu'
@@ -11,6 +11,7 @@ import { LuLoaderCircle } from 'react-icons/lu'
 export default function EditRouteModal({ route }: { route: TRoute }) {
   const { data: session } = useSession()
   const queryClient = useQueryClient()
+  console.log(route)
 
   const [isDeletingRoute, setIsDeletingRoute] = useState<boolean>(false)
   const [isSavingRoute, setIsSavingRoute] = useState<boolean>(false)
@@ -43,6 +44,21 @@ export default function EditRouteModal({ route }: { route: TRoute }) {
       voice_actor: route.voice_actor,
     },
   })
+
+  // Reset edit route values if route is changed elsewhere
+  useEffect(() => {
+    reset({
+      type: route.type,
+      name: route.name,
+      route_img_link: route.route_img_link,
+      status: route.status,
+      review: route.review && route.review.length > 0 ? route.review : [],
+      started_date: route.started_date ? formatDate(route.started_date) : route.started_date,
+      completed_date: route.completed_date ? formatDate(route.completed_date) : route.completed_date,
+      notes: route.notes,
+      voice_actor: route.voice_actor,
+    })
+  }, [route])
 
   const { mutate } = useMutation({
     mutationFn: async () => {
