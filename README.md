@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Overview
 
-## Getting Started
+This website is a tool for managing your otoge game collection, including tracking your library and adding reviews to games.
 
-First, run the development server:
+## https://otoge-tracker.vercel.app/
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Features
+
+- Game Collection
+  - Manually add games
+  - Search VNDB for games to automatically import
+  - Keep track of play status
+- Game/Character Route Reviews
+  - Add scores and notes to character routes
+  - See total scores for each character
+
+### Game Collection
+
+![A screenshot of the game collection page showing a list of games](/docs/images/game-collection.png)
+You can keep track of your game collection by adding new games or editing existing games. The following information can be tracked per game:
+
+- Play Status
+- Started and Completed Dates
+- Owned Copies: Language, Platform, Original Price, and Purchased Price
+- Character Routes: Includes Play Status and individual reviwes
+
+#### Import from VNDB
+
+![A screenshot of the VNDB import module](/docs/images/vndb-import.png)
+Games can be imported from VNDB by searching for game name. Importing from VNDB allows you to automatically fetch game information, such as title, description, cover image, character routes, and voice actor information.
+
+## Future Features
+
+- Game Analytics: A page where you can see breakdowns of scores per game and character, total play time, and other metrics
+- Customizable score categories and weights
+
+## Build
+
+1. To build and run the project locally, you will need to have `npm` installed and a MongoDB database set up.
+
+2. Clone this repo and create an `.env` file in the root folder with the following:
+
+```
+MONGODB_URI=<Insert your MongoDB URI>
+NEXTAUTH_SECRET=<Run npx auth secret to generate a random secret value>
+NEXTAUTH_URL=http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+3. Install all dependencies using `npm install`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+4. Use `npm run dev` to run the app.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+5. Open [http://localhost:3000](http://localhost:3000) with your browser.
