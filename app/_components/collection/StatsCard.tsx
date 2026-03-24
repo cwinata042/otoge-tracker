@@ -26,6 +26,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
           <p className="review-total-score">{review.review_score}</p>
           <p className="review-score-details">{`/${review.total_score}`}</p>
         </div>
+        <p className="review-notes">{review.note}</p>
       </div>
     )
   })
@@ -51,20 +52,18 @@ export default function RouteCard({ route }: { route: TRoute }) {
           <CiEdit className="edit-button-icon" onClick={() => openModal('edit-route-container')} />
         </div>
         <div className="review-container">
-          <div className="reviews">
-            {route.review && route.review.length > 0 ? reviewCategories : <div>No review found</div>}
-          </div>
           <div className="total-score">
-            {route.review && route.review.length > 0 ? (
-              <div className="final-score">
-                <p className="final-score-title">Total</p>
-                <p className="final-score-total">{route.final_score}</p>
-              </div>
-            ) : (
-              <button onClick={() => openModal('add-review-container')}>Add Review</button>
-            )}
+            <div className="final-score">
+              <p className="final-score-title">Total</p>
+              <p className="final-score-total">{route.final_score}</p>
+            </div>
           </div>
         </div>
+        {isExpanded && (
+          <div>
+            <div className="reviews">{reviewCategories}</div>
+          </div>
+        )}
       </div>
     </div>
   )

@@ -1,13 +1,20 @@
+'use client'
+
 import { useSession } from 'next-auth/react'
 import Header from '../_components/Header'
 import { STATS_CHARACTERS_QUERY_KEY } from '@/lib/queryKeys'
 import { useQuery } from '@tanstack/react-query'
 import { LuLoaderCircle } from 'react-icons/lu'
-import RouteCard from '../_components/collection/RouteCard'
 import { TRoute } from '@/lib/types'
+import StatsCard from '../_components/collection/StatsCard'
 
 export default function Stats() {
   const { data: session } = useSession()
+
+  // User settings, should be stored somewhere else long term (local browser storage?)
+
+  // Whether the same character with multiple routes should have one score
+  const combineMultipleRoutes = false
 
   const {
     status,
@@ -19,6 +26,7 @@ export default function Stats() {
       const res = await fetch(`/api/characters`, {
         headers: {
           UserId: session?.user._id ? session?.user._id : '',
+          Mode: 'stats',
         },
       })
       return res.json()
@@ -48,7 +56,7 @@ export default function Stats() {
         )
       default:
         return characters.map((char: TRoute) => {
-          return <RouteCard key={char._id} route={char} />
+          return <StatsCard key={char._id} route={char} />
         })
     }
   }
@@ -56,7 +64,9 @@ export default function Stats() {
   return (
     <div className="main-container">
       <Header />
-      {getCharacters()}
+      <div className="body">
+        <div className="single-game-routes">{getCharacters()}</div>
+      </div>
     </div>
   )
 }
