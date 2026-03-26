@@ -13,7 +13,7 @@ import { useState } from 'react'
 export default function Stats() {
   const { data: session } = useSession()
   const [currSort, setCurrSort] = useState<TSort>({ name: 'Total Score', isDesc: true })
-  const [currStatCategory, setCurrStatCategory] = useState<String>('Overall')
+  const [currStatCategory, setCurrStatCategory] = useState<string>('Overall')
 
   const sortOptions = ['Total Score', 'Story', 'Personality', 'Romance', 'Appearance']
 
