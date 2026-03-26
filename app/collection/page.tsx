@@ -181,6 +181,14 @@ export default function Collection() {
     search.value = ''
   }
 
+  const search = document?.getElementsByClassName('search')[0]
+  search?.addEventListener('keyup', function (e: any) {
+    if (e.key === 'Enter') {
+      const searchText: string = (document.getElementById('collection-search') as HTMLInputElement)?.value
+      setCurrSearch(searchText)
+    }
+  })
+
   return (
     <div className="main-container">
       <Header />

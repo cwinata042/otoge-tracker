@@ -164,8 +164,9 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
       <div key={copy.id} className="owned-copy-field">
         {index !== 0 && <hr className="mobile-hr" />}
         <div className="form-field">
-          <label htmlFor={copy.id}>Language*</label>
+          <label htmlFor={`${copy.id}-language`}>Language*</label>
           <select
+            id={`${copy.id}-language`}
             key={copy.id}
             {...register(`owned_copies.${index}.language`, {
               validate: {
@@ -184,8 +185,9 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
           )}
         </div>
         <div className="form-field">
-          <label htmlFor={copy.id}>Platform*</label>
+          <label htmlFor={`${copy.id}-platform`}>Platform*</label>
           <select
+            id={`${copy.id}-platform`}
             key={copy.id}
             {...register(`owned_copies.${index}.platform`, {
               validate: {
@@ -204,8 +206,9 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
           )}
         </div>
         <div className="form-field">
-          <label htmlFor={copy.id}>Type*</label>
+          <label htmlFor={`${copy.id}-type`}>Type*</label>
           <select
+            id={`${copy.id}-type`}
             key={copy.id}
             {...register(`owned_copies.${index}.type`, {
               validate: {
@@ -224,17 +227,32 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
           )}
         </div>
         <div className="form-field">
-          <label htmlFor={copy.id}>Original Price</label>
-          <input key={copy.id} type="number" min={0} step=".01" {...register(`owned_copies.${index}.orig_price`)} />
+          <label htmlFor={`${copy.id}-original-price`}>Original Price</label>
+          <input
+            id={`${copy.id}-original-price`}
+            key={copy.id}
+            type="number"
+            min={0}
+            step=".01"
+            {...register(`owned_copies.${index}.orig_price`)}
+          />
         </div>
         <div className="form-field">
-          <label htmlFor={copy.id}>Price</label>
-          <input key={copy.id} type="number" min={0} step=".01" {...register(`owned_copies.${index}.price`)} />
+          <label htmlFor={`${copy.id}-price`}>Price</label>
+          <input
+            id={`${copy.id}-price`}
+            key={copy.id}
+            type="number"
+            min={0}
+            step=".01"
+            {...register(`owned_copies.${index}.price`)}
+          />
         </div>
         <div className="form-field">
-          <label htmlFor={copy.id}>Currency</label>
+          <label htmlFor={`${copy.id}-currency`}>Currency</label>
           <select
             key={copy.id}
+            id={`${copy.id}-currency`}
             {...register(`owned_copies.${index}.price_currency`, {
               validate: {
                 checkCurrency: (currency: TCurrency | string) => {
@@ -317,7 +335,6 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
                     type: TRouteTypes.Character,
                     name: characterObj.name,
                     route_img_link: characterObj.image.url,
-                    status: TStatuses.Incomplete,
                     voice_actor: {
                       romanized: staffObj.name,
                       orig: staffObj.original ? staffObj.original : staffObj.name,
@@ -372,6 +389,7 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
               <input
                 type="text"
                 key="title"
+                id="title"
                 {...register('title', {
                   required: true,
                 })}
@@ -383,6 +401,7 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
               <input
                 type="text"
                 key="orig_title"
+                id="orig_title"
                 {...register('orig_title', {
                   required: true,
                 })}
@@ -393,27 +412,27 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
             </div>
             <div className="form-field">
               <label htmlFor="description">Description</label>
-              <textarea className="large" key="title" {...register('description')} />
+              <textarea id="description" className="large" key="title" {...register('description')} />
             </div>
             <div className="form-field">
               <label htmlFor="route_img_link">Notes</label>
-              <textarea {...register('notes')}></textarea>
+              <textarea id="route_img_link" {...register('notes')}></textarea>
             </div>
             <div className="form-field">
               <label htmlFor="route_order">Recommended Route Order</label>
-              <input type="text" key="title" {...register('route_order')} />
+              <input id="route_order" type="text" key="title" {...register('route_order')} />
             </div>
             <div className="form-field-group">
               <div className="form-field">
                 <label htmlFor="edit-game-type">Type*</label>
-                <select key="edit-game-type" {...register('type', { required: true })}>
+                <select id="edit-game-type" key="edit-game-type" {...register('type', { required: true })}>
                   <TypeDropdown type="TGameTypes" />
                 </select>
                 {errors.type?.type === 'required' && <div className="form-error">Please select a route type.</div>}
               </div>
               <div className="form-field">
                 <label htmlFor="new-route-status">Status*</label>
-                <select key="new-route-status" {...register('status', { required: true })}>
+                <select id="new-route-status" key="new-route-status" {...register('status', { required: true })}>
                   <TypeDropdown type="TStatuses" />
                 </select>
                 {errors?.status?.type === 'required' && <div className="form-error">Please select a route status.</div>}
@@ -421,18 +440,19 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
             </div>
             <div className="form-field-group breakable">
               <div className="form-field">
-                <label htmlFor="new-route-type">Started</label>
-                <input key="new-route-name" type="date" {...register('started_date')}></input>
+                <label htmlFor="started-date">Started</label>
+                <input id="started-date" key="new-route-name" type="date" {...register('started_date')}></input>
               </div>
               <div className="form-field">
-                <label htmlFor="new-route-type">Completed</label>
-                <input key="new-route-name" type="date" {...register('completed_date')}></input>
+                <label htmlFor="completed-date">Completed</label>
+                <input id="completed-date" key="new-route-name" type="date" {...register('completed_date')}></input>
               </div>
             </div>
             <div className="form-field">
               <label htmlFor="edit-game-img_link">Game Image Link</label>
               <input
                 key="edit-game-img_link"
+                id="edit-game-img_link"
                 type="text"
                 {...register('img_link', {
                   validate: {

@@ -1,5 +1,4 @@
 import { IoMdArrowDropdown } from 'react-icons/io'
-import { RxCross2 } from 'react-icons/rx'
 import { FaSortAmountDown, FaSortAmountUp } from 'react-icons/fa'
 import { TSort } from '@/lib/types'
 

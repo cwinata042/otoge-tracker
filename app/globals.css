@@ -1,3 +1,5 @@
+/* TODO: REFACTOR MAJORLY NEEDED - this file is getting very messy */
+
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..1000');
 
 :root {
@@ -73,16 +75,29 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+  cursor: pointer;
 }
 
 p {
   cursor: default;
+  white-space: pre-wrap;
 }
 
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: dark;
   }
+}
+
+.stats-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.stats-categories {
+  display: flex;
+  gap: 20px;
 }
 
 .header {
@@ -141,6 +156,12 @@ div.main {
   align-items: center;
 }
 
+.voice-actor {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
 .collection-title {
   display: flex;
   gap: 60px;
@@ -160,6 +181,13 @@ div.main {
   display: grid;
   gap: var(--game-card-grid-gap);
   width: fit-content;
+}
+
+.stats-container {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 20px;
 }
 
 @media (width >= 1190px) {
@@ -395,11 +423,18 @@ textarea.large {
 select {
   border-right: 10px solid transparent;
 }
-a {
+a.active {
   color: var(--accent-dark);
 }
 a:hover {
   color: var(--accent-dark-hover);
+}
+
+a.route-card {
+  color: var(--background);
+}
+a.route-card:hover {
+  background: var(--dark-hover);
 }
 
 .sign-up-form > .form-field > input,
@@ -413,6 +448,10 @@ a:hover {
   outline: none;
   width: 100%;
   cursor: pointer;
+}
+
+.characters.single-game-routes {
+  width: 100%;
 }
 
 .copies {
@@ -937,6 +976,10 @@ p.center {
   text-align: center;
 }
 
+.stat-reviews > .reviews {
+  gap: 20px;
+}
+
 .single-game-main {
   display: flex;
   flex-direction: column;
@@ -1158,24 +1201,34 @@ textarea.appearance {
   color: var(--appearance);
 }
 input.story,
-.story > .review-category {
+.story > .review-category,
+.story > .review-stats > .review-category {
   background: var(--story);
   color: var(--darker);
 }
 input.personality,
-.personality > .review-category {
+.personality > .review-category,
+.personality > .review-stats > .review-category {
   background: var(--personality);
   color: var(--darker);
 }
 input.romance,
-.romance > .review-category {
+.romance > .review-category,
+.romance > .review-stats > .review-category {
   background: var(--romance);
   color: var(--darker);
 }
 input.appearance,
-.appearance > .review-category {
+.appearance > .review-category,
+.appearance > .review-stats > .review-category {
   background: var(--appearance);
   color: var(--darker);
+}
+.route-header-stats {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  gap: 20px;
 }
 hr {
   border: none;
@@ -1191,6 +1244,14 @@ hr.mb {
   display: flex;
   flex-direction: column;
   gap: 40px;
+}
+.review-stats {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+.review-notes {
+  display: flex;
 }
 .review-score {
   display: flex;
@@ -1332,12 +1393,14 @@ input[type='radio'] {
   }
   .reviews {
     flex-direction: column;
-    align-items: start;
-  }
-  .review {
     justify-content: start;
-    flex-direction: row;
+  }
+  .review.stats {
+    justify-content: start;
+    flex-direction: column;
     gap: 5px;
+    width: 100%;
+    align-items: start;
   }
   .review-container {
     gap: 15px;
@@ -1543,7 +1606,7 @@ input[type='radio'] {
   }
   .review {
     justify-content: start;
-    flex-direction: row;
+    flex-direction: column;
     gap: 5px;
   }
   .review-container {
