@@ -30,6 +30,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
           alt={'Game Image'}
           fill={true}
           style={{ objectFit: 'cover' }}
+          sizes="(max-width: 120px) 100vw"
         />
       </div>
       <div className="route-info">
@@ -48,7 +49,7 @@ export default function RouteCard({ route }: { route: TRoute }) {
           </div>
         </div>
         {isExpanded && (
-          <div>
+          <div className="stat-reviews">
             <div className="reviews">{reviewCategories}</div>
           </div>
         )}

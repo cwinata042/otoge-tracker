@@ -1,3 +1,5 @@
+/* REFACTOR MAJORLY NEEDED - this file is getting very messy */
+
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..1000');
 
 :root {
@@ -938,6 +940,10 @@ p.center {
   text-align: center;
 }
 
+.stat-reviews > .reviews {
+  gap: 20px;
+}
+
 .single-game-main {
   display: flex;
   flex-direction: column;
@@ -1351,7 +1357,7 @@ input[type='radio'] {
   }
   .reviews {
     flex-direction: column;
-    align-items: start;
+    justify-content: start;
   }
   .review.stats {
     justify-content: start;
