@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import Header from '../_components/Header'
-import { STATS_CHARACTERS_QUERY_KEY } from '@/lib/queryKeys'
+import { CHARACTERS_QUERY_KEY } from '@/lib/queryKeys'
 import { useQuery } from '@tanstack/react-query'
 import { LuLoaderCircle } from 'react-icons/lu'
 import { TRoute, TSort } from '@/lib/types'
@@ -26,7 +26,7 @@ export default function Characters() {
     error,
     data: characters,
   } = useQuery({
-    queryKey: [STATS_CHARACTERS_QUERY_KEY],
+    queryKey: [CHARACTERS_QUERY_KEY],
     queryFn: async () => {
       const res = await fetch(`/api/characters`, {
         headers: {
@@ -93,6 +93,14 @@ export default function Characters() {
     setCurrSearch(searchText)
   }
 
+  const search = document?.getElementsByClassName('search')[0]
+  search?.addEventListener('keyup', function (e: any) {
+    if (e.key === 'Enter') {
+      const searchText: string = (document.getElementById('collection-search') as HTMLInputElement)?.value
+      setCurrSearch(searchText)
+    }
+  })
+
   return (
     <div className="main-container">
       <Header />
@@ -104,7 +112,7 @@ export default function Characters() {
               Search
             </button>
           </div>
-          <div className="single-game-routes">{getCharacters()}</div>
+          <div className="single-game-routes characters">{getCharacters()}</div>
         </div>
       </div>
     </div>

@@ -411,7 +411,7 @@ textarea.large {
 select {
   border-right: 10px solid transparent;
 }
-a {
+a.active {
   color: var(--accent-dark);
 }
 a:hover {
@@ -436,6 +436,10 @@ a.route-card:hover {
   outline: none;
   width: 100%;
   cursor: pointer;
+}
+
+.characters.single-game-routes {
+  width: 100%;
 }
 
 .copies {

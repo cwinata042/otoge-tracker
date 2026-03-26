@@ -20,7 +20,7 @@ export async function GET(req: Request) {
       characters = await Route.find({
         user_id: new mongoose.Types.ObjectId(userId ? userId : ''),
         type: 'Character',
-      }).sort('-name') /* find all characters in the database by total score descending */
+      }).sort('name') /* find all characters in the database by name */
     }
 
     return NextResponse.json(characters, { status: 200 })

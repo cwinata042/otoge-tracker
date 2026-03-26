@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 export default function CharCard({ route }: { route: TRoute }) {
   return (
-    <Link key={route._id} href={`/collection/${route.game_id}`} className="route-card">
+    <Link key={route._id} href={`/collection/${route.game_id}`} className="route-card characters">
       <div className="route-img-container">
         <Image
           src={isValidLink(route.route_img_link) ? route.route_img_link : 'https://placehold.co/120x150/png'}
