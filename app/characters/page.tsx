@@ -19,7 +19,7 @@ export default function Characters() {
   // User settings, should be stored somewhere else long term (local browser storage?)
 
   // Whether the same character with multiple routes should have one score
-  const combineMultipleRoutes = false
+  const combineMultipleRoutes = true
 
   const {
     status,
@@ -52,6 +52,24 @@ export default function Characters() {
     })
     .sort(sortFn)
 
+  const uniqueCharacters = getUniqueCharacters()
+
+  function getUniqueCharacters() {
+    const uniqueChar = new Set()
+
+    return displayedCharacters?.filter((char: TRoute) => {
+      const charName = char.name
+
+      if (uniqueChar.has(charName)) {
+        //TODO: Add the game to the char's list of game appearances
+
+        return false
+      }
+      uniqueChar.add(charName)
+      return true
+    })
+  }
+
   function sortFn(a: TRoute, b: TRoute) {
     let aValue: number | undefined, bValue: number | undefined
 
@@ -82,7 +100,8 @@ export default function Characters() {
           </div>
         )
       default:
-        return displayedCharacters.map((char: TRoute) => {
+        const chars = combineMultipleRoutes ? uniqueCharacters : displayedCharacters
+        return chars.map((char: TRoute) => {
           return <CharCard key={char._id} route={char} />
         })
     }
