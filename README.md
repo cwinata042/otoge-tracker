@@ -10,9 +10,13 @@ This website is a tool for managing your otoge game collection, including tracki
   - Manually add games
   - Search VNDB for games to automatically import
   - Keep track of play status
+- Character List
+  - Search for characters by name and voice actor
 - Game/Character Route Reviews
   - Add scores and notes to character routes
   - See total scores for each character
+- Stats
+  - See character rankings
 
 ### Game Collection
 
@@ -31,7 +35,9 @@ Games can be imported from VNDB by searching for game name. Importing from VNDB 
 
 ## Future Features
 
-- Game Analytics: A page where you can see breakdowns of scores per game and character, total play time, and other metrics
+- Game Analytics: A page where you can see breakdowns of stats
+  - Game rankings
+  - Overall stats such as total games, total savings, etc.
 - Customizable score categories and weights
 
 ## Build
