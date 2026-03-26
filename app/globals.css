@@ -144,6 +144,12 @@ div.main {
   align-items: center;
 }
 
+.voice-actor {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
 .collection-title {
   display: flex;
   gap: 60px;
@@ -410,6 +416,13 @@ a {
 }
 a:hover {
   color: var(--accent-dark-hover);
+}
+
+a.route-card {
+  color: var(--background);
+}
+a.route-card:hover {
+  background: var(--dark-hover);
 }
 
 .sign-up-form > .form-field > input,

@@ -4,7 +4,7 @@ import { useState } from 'react'
 import GameStatus from './GameStatus'
 import { isValidLink } from '@/lib/helper'
 
-export default function RouteCard({ route }: { route: TRoute }) {
+export default function StatsCard({ route }: { route: TRoute }) {
   const [isExpanded, setIsExpanded] = useState<boolean>(false)
 
   const reviewCategories = route.review?.map((review) => {

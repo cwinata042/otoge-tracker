@@ -15,12 +15,12 @@ export async function GET(req: Request) {
         user_id: new mongoose.Types.ObjectId(userId ? userId : ''),
         type: 'Character',
         review: { $exists: true, $ne: [] },
-      }).sort('-final_score') /* find all characters in the database by total score descending */
+      }).sort('final_score') /* find all characters in the database by total score descending */
     } else {
       characters = await Route.find({
         user_id: new mongoose.Types.ObjectId(userId ? userId : ''),
         type: 'Character',
-      }).sort('-final_score') /* find all characters in the database by total score descending */
+      }).sort('-name') /* find all characters in the database by total score descending */
     }
 
     return NextResponse.json(characters, { status: 200 })

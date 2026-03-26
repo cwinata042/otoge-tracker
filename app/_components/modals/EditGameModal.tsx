@@ -317,7 +317,6 @@ export default function EditGameModal({ gameData }: { gameData: TGameDetails }) 
                     type: TRouteTypes.Character,
                     name: characterObj.name,
                     route_img_link: characterObj.image.url,
-                    status: TStatuses.Incomplete,
                     voice_actor: {
                       romanized: staffObj.name,
                       orig: staffObj.original ? staffObj.original : staffObj.name,
