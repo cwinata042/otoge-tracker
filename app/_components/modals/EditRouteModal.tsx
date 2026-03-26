@@ -11,7 +11,6 @@ import { LuLoaderCircle } from 'react-icons/lu'
 export default function EditRouteModal({ route }: { route: TRoute }) {
   const { data: session } = useSession()
   const queryClient = useQueryClient()
-  console.log(route)
 
   const [isDeletingRoute, setIsDeletingRoute] = useState<boolean>(false)
   const [isSavingRoute, setIsSavingRoute] = useState<boolean>(false)
@@ -78,7 +77,7 @@ export default function EditRouteModal({ route }: { route: TRoute }) {
       const res = await fetch(`/api/collection/${route.game_id}/route/${route._id}`, {
         method: 'PATCH',
         body: JSON.stringify({
-          route: { ...body, review: scores?.includes('') ? [] : calcScore ?? [] },
+          route: { ...body, review: scores?.includes('') ? [] : (calcScore ?? []) },
           user_id: session?.user?._id ? session?.user?._id : '',
           route_id: route._id,
           game_id: route.game_id,
@@ -211,14 +210,14 @@ export default function EditRouteModal({ route }: { route: TRoute }) {
             <div className="form-field-group">
               <div className="form-field">
                 <label htmlFor="type">Type*</label>
-                <select key="type" {...register('type', { required: true })}>
+                <select id="type" key="type" {...register('type', { required: true })}>
                   <TypeDropdown type="TRouteTypes" />
                 </select>
                 {errors.type?.type === 'required' && <div className="form-error">Please select a route type.</div>}
               </div>
               <div className="form-field">
                 <label htmlFor="status">Status*</label>
-                <select key="status" {...register('status', { required: true })}>
+                <select id="status" key="status" {...register('status', { required: true })}>
                   <TypeDropdown type="TStatuses" />
                 </select>
                 {errors?.status?.type === 'required' && <div className="form-error">Please select a route status.</div>}
@@ -226,18 +225,19 @@ export default function EditRouteModal({ route }: { route: TRoute }) {
             </div>
             <div className="form-field-group breakable">
               <div className="form-field">
-                <label htmlFor="new-route-type">Started</label>
-                <input key="new-route-name" type="date" {...register('started_date')}></input>
+                <label htmlFor="started-date">Started</label>
+                <input id="started-date" key="new-route-name" type="date" {...register('started_date')}></input>
               </div>
               <div className="form-field">
-                <label htmlFor="new-route-type">Completed</label>
-                <input key="new-route-name" type="date" {...register('completed_date')}></input>
+                <label htmlFor="completed-date">Completed</label>
+                <input id="completed-date" key="new-route-name" type="date" {...register('completed_date')}></input>
               </div>
             </div>
             <div className="form-field">
               <label htmlFor="name">{getValues('type') === 'Character' ? 'Character Name*' : 'Route Name*'}</label>
               <input
                 type="text"
+                id="name"
                 {...register('name', {
                   validate: {
                     checkName: (name) => {

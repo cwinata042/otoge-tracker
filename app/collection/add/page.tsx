@@ -164,7 +164,8 @@ export default function AddToCollection() {
           <div className="form-field">
             <label htmlFor={copy.id}>Language*</label>
             <select
-              key={copy.id}
+              key={`${copy.id}-language`}
+              id={`${copy.id}-language`}
               {...register(`owned_copies.${index}.language`, {
                 validate: {
                   checkLang: (lang) => {
@@ -182,9 +183,10 @@ export default function AddToCollection() {
             )}
           </div>
           <div className="form-field">
-            <label htmlFor={copy.id}>Platform*</label>
+            <label htmlFor={`${copy.id}-platform`}>Platform*</label>
             <select
               key={copy.id}
+              id={`${copy.id}-platform`}
               {...register(`owned_copies.${index}.platform`, {
                 validate: {
                   checkPlatform: (platform) => {
@@ -202,9 +204,10 @@ export default function AddToCollection() {
             )}
           </div>
           <div className="form-field">
-            <label htmlFor={copy.id}>Type*</label>
+            <label htmlFor={`${copy.id}-type`}>Type*</label>
             <select
               key={copy.id}
+              id={`${copy.id}-type`}
               {...register(`owned_copies.${index}.type`, {
                 validate: {
                   checkType: (type) => {
@@ -224,17 +227,32 @@ export default function AddToCollection() {
         </div>
         <div className="owned-copy-prices">
           <div className="form-field">
-            <label htmlFor={copy.id}>Original Price</label>
-            <input key={copy.id} type="number" min={0} step=".01" {...register(`owned_copies.${index}.orig_price`)} />
+            <label htmlFor={`${copy.id}-original-price`}>Original Price</label>
+            <input
+              key={copy.id}
+              id={`${copy.id}-original-price`}
+              type="number"
+              min={0}
+              step=".01"
+              {...register(`owned_copies.${index}.orig_price`)}
+            />
           </div>
           <div className="form-field">
-            <label htmlFor={copy.id}>Price</label>
-            <input key={copy.id} type="number" min={0} step=".01" {...register(`owned_copies.${index}.price`)} />
+            <label htmlFor={`${copy.id}-price`}>Price</label>
+            <input
+              key={copy.id}
+              type="number"
+              id={`${copy.id}-price`}
+              min={0}
+              step=".01"
+              {...register(`owned_copies.${index}.price`)}
+            />
           </div>
           <div className="form-field">
-            <label htmlFor={copy.id}>Currency</label>
+            <label htmlFor={`${copy.id}-currency`}>Currency</label>
             <select
               key={copy.id}
+              id={`${copy.id}-currency`}
               {...register(`owned_copies.${index}.price_currency`, {
                 validate: {
                   checkCurrency: (currency: TCurrency | string) => {
@@ -274,8 +292,12 @@ export default function AddToCollection() {
         {index !== 0 && <hr className="mobile-hr" />}
         <div className="owned-copy-main">
           <div className="form-field">
-            <label htmlFor={route.id}>Status*</label>
-            <select key={route.id} {...register(`routes.${index}.status`, { required: true })}>
+            <label htmlFor={`${route.id}-status`}>Status*</label>
+            <select
+              key={route.id}
+              id={`${route.id}-status`}
+              {...register(`routes.${index}.status`, { required: true })}
+            >
               {statusDropdown}
             </select>
             {errors?.routes && errors.routes[index]?.status?.type === 'required' && (
@@ -283,8 +305,8 @@ export default function AddToCollection() {
             )}
           </div>
           <div className="form-field">
-            <label htmlFor={route.id}>Type*</label>
-            <select key={route.id} {...register(`routes.${index}.type`, { required: true })}>
+            <label htmlFor={`${route.id}-type`}>Type*</label>
+            <select key={route.id} id={`${route.id}-type`} {...register(`routes.${index}.type`, { required: true })}>
               {routeTypeDropdown}
             </select>
             {errors?.routes && errors.routes[index]?.type?.type === 'required' && (
@@ -292,8 +314,13 @@ export default function AddToCollection() {
             )}
           </div>
           <div className="form-field">
-            <label htmlFor={route.id}>Character/Route Name*</label>
-            <input type="text" key={route.id} {...register(`routes.${index}.name`, { required: true })} />
+            <label htmlFor={`${route.id}-route-name`}>Character/Route Name*</label>
+            <input
+              type="text"
+              id={`${route.id}-route-name`}
+              key={route.id}
+              {...register(`routes.${index}.name`, { required: true })}
+            />
             {errors?.routes && errors.routes[index]?.name?.type === 'required' && (
               <div className="form-error">Please enter a character/route name.</div>
             )}
@@ -301,16 +328,26 @@ export default function AddToCollection() {
         </div>
         <div className="owned-copy-other">
           <div className="form-field">
-            <label htmlFor={route.id}>VA (Romanized)</label>
-            <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.romanized`)} />
+            <label htmlFor={`${route.id}-va-rom`}>VA (Romanized)</label>
+            <input
+              type="text"
+              id={`${route.id}-va-rom`}
+              key={route.id}
+              {...register(`routes.${index}.voice_actor.romanized`)}
+            />
           </div>
           <div className="form-field">
-            <label htmlFor={route.id}>VA (Original)</label>
-            <input type="text" key={route.id} {...register(`routes.${index}.voice_actor.orig`)} />
+            <label htmlFor={`${route.id}-va-og`}>VA (Original)</label>
+            <input
+              type="text"
+              id={`${route.id}-va-og`}
+              key={route.id}
+              {...register(`routes.${index}.voice_actor.orig`)}
+            />
           </div>
           <div className="form-field">
-            <label htmlFor={route.id}>Image Link</label>
-            <input type="text" key={route.id} {...register(`routes.${index}.route_img_link`)} />
+            <label htmlFor={`${route.id}-img`}>Image Link</label>
+            <input type="text" id={`${route.id}-img`} key={route.id} {...register(`routes.${index}.route_img_link`)} />
           </div>
         </div>
         <FaRegTrashAlt className="trash-icon" onClick={() => removeRoute(index)} />
@@ -365,7 +402,7 @@ export default function AddToCollection() {
                     <Image
                       src={
                         isValidLink(watch('img_link'))
-                          ? watch('img_link') ?? 'https://placehold.co/120x150/png'
+                          ? (watch('img_link') ?? 'https://placehold.co/120x150/png')
                           : 'https://placehold.co/120x150/png'
                       }
                       alt={'Game Image'}
@@ -379,6 +416,7 @@ export default function AddToCollection() {
                     <label htmlFor="title">Title*</label>
                     <input
                       type="text"
+                      id="title"
                       key="title"
                       {...register('title', {
                         required: true,
@@ -390,6 +428,7 @@ export default function AddToCollection() {
                     <label htmlFor="orig_title">Original Title*</label>
                     <input
                       type="text"
+                      id="orig_title"
                       key="orig_title"
                       {...register('orig_title', {
                         required: true,
@@ -401,20 +440,21 @@ export default function AddToCollection() {
                   </div>
                   <div className="form-field">
                     <label htmlFor="description">Description</label>
-                    <textarea className="large" key="description" {...register('description')} />
+                    <textarea id="description" className="large" key="description" {...register('description')} />
                   </div>
                   <div className="form-field">
                     <label htmlFor="notes">Notes</label>
-                    <textarea className="large" key="notes" {...register('notes')} />
+                    <textarea id="notes" className="large" key="notes" {...register('notes')} />
                   </div>
                   <div className="form-field">
                     <label htmlFor="route_order">Recommended Route Order</label>
-                    <input type="text" key="route_order" {...register('route_order')} />
+                    <input id="route_order" type="text" key="route_order" {...register('route_order')} />
                   </div>
                   <div className="form-field">
                     <label htmlFor="img_link">Link to Cover Image</label>
                     <input
                       type="text"
+                      id="img_link"
                       key="img_link"
                       {...register('img_link', {
                         validate: {
@@ -430,7 +470,7 @@ export default function AddToCollection() {
                   </div>
                   <div className="form-field">
                     <label htmlFor="type">Type*</label>
-                    <select key="type" {...register('type', { required: true })}>
+                    <select id="type" key="type" {...register('type', { required: true })}>
                       {typeDropdown}
                     </select>
                     {errors.type?.type === 'required' && <div className="form-error">Please select a type.</div>}
@@ -438,7 +478,12 @@ export default function AddToCollection() {
                   <div className="form-field">
                     <label htmlFor="status">Status*</label>
                     <div className="custom-select">
-                      <select key="status" defaultValue={TStatuses['']} {...register('status', { required: true })}>
+                      <select
+                        id="status"
+                        key="status"
+                        defaultValue={TStatuses['']}
+                        {...register('status', { required: true })}
+                      >
                         {statusDropdown}
                       </select>
                     </div>
@@ -446,12 +491,17 @@ export default function AddToCollection() {
                   </div>
                   <div className="form-field-group">
                     <div className="form-field">
-                      <label htmlFor="new-route-type">Started</label>
-                      <input key="new-route-name" type="date" {...register('started_date')}></input>
+                      <label htmlFor="started-date">Started</label>
+                      <input id="started-date" key="started-date" type="date" {...register('started_date')}></input>
                     </div>
                     <div className="form-field">
-                      <label htmlFor="new-route-type">Completed</label>
-                      <input key="new-route-name" type="date" {...register('completed_date')}></input>
+                      <label htmlFor="completed-date">Completed</label>
+                      <input
+                        id="completed-date"
+                        key="completed-date"
+                        type="date"
+                        {...register('completed_date')}
+                      ></input>
                     </div>
                   </div>
                   <div className="form-field">

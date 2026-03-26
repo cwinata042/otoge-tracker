@@ -108,14 +108,14 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
             <div className="form-field-group">
               <div className="form-field">
                 <label htmlFor="new-route-type">Type*</label>
-                <select key="new-route-type" {...register('type', { required: true })}>
+                <select id="new-route-type" key="new-route-type" {...register('type', { required: true })}>
                   {routeTypeDropdown}
                 </select>
                 {errors.type?.type === 'required' && <div className="form-error">Please select a route type.</div>}
               </div>
               <div className="form-field">
                 <label htmlFor="new-route-status">Status*</label>
-                <select key="new-route-status" {...register('status', { required: true })}>
+                <select id="new-route-status" key="new-route-status" {...register('status', { required: true })}>
                   {statusDropdown}
                 </select>
                 {errors?.status?.type === 'required' && <div className="form-error">Please select a route status.</div>}
@@ -124,11 +124,21 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
             <div className="form-field-group breakable">
               <div className="form-field">
                 <label htmlFor="new-route-date_started">Started</label>
-                <input key="new-route-date_started" type="date" {...register('started_date')}></input>
+                <input
+                  id="new-route-date_started"
+                  key="new-route-date_started"
+                  type="date"
+                  {...register('started_date')}
+                ></input>
               </div>
               <div className="form-field">
                 <label htmlFor="new-route-date_completed">Completed</label>
-                <input key="new-route-date_completed" type="date" {...register('completed_date')}></input>
+                <input
+                  id="new-route-date_completed"
+                  key="new-route-date_completed"
+                  type="date"
+                  {...register('completed_date')}
+                ></input>
               </div>
             </div>
             <div className="form-field">
@@ -137,6 +147,7 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
               </label>
               <input
                 key="new-route-name"
+                id="new-route-name"
                 type="text"
                 {...register('name', {
                   validate: {
@@ -151,16 +162,27 @@ export default function AddRouteModal({ gameId }: { gameId: string }) {
             <div className="form-field-group breakable">
               <div className="form-field">
                 <label htmlFor="new-route-va_romanized">Voice Actor (Romanized)</label>
-                <input key="new-route-va_romanized" type="text" {...register('voice_actor.romanized')}></input>
+                <input
+                  id="new-route-va_romanized"
+                  key="new-route-va_romanized"
+                  type="text"
+                  {...register('voice_actor.romanized')}
+                ></input>
               </div>
               <div className="form-field">
                 <label htmlFor="new-route-va_orig">Voice Actor (Original)</label>
-                <input key="new-route-va_orig" type="text" {...register('voice_actor.orig')}></input>
+                <input
+                  id="new-route-va_orig"
+                  key="new-route-va_orig"
+                  type="text"
+                  {...register('voice_actor.orig')}
+                ></input>
               </div>
             </div>
             <div className="form-field">
               <label htmlFor="new-route-route_img_link">Route Image Link</label>
               <input
+                id="new-route-route_img_link"
                 key="new-route-route_img_link"
                 type="text"
                 {...register('route_img_link', {

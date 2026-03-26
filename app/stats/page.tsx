@@ -13,6 +13,7 @@ import { useState } from 'react'
 export default function Stats() {
   const { data: session } = useSession()
   const [currSort, setCurrSort] = useState<TSort>({ name: 'Total Score', isDesc: true })
+  const [currStatCategory, setCurrStatCategory] = useState<String>('Overall')
 
   const sortOptions = ['Total Score', 'Story', 'Personality', 'Romance', 'Appearance']
 
@@ -92,15 +93,45 @@ export default function Stats() {
     }
   }
 
+  function getStatCategory() {
+    switch (currStatCategory) {
+      case 'Overall':
+        return <div>overall stats</div>
+      case 'Character':
+        return <div className="single-game-routes">{getCharacters()}</div>
+      case 'Game':
+        return <div>game stats</div>
+    }
+  }
+
   return (
     <div className="main-container">
       <Header />
       <div className="body">
         <div className="stats-container">
-          <div className="filter-sort">
-            <Sort sortOptions={sortOptions} currSort={currSort} setCurrSort={setCurrSort} />
+          <div className="stats-header">
+            <div className="stats-categories">
+              <a
+                className={currStatCategory === 'Overall' ? 'active' : ''}
+                onClick={() => setCurrStatCategory('Overall')}
+              >
+                Overall
+              </a>
+              <a
+                className={currStatCategory === 'Character' ? 'active' : ''}
+                onClick={() => setCurrStatCategory('Character')}
+              >
+                Character Ranking
+              </a>
+              <a className={currStatCategory === 'Game' ? 'active' : ''} onClick={() => setCurrStatCategory('Game')}>
+                Game Ranking
+              </a>
+            </div>
+            <div className="filter-sort">
+              <Sort sortOptions={sortOptions} currSort={currSort} setCurrSort={setCurrSort} />
+            </div>
           </div>
-          <div className="single-game-routes">{getCharacters()}</div>
+          {getStatCategory()}
         </div>
       </div>
     </div>

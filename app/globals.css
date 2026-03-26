@@ -75,6 +75,7 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+  cursor: pointer;
 }
 
 p {
@@ -86,6 +87,17 @@ p {
   html {
     color-scheme: dark;
   }
+}
+
+.stats-header {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.stats-categories {
+  display: flex;
+  gap: 20px;
 }
 
 .header {

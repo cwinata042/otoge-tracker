@@ -50,6 +50,7 @@ export default function AddReviewModal({ route }: { route: TRoute }) {
                 type="number"
                 step=".1"
                 className={category.name.toLowerCase()}
+                id={`${category.name.toLowerCase()}-score`}
                 key={`${category.name.toLowerCase()}-score`}
                 {...register(`review.${index}.review_score`, {
                   validate: {
@@ -70,6 +71,7 @@ export default function AddReviewModal({ route }: { route: TRoute }) {
           <div className="category-notes">
             <label htmlFor={`${category.name.toLowerCase()}-notes`}>Notes</label>
             <textarea
+              id={`${category.name.toLowerCase()}-notes`}
               className={category.name.toLowerCase()}
               key={`${category.name.toLowerCase()}-notes`}
               {...register(`review.${index}.note`)}
@@ -144,7 +146,7 @@ export default function AddReviewModal({ route }: { route: TRoute }) {
                 {addReviewCategories}
                 <div className="form-field">
                   <label htmlFor="route_img_link">Other Notes</label>
-                  <textarea {...register('notes')}></textarea>
+                  <textarea id="route_img_link" {...register('notes')}></textarea>
                 </div>
               </>
             }
