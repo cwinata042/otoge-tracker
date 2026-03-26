@@ -5,11 +5,16 @@ import Header from '../_components/Header'
 import { STATS_CHARACTERS_QUERY_KEY } from '@/lib/queryKeys'
 import { useQuery } from '@tanstack/react-query'
 import { LuLoaderCircle } from 'react-icons/lu'
-import { TRoute } from '@/lib/types'
+import { TRoute, TSort } from '@/lib/types'
 import StatsCard from '../_components/collection/StatsCard'
+import Sort from '../_components/collection/Sort'
+import { useState } from 'react'
 
 export default function Stats() {
   const { data: session } = useSession()
+  const [currSort, setCurrSort] = useState<TSort>({ name: 'Total Score', isDesc: true })
+
+  const sortOptions = ['Total Score', 'Story', 'Personality', 'Romance', 'Appearance']
 
   // User settings, should be stored somewhere else long term (local browser storage?)
 
@@ -35,6 +40,32 @@ export default function Stats() {
     enabled: !!session,
   })
 
+  const displayedCharacters = characters?.sort(sortFn)
+
+  function sortFn(a: TRoute, b: TRoute) {
+    let aValue: number | undefined, bValue: number | undefined
+
+    switch (currSort.name) {
+      case 'Total Score':
+        aValue = a.final_score
+        bValue = b.final_score
+        break
+      case 'Story':
+      case 'Personality':
+      case 'Romance':
+      case 'Appearance':
+        aValue = a.review?.filter((review) => review.category === currSort.name)[0].review_score
+        bValue = b.review?.filter((review) => review.category === currSort.name)[0].review_score
+        break
+    }
+
+    if (!aValue || !bValue) {
+      return 0
+    }
+
+    return currSort.isDesc ? bValue - aValue : aValue - bValue
+  }
+
   function getCharacters() {
     switch (status) {
       case 'pending':
@@ -55,7 +86,7 @@ export default function Stats() {
           </div>
         )
       default:
-        return characters.map((char: TRoute) => {
+        return displayedCharacters.map((char: TRoute) => {
           return <StatsCard key={char._id} route={char} />
         })
     }
@@ -65,7 +96,12 @@ export default function Stats() {
     <div className="main-container">
       <Header />
       <div className="body">
-        <div className="single-game-routes">{getCharacters()}</div>
+        <div className="stats-container">
+          <div className="filter-sort">
+            <Sort sortOptions={sortOptions} currSort={currSort} setCurrSort={setCurrSort} />
+          </div>
+          <div className="single-game-routes">{getCharacters()}</div>
+        </div>
       </div>
     </div>
   )

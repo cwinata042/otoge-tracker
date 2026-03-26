@@ -1,4 +1,4 @@
-/* REFACTOR MAJORLY NEEDED - this file is getting very messy */
+/* TODO: REFACTOR MAJORLY NEEDED - this file is getting very messy */
 
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@100..1000');
 
@@ -163,6 +163,13 @@ div.main {
   display: grid;
   gap: var(--game-card-grid-gap);
   width: fit-content;
+}
+
+.stats-container {
+  display: flex;
+  flex-direction: column;
+  align-items: end;
+  gap: 20px;
 }
 
 @media (width >= 1190px) {
