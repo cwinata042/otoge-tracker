@@ -48,7 +48,7 @@ const ownedGameSchema = new mongoose.Schema(
         },
         platform: {
           type: String,
-          enum: ['Switch', 'PS Vita', 'PC'],
+          enum: ['Switch', 'PS Vita', 'PC', 'PSP'],
           required: [true, "Please provide the game copy's platform."],
         },
         orig_price: {

@@ -25,6 +25,7 @@ export enum TGamePlatforms {
   'Switch' = 'Switch',
   'PC' = 'PC',
   'PS Vita' = 'PS Vita',
+  'PSP' = 'PSP',
 }
 
 export enum TCopyTypes {
