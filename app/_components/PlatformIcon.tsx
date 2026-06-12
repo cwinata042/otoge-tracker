@@ -34,7 +34,7 @@ export default function PlatformIcon({
       return <PiDesktop size={width ? width : 20} />
     case TGamePlatforms['PSP']:
       return (
-        <Image src="/psp.svg" alt="PSP logo" width={width ? `${width}` : '18'} height={height ? `${height}` : '18'} />
+        <Image src="/psp.svg" alt="PSP logo" width={width ? `${width}` : '30'} height={height ? `${height}` : '10'} />
       )
   }
 }
